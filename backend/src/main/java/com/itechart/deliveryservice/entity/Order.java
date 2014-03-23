@@ -1,6 +1,7 @@
 package com.itechart.deliveryservice.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity(name = "orders")
 public class Order {
@@ -14,6 +15,8 @@ public class Order {
     private long customer;
 
     private String description;
+
+    private Date date;
 
     private int cost;
 
@@ -102,5 +105,13 @@ public class Order {
 
     public void setRecipient(long recipient) {
         this.recipient = recipient;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
