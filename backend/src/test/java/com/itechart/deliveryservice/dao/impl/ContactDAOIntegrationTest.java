@@ -1,8 +1,8 @@
 package com.itechart.deliveryservice.dao.impl;
 
 import com.itechart.deliveryservice.dao.ContactDAO;
-import com.itechart.deliveryservice.entity.Address;
 import com.itechart.deliveryservice.entity.Contact;
+import com.itechart.deliveryservice.entity.Phone;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,18 +69,18 @@ public class ContactDAOIntegrationTest {
 
     private Contact createContact(String name, String surname){
         Contact contact = new Contact();
-        Address address = new Address();
+//        Address address = new Address();
         contact.setName(name);
         contact.setSurname(surname);
         contact.setMiddleName(name + "123");
         contact.setDateOfBirth(new Date());
         contact.setEmail(surname+"@gmail.com");
-        address.setCity("cc");
-        address.setStreet("ss");
-        address.setHome("1");
-        address.setFlat("11");
-        contact.setAddress(address);
-        contact.setPhones(new ArrayList<Phone>().add(new Phone()));
+//        address.setCity("cc");
+//        address.setStreet("ss");
+//        address.setHome("1");
+//        address.setFlat("11");
+//        contact.setAddress(address);
+        contact.setPhones(new ArrayList<Phone>());
         return contact;
     }
 }

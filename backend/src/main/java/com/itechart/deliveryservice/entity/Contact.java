@@ -1,10 +1,7 @@
 package com.itechart.deliveryservice.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +15,12 @@ public class Contact {
     private String middleName;
     private Date dateOfBirth;  // TODO: change to Joda-time or other
     private String email;
+    
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="address_id")
     private Address address;
+    
+    @OneToMany(mappedBy="owner")
     private List<Phone> phones;
 
     public long getId() {
