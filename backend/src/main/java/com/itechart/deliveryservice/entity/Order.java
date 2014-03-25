@@ -31,6 +31,9 @@ public class Order {
 
     private long recipient;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderHistory history;
+
     public Order() {
         super();
     }
@@ -113,5 +116,13 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public OrderHistory getHistory() {
+        return history;
+    }
+
+    public void setHistory(OrderHistory history) {
+        this.history = history;
     }
 }
