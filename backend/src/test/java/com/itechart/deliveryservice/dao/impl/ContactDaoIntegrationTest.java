@@ -1,6 +1,6 @@
 package com.itechart.deliveryservice.dao.impl;
 
-import com.itechart.deliveryservice.dao.ContactDAO;
+import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.entity.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -15,18 +15,18 @@ import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:test-bean-context.xml"})
-public class ContactDAOIntegrationTest {
+public class ContactDaoIntegrationTest {
     @Autowired
-    ContactDAO contactDAO;
+    ContactDao contactDao;
 
-    public  ContactDAOIntegrationTest(){
+    public  ContactDaoIntegrationTest(){
         super();
     }
     @Test
     @Transactional
     public void shouldCreateOrderInDB() {
         Contact contact = createContact("First", "Contact");
-        contactDAO.insert(contact);
+        contactDao.save(contact);
         assertTrue(contact.getId() > 0);
     }
 
@@ -34,8 +34,8 @@ public class ContactDAOIntegrationTest {
     @Transactional
     public void shouldFindStoredOrder() {
         Contact contactToStore = createContact("Find", "Contact");
-        contactDAO.insert(contactToStore);
-        Contact storedContact = contactDAO.find(contactToStore.getId());
+        contactDao.save(contactToStore);
+        Contact storedContact = contactDao.getById(contactToStore.getId());
         assertNotNull(storedContact);
         assertEquals(contactToStore.getName(), storedContact.getName());
         assertEquals(contactToStore.getSurname(), storedContact.getSurname());
@@ -45,11 +45,11 @@ public class ContactDAOIntegrationTest {
     @Transactional
     public void shouldUpdateStateStoredOrder() {
         Contact contact = createContact("Update", "Contact");
-        contactDAO.insert(contact);
+        contactDao.save(contact);
         Date today = new Date();
         contact.setDateOfBirth(today);
-        contactDAO.update(contact);
-        Contact storedContact = contactDAO.find(contact.getId());
+        contactDao.merge(contact);
+        Contact storedContact = contactDao.getById(contact.getId());
         assertNotNull(storedContact);
         assertEquals(today, storedContact.getDateOfBirth());
     }
@@ -58,11 +58,11 @@ public class ContactDAOIntegrationTest {
     @Transactional
     public void shouldSaveAndAfterDeleteOrder() {
         Contact contact = createContact("Delete", "Contact");
-        contactDAO.insert(contact);
-        Contact storedContact = contactDAO.find(contact.getId());
+        contactDao.save(contact);
+        Contact storedContact = contactDao.getById(contact.getId());
         assertNotNull(storedContact);
-        contactDAO.delete(contact);
-        contact = contactDAO.find(contact.getId());
+        contactDao.delete(contact);
+        contact = contactDao.getById(contact.getId());
         assertNull(contact);
     }
 

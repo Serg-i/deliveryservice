@@ -1,6 +1,6 @@
 package com.itechart.deliveryservice.dao.impl;
 
-import com.itechart.deliveryservice.dao.UserDAO;
+import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.User;
 import com.itechart.deliveryservice.entity.UserRole;
 import org.junit.Test;
@@ -16,12 +16,12 @@ import static junit.framework.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:test-bean-context.xml"})
 @TransactionConfiguration(defaultRollback=true)
-public class UserDAOIntegrationTest {
+public class UserDaoIntegrationTest {
 
     @Autowired
-    UserDAO userDAO;
+    UserDao userDao;
 
-    public UserDAOIntegrationTest() {
+    public UserDaoIntegrationTest() {
         super();
     }
 
@@ -29,7 +29,7 @@ public class UserDAOIntegrationTest {
     @Transactional
     public void shouldCreateUserInDB() {
         User user = createUser("I'm the first user!");
-        userDAO.insert(user);
+        userDao.save(user);
         assertTrue(user.getId() > 0);
     }
 
@@ -37,8 +37,8 @@ public class UserDAOIntegrationTest {
     @Transactional
     public void shouldFindStoredUser() {
         User userToStore = createUser("FindMe");
-        userDAO.insert(userToStore);
-        User storedUser = userDAO.find(userToStore.getId());
+        userDao.save(userToStore);
+        User storedUser = userDao.getById(userToStore.getId());
         assertNotNull(storedUser);
         assertEquals(userToStore.getNickName(), storedUser.getNickName());
     }
@@ -47,10 +47,10 @@ public class UserDAOIntegrationTest {
     @Transactional
     public void shouldUpdateStoredUser() {
         User user = createUser("UpdateMePls");
-        userDAO.insert(user);
+        userDao.save(user);
         user.setRole(UserRole.COURIER);
-        userDAO.update(user);
-        User storedUser = userDAO.find(user.getId());
+        userDao.merge(user);
+        User storedUser = userDao.getById(user.getId());
         assertNotNull(storedUser);
         assertEquals(UserRole.COURIER, storedUser.getRole());
     }
@@ -59,11 +59,11 @@ public class UserDAOIntegrationTest {
     @Transactional
     public void shouldSaveAndAfterDeleteUser() {
         User user = createUser("DEL me pls!");
-        userDAO.insert(user);
-        User storedUser = userDAO.find(user.getId());
+        userDao.save(user);
+        User storedUser = userDao.getById(user.getId());
         assertNotNull(storedUser);
-        userDAO.delete(user);
-        user = userDAO.find(user.getId());
+        userDao.delete(user);
+        user = userDao.getById(user.getId());
         assertNull(user);
     }
 

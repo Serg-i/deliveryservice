@@ -1,6 +1,6 @@
 package com.itechart.deliveryservice.dao.impl;
 
-import com.itechart.deliveryservice.dao.OrderDAO;
+import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.entity.Order;
 import com.itechart.deliveryservice.entity.OrderState;
 import org.junit.Test;
@@ -14,12 +14,12 @@ import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:test-bean-context.xml"})
-public class OrderDAOIntegrationTest {
+public class OrderDaoIntegrationTest {
 
     @Autowired
-    OrderDAO orderDAO;
+    OrderDao orderDao;
 
-    public OrderDAOIntegrationTest() {
+    public OrderDaoIntegrationTest() {
         super();
     }
 
@@ -27,7 +27,7 @@ public class OrderDAOIntegrationTest {
     @Transactional
     public void shouldCreateOrderInDB() {
         Order order = createOrder("It's the first order!");
-        orderDAO.insert(order);
+        orderDao.save(order);
         assertTrue(order.getId() > 0);
     }
 
@@ -35,8 +35,8 @@ public class OrderDAOIntegrationTest {
     @Transactional
     public void shouldFindStoredOrder() {
         Order orderToStore = createOrder("FindOrder");
-        orderDAO.insert(orderToStore);
-        Order storedUser = orderDAO.find(orderToStore.getId());
+        orderDao.save(orderToStore);
+        Order storedUser = orderDao.getById(orderToStore.getId());
         assertNotNull(storedUser);
         assertEquals(orderToStore.getCustomer(), storedUser.getCustomer());
         assertEquals(orderToStore.getRecipient(), storedUser.getRecipient());
@@ -46,10 +46,10 @@ public class OrderDAOIntegrationTest {
     @Transactional
     public void shouldUpdateStateStoredOrder() {
         Order order = createOrder("UpdateOrder");
-        orderDAO.insert(order);
+        orderDao.save(order);
         order.setState(OrderState.ACCEPTED);
-        orderDAO.update(order);
-        Order storedOrder = orderDAO.find(order.getId());
+        orderDao.merge(order);
+        Order storedOrder = orderDao.getById(order.getId());
         assertNotNull(storedOrder);
         assertEquals(OrderState.ACCEPTED, storedOrder.getState());
     }
@@ -58,11 +58,11 @@ public class OrderDAOIntegrationTest {
     @Transactional
     public void shouldSaveAndAfterDeleteOrder() {
         Order order = createOrder("DelOrder!");
-        orderDAO.insert(order);
-        Order storedOrder = orderDAO.find(order.getId());
+        orderDao.save(order);
+        Order storedOrder = orderDao.getById(order.getId());
         assertNotNull(storedOrder);
-        orderDAO.delete(order);
-        order = orderDAO.find(order.getId());
+        orderDao.delete(order);
+        order = orderDao.getById(order.getId());
         assertNull(order);
     }
 

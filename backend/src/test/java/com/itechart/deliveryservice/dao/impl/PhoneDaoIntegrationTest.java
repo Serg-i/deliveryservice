@@ -19,12 +19,12 @@ import static junit.framework.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:test-bean-context.xml"})
 @TransactionConfiguration(defaultRollback=true)
-public class PhoneDAOIntegrationTest {
+public class PhoneDaoIntegrationTest {
 
     @Autowired
-    ContactDAO contactDAO;
+    ContactDao contactDao;
     @Autowired
-    PhoneDAO phoneDAO;
+    PhoneDao phoneDao;
     
     private Phone phone;
     private Contact owner;
@@ -34,46 +34,45 @@ public class PhoneDAOIntegrationTest {
     private String number = "3333333";
     private PhoneType phoneType = PhoneType.HOME;
     
-    
-    public PhoneDAOIntegrationTest() {
+    public PhoneDaoIntegrationTest() {
         super();
     }
 
     @Before
-    public final void before() { 
-    	
-    	owner = new Contact();
-	    owner.setName("name");
-	    owner.setSurname("surname");
-	    owner.setMiddleName("middlename");
-	    owner.setDateOfBirth(new Date());
-	    owner.setEmail("email@email.com");
-	    contactDAO.insert(owner);
-	    phone = new Phone();
-	    phone.setOwner(owner);
-	    phone.setComment(comment);
-	    phone.setCountryCode(countryCode);
-	    phone.setOperatorCode(operatorCode);
-	    phone.setNumber(number);
-	    phone.setPhoneType(phoneType);
+    public final void before() {
+        
+        owner = new Contact();
+        owner.setName("name");
+        owner.setSurname("surname");
+        owner.setMiddleName("middlename");
+        owner.setDateOfBirth(new Date());
+        owner.setEmail("email@email.com");
+        contactDao.save(owner);
+        phone = new Phone();
+        phone.setOwner(owner);
+        phone.setComment(comment);
+        phone.setCountryCode(countryCode);
+        phone.setOperatorCode(operatorCode);
+        phone.setNumber(number);
+        phone.setPhoneType(phoneType);
     }
-    
+
     @Test
     @Transactional
     public void shouldCreatePhoneInDB() {
-    	
-        phoneDAO.insert(phone);
+        
+        phoneDao.save(phone);
         assertTrue(phone.getId() > 0);
-        Phone foundPhone = phoneDAO.find(phone.getId());
+        Phone foundPhone = phoneDao.getById(phone.getId());
         assertNotNull(foundPhone);
     }
 
     @Test
     @Transactional
     public void shouldCreateAndFindTheSamePhone() {
-    	
-        phoneDAO.insert(phone);
-        Phone foundPhone = phoneDAO.find(phone.getId());
+        
+        phoneDao.save(phone);
+        Phone foundPhone = phoneDao.getById(phone.getId());
         assertNotNull(foundPhone);
         assertEquals(foundPhone.getCountryCode(), countryCode);
         assertEquals(foundPhone.getOperatorCode(), operatorCode);
@@ -86,15 +85,15 @@ public class PhoneDAOIntegrationTest {
     @Test
     @Transactional
     public void shouldCreateAndUpdatePhone() {
-    	
-    	phoneDAO.insert(phone);
-    	phone.setCountryCode(countryCode + "0");
-    	phone.setOperatorCode(operatorCode + "0");
-    	phone.setNumber(number + "0");
-    	phone.setPhoneType(PhoneType.MOBILE);
-    	phone.setComment(comment + "0");
-    	phoneDAO.update(phone);
-    	Phone foundPhone = phoneDAO.find(phone.getId());
+        
+        phoneDao.save(phone);
+        phone.setCountryCode(countryCode + "0");
+        phone.setOperatorCode(operatorCode + "0");
+        phone.setNumber(number + "0");
+        phone.setPhoneType(PhoneType.MOBILE);
+        phone.setComment(comment + "0");
+        phoneDao.merge(phone);
+        Phone foundPhone = phoneDao.getById(phone.getId());
         assertNotNull(foundPhone);
         assertEquals(foundPhone.getCountryCode(), countryCode + "0");
         assertEquals(foundPhone.getOperatorCode(), operatorCode + "0");
@@ -107,12 +106,12 @@ public class PhoneDAOIntegrationTest {
     @Transactional
     public void shouldCreateAndAfterDeleterPhone() {
       
-        phoneDAO.insert(phone);
-        Phone foundPhone = phoneDAO.find(phone.getId());
+        phoneDao.save(phone);
+        Phone foundPhone = phoneDao.getById(phone.getId());
         assertNotNull(foundPhone);
-        phoneDAO.delete(foundPhone);
-        foundPhone = phoneDAO.find(foundPhone.getId());
+        phoneDao.delete(foundPhone);
+        foundPhone = phoneDao.getById(foundPhone.getId());
         assertNull(foundPhone);
     }
-	
+
 }
