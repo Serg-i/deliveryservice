@@ -7,17 +7,24 @@ import java.util.List;
 
 @Entity
 public class Contact {
+	
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
+    
+    @Basic(optional = false)
     private String name;
+    
+    @Basic(optional = false)
     private String surname;
+    
     private String middleName;
+    
     private Date dateOfBirth;  // TODO: change to Joda-time or other
+    
     private String email;
     
-    @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="address_id")
+    @Embedded
     private Address address;
     
     @OneToMany(mappedBy="owner")
