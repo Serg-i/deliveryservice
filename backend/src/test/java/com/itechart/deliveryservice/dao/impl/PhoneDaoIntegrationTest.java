@@ -2,6 +2,8 @@ package com.itechart.deliveryservice.dao.impl;
 
 import java.util.Date;
 
+import javax.persistence.PersistenceException;
+
 import com.itechart.deliveryservice.dao.*;
 import com.itechart.deliveryservice.entity.*;
 
@@ -65,8 +67,61 @@ public class PhoneDaoIntegrationTest {
         assertTrue(phone.getId() > 0);
         Phone foundPhone = phoneDao.getById(phone.getId());
         assertNotNull(foundPhone);
+        assertTrue(phoneDao.getCount() == 1);
+        assertTrue(contactDao.getById(owner.getId()).getPhones().size() > 0);
     }
-
+    
+    @Test(expected=NullPointerException.class)
+    @Transactional
+    public void shouldFailToCreatePhoneWithoutOwner() throws Throwable {
+        
+        phone.setOwner(null);
+        phoneDao.save(phone);
+    }
+    
+    @Test(expected=PersistenceException.class)
+    @Transactional
+    public void shouldFailToCreatePhoneWithoutCountryCode() {
+        
+        phone.setCountryCode(null);
+        phoneDao.save(phone);
+    }
+    
+    @Test(expected=PersistenceException.class)
+    @Transactional
+    public void shouldFailToCreatePhoneWithoutOperatorCode() {
+        
+        phone.setOperatorCode(null);
+        phoneDao.save(phone);
+    }
+    
+    @Test(expected=PersistenceException.class)
+    @Transactional
+    public void shouldFailToCreatePhoneWithoutNumber() {
+        
+        phone.setNumber(null);
+        phoneDao.save(phone);
+    }
+    
+    @Test(expected=PersistenceException.class)
+    @Transactional
+    public void shouldFailToCreatePhoneWithCommentLength201() 
+            throws PersistenceException{
+        
+        String comment = new String(new char[201]).replace('\0', ' ');
+        phone.setComment(comment);
+        phoneDao.save(phone);
+    }
+    
+    @Test
+    @Transactional
+    public void shouldCreatePhoneByAddingItToContact() {
+        
+        owner.addPhone(phone);
+        contactDao.merge(owner);
+        assertTrue(phoneDao.getCount() == 1);
+    }
+    
     @Test
     @Transactional
     public void shouldCreateAndFindTheSamePhone() {
@@ -112,6 +167,17 @@ public class PhoneDaoIntegrationTest {
         phoneDao.delete(foundPhone);
         foundPhone = phoneDao.getById(foundPhone.getId());
         assertNull(foundPhone);
+    }
+    
+    @Test
+    @Transactional
+    public void shouldDeleteContactAndAllContactPhones() {
+      
+        phoneDao.save(phone);
+        Phone foundPhone = phoneDao.getById(phone.getId());
+        assertNotNull(foundPhone);
+        contactDao.delete(owner);
+        assertNull(phoneDao.getById(phone.getId()));
     }
 
 }

@@ -2,6 +2,8 @@ package com.itechart.deliveryservice.entity;
 
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +29,8 @@ public class Contact {
     @Embedded
     private Address address;
     
-    @OneToMany(mappedBy="owner")
-    private List<Phone> phones;
+    @OneToMany(mappedBy="owner", cascade = CascadeType.ALL)
+    private List<Phone> phones = new ArrayList<Phone>();
 
     public long getId() {
         return id;
@@ -92,6 +94,13 @@ public class Contact {
 
     public void setPhones(List<Phone> phones) {
         this.phones = phones;
+    }
+
+    public void addPhone(Phone phone) {
+        this.phones.add(phone);
+        if (phone.getOwner() != this) {
+            phone.setOwner(this);
+        }
     }
 
 }

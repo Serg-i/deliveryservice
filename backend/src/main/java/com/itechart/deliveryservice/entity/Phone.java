@@ -10,7 +10,7 @@ public class Phone {
     private long id;
   
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="owner_id")
+	@JoinColumn(name="owner_id", nullable = false)
 	private Contact owner;
 	
     @Column(name = "country_code", nullable = false)
@@ -25,6 +25,7 @@ public class Phone {
     @Enumerated(EnumType.STRING)
     private PhoneType type;
     
+    @Column(length = 200)
     private String comment;
     
     public long getId() {
@@ -40,7 +41,10 @@ public class Phone {
     }
     
     public void setOwner(Contact owner) {
-    	this.owner = owner;
+        this.owner = owner;
+        if (!owner.getPhones().contains(this)) {
+             owner.addPhone(this);
+        }
     }
     
     public String getCountryCode() {
