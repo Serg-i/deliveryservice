@@ -22,7 +22,13 @@
         <!-- RSETEasy -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
+            <artifactId>resteasy-spring</artifactId>
+        </dependency>
+
+        <!-- Conversion -->
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
         </dependency>
 
         <!-- Logging -->

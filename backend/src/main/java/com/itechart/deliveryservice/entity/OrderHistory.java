@@ -15,7 +15,7 @@ public class OrderHistory {
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<OrderChange> orderChanges = new ArrayList<>();
+    private List<OrderChange> orderChanges = new ArrayList<OrderChange>();
 
     public long getId() {
         return id;

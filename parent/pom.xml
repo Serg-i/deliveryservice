@@ -33,8 +33,15 @@
             <!-- RESTEasy -->
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jaxrs</artifactId>
+                <artifactId>resteasy-spring</artifactId>
                 <version>3.0.6.Final</version>
+            </dependency>
+
+            <!-- Conversion -->
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>5.4.0</version>
             </dependency>
 
             <!-- Child projects -->
@@ -74,6 +81,7 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>2.5</version>
+                <scope>provied></scope>
             </dependency>
             <dependency>
                 <groupId>javax.servlet.jsp</groupId>
