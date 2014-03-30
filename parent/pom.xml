@@ -23,6 +23,20 @@
     <dependencyManagement>
         <dependencies>
 
+            <!-- Jackson -->
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-jaxrs</artifactId>
+                <version>1.9.13</version>
+            </dependency>
+
+            <!-- RESTEasy -->
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxrs</artifactId>
+                <version>3.0.6.Final</version>
+            </dependency>
+
             <!-- Child projects -->
             <dependency>
                 <groupId>com.itechart</groupId>

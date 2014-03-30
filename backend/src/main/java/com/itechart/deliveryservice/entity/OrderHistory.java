@@ -1,5 +1,7 @@
 package com.itechart.deliveryservice.entity;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,7 @@ public class OrderHistory {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL)

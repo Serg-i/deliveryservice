@@ -1,5 +1,6 @@
 package com.itechart.deliveryservice.entity;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ public class OrderChange {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     private long id;
 
     private OrderState newState;
