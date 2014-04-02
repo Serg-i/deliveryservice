@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.itechart.deliveryservice.controller.data.PhoneDTO;
 import org.dozer.DozerBeanMapper;
+import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import com.itechart.deliveryservice.dao.PhoneDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Phone;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -21,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Transactional
+@ValidateRequest
 public class PhoneController {
 
     @Autowired
@@ -44,7 +47,7 @@ public class PhoneController {
     @PUT
     @Path("/{contactId}/phones/{phoneId}")
     public void getPhone(@PathParam("contactId") long contactId,
-                                   @PathParam("phoneId") long phoneId, PhoneDTO phoneDTO) {
+                                   @PathParam("phoneId") long phoneId, @Valid PhoneDTO phoneDTO) {
 
         Phone phone =  mapper.map(phoneDTO, Phone.class);
         Contact owner = contactDao.getById(contactId);

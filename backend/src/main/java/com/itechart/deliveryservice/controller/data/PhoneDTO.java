@@ -2,15 +2,24 @@ package com.itechart.deliveryservice.controller.data;
 
 import com.itechart.deliveryservice.entity.PhoneType;
 
-public class PhoneDTO {
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+public class PhoneDTO {
 
     private long id;
     private long ownerId;
+    @Size(max = 4)
+    @Pattern(regexp = "^[0-9]+$")
     private String countryCode;
+    @Size(max = 3)
+    @Pattern(regexp = "^[0-9]+$")
     private String operatorCode;
+    @Size(max = 8)
+    @Pattern(regexp = "^[0-9]+$")
     private String number;
     private PhoneType type;
+    @Size(max = 200)
     private String comment;
     
     public long getId() {
@@ -57,7 +66,7 @@ public class PhoneDTO {
         return type;
     }
     
-    public void setPhoneType(PhoneType type) {
+    public void setType(PhoneType type) {
         this.type = type;
     }
     

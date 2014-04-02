@@ -5,6 +5,7 @@ import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.PhoneDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Phone;
+import com.itechart.deliveryservice.entity.PhoneType;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.dozer.DozerBeanMapper;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -85,10 +87,9 @@ public class PhoneControllerTest {
     public void shouldUpdatePhone() throws Exception {
 
         Phone phone = owner.getPhones().get(0);
-        phone.setNumber("4444444");
         PhoneDTO phoneDTO = dozer.map(phone, PhoneDTO.class);
+        phoneDTO.setNumber("4444444");
         String body = mapper.writeValueAsString(phoneDTO);
-
         {
             MockHttpRequest request = MockHttpRequest.put("/api/contacts/" + owner.getId()
                     + "/phones/" + phone.getId());
@@ -121,6 +122,28 @@ public class PhoneControllerTest {
         assertNull(found);
     }
 
+    @Test
+    public void shouldFailValidation() throws Exception {
+
+        Phone phone = owner.getPhones().get(0);
+        PhoneDTO phoneDTO = dozer.map(phone, PhoneDTO.class);
+        phoneDTO.setNumber("nope");
+        String body = mapper.writeValueAsString(phoneDTO);
+        {
+            MockHttpRequest request = MockHttpRequest.put("/api/contacts/" + owner.getId()
+                    + "/phones/" + phone.getId());
+            request.contentType(MediaType.APPLICATION_JSON);
+            request.content(body.getBytes());
+            MockHttpResponse response = new MockHttpResponse();
+
+            dispatcher.invoke(request, response);
+
+            assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
+        }
+        Phone found = phoneDao.getById(phone.getId());
+        assertNotSame(phoneDTO.getNumber(), found.getNumber());
+    }
+
     private void initDb() {
 
         owner = new Contact();
@@ -131,12 +154,14 @@ public class PhoneControllerTest {
         phone.setCountryCode("375");
         phone.setOperatorCode("33");
         phone.setNumber("3333333");
+        phone.setType(PhoneType.HOME);
         phone.setOwner(owner);
         phoneDao.save(phone);
         phone = new Phone();
         phone.setCountryCode("375");
         phone.setOperatorCode("29");
         phone.setNumber("2222222");
+        phone.setType(PhoneType.MOBILE);
         phone.setOwner(owner);
         phoneDao.save(phone);
     }
