@@ -75,7 +75,7 @@ public class Phone {
     	return type;
     }
     
-    public void setPhoneType(PhoneType type) {
+    public void setType(PhoneType type) {
     	this.type = type;
     }
     

@@ -56,7 +56,7 @@ public class PhoneDaoIntegrationTest {
         phone.setCountryCode(countryCode);
         phone.setOperatorCode(operatorCode);
         phone.setNumber(number);
-        phone.setPhoneType(phoneType);
+        phone.setType(phoneType);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class PhoneDaoIntegrationTest {
         phone.setCountryCode(countryCode + "0");
         phone.setOperatorCode(operatorCode + "0");
         phone.setNumber(number + "0");
-        phone.setPhoneType(PhoneType.MOBILE);
+        phone.setType(PhoneType.MOBILE);
         phone.setComment(comment + "0");
         phoneDao.merge(phone);
         Phone foundPhone = phoneDao.getById(phone.getId());
