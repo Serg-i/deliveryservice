@@ -6,7 +6,7 @@
 
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.Phone</class-a>
-        <class-b>com.itechart.deliveryservice.controller.data.PhoneVO</class-b>
+        <class-b>com.itechart.deliveryservice.controller.data.PhoneDTO</class-b>
         <field>
                 <a>owner.id</a>
                 <b>ownerId</b>

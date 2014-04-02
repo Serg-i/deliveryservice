@@ -2,7 +2,7 @@ package com.itechart.deliveryservice.controller.data;
 
 import com.itechart.deliveryservice.entity.PhoneType;
 
-public class PhoneVO {
+public class PhoneDTO {
 
 
     private long id;
