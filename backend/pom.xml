@@ -19,15 +19,26 @@
             <artifactId>jackson-jaxrs</artifactId>
         </dependency>
 
+        <!-- RSETEasy -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson-provider</artifactId>
         </dependency>
 
-        <!-- RSETEasy -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-spring</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-hibernatevalidator-provider</artifactId>
+        </dependency>
+
+        <!-- Validation -->
+        <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <!-- Conversion -->

@@ -30,17 +30,30 @@
                 <version>1.9.13</version>
             </dependency>
 
+            <!-- RESTEasy -->
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-jackson-provider</artifactId>
                 <version>3.0.6.Final</version>
             </dependency>
 
-            <!-- RESTEasy -->
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-spring</artifactId>
                 <version>3.0.6.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-hibernatevalidator-provider</artifactId>
+                <version>3.0.6.Final</version>
+            </dependency>
+
+            <!-- Validation -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>4.2.0.Final</version>
             </dependency>
 
             <!-- Conversion -->
