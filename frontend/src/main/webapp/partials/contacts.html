@@ -1,39 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <link href="../css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="../css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
 <div class="page-header">
-    <h1>Пользователи <small></small></h1>
+    <h1>Контакты<small></small></h1>
 </div>
 <div class="container-fluid">
     <div class="panel-body">
         <div class=" text-right">
             <div class="btn-group">
-                <button type="button" class="btn btn-default">Новый</button>
-                <button type="button" class="btn btn-default">Редактировать</button>
+                <a href="#/api/search-contact" class="btn btn-default">Поиск</a>
+                <a href="#/api/email" class="btn btn-default">Отправить письмо</a>
+            </div>
+            <div class="btn-group">
+                <a href="#/api/contact" class="btn btn-default">Новый</a>
+                <a href="#/api/contact" class="btn btn-default">Редактировать</a>
                 <button type="button" class="btn btn-default">Удалить</button>
             </div>
         </div>
         <br/>
         <div class="panel panel-default">
-            <div class="panel-heading">Пользователи</div>
+            <div class="panel-heading">Контакты</div>
             <table class="table">
                 <thead>
                 <tr>
                     <td><span class="label label-primary"></span></td>
                     <td><span class="label label-primary">Полное имя</span></td>
-                    <td><span class="label label-primary">Login</span></td>
-                    <td><span class="label label-primary">Роль</span></td>
+                    <td><span class="label label-primary">Дата рождения</span></td>
+                    <td><span class="label label-primary">Адрес</span></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td><input type="checkbox"></td>
-                    <td><a href="#"><span class="label label-default">Имя имя пам-парам</span></a></td>
+                    <td><a href="#/api/contact"><span class="label label-default">Имя имя пам-парам</span></a></td>
                     <td><span class="label label-default">Новый статус</span></td>
                     <td><span class="label label-default">Кто изменил статус</span></td>
                 </tr>
@@ -42,10 +38,3 @@
         </div>
     </div>
 </div>
-<div class="modal-footer">
-    © 2014 iTechArt
-</div>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-</body>
-</html>
