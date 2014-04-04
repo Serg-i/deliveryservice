@@ -20,7 +20,7 @@
 
     <servlet-mapping>
         <servlet-name>Resteasy</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -40,5 +40,9 @@
     <listener>
         <listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
     </listener>
+
+    <session-config>
+        <session-timeout>20</session-timeout>
+    </session-config>
 
 </web-app>

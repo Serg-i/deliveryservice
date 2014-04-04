@@ -7,15 +7,22 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.springframework.org/schema/security
 http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <http auto-config="true">
-        <anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
+   <http auto-config="true">
+
+        <intercept-url pattern="/api/**" access="ROLE_USER" />
+
+        <form-login login-page="/login.html" default-target-url="/orders.html"
+                    authentication-failure-url="/login.html?login_error=1" />
+        <logout />
+
+        <remember-me user-service-ref="userDetailsService" key = "Something" />
     </http>
 
     <beans:bean id="userDetailsService"
                 class="com.itechart.deliveryservice.service.security.UserAuthenticationProvider" />
 
     <beans:bean
-            class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+                class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 
     <authentication-manager>
         <authentication-provider user-service-ref="userDetailsService" />
