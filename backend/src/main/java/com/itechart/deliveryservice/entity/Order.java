@@ -10,26 +10,34 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Enumerated(EnumType.STRING)
     private OrderState state;
 
-    private long customer;
+    @ManyToOne
+    @JoinColumn (name="customer_id")
+    private Contact customer;
 
     private String description;
 
     private Date date;
 
-    private int cost;
+    private String cost;
 
-    @Column(name = "reception_manager")
-    private long receptionManager ;
+    @ManyToOne
+    @JoinColumn (name="reception_manager_id")
+    private User receptionManager ;
 
-    @Column(name = "processing_manager")
-    private long processingManager ;
+    @ManyToOne
+    @JoinColumn (name="processing_manager_id")
+    private User processingManager ;
 
-    @Column(name = "delivery_manager")
-    private long deliveryManager ;
+    @ManyToOne
+    @JoinColumn (name="delivery_manager__id")
+    private User deliveryManager ;
 
-    private long recipient;
+    @ManyToOne
+    @JoinColumn (name="recipient_id")
+    private Contact recipient;
 
     @OneToOne(cascade = CascadeType.ALL)
     private OrderHistory history;
@@ -54,14 +62,6 @@ public class Order {
         this.state = state;
     }
 
-    public long getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(long customer) {
-        this.customer = customer;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -70,44 +70,12 @@ public class Order {
         this.description = description;
     }
 
-    public int getCost() {
+    public String getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(String cost) {
         this.cost = cost;
-    }
-
-    public long getReceptionManager() {
-        return receptionManager;
-    }
-
-    public void setReceptionManager(long receptionManager) {
-        this.receptionManager = receptionManager;
-    }
-
-    public long getProcessingManager() {
-        return processingManager;
-    }
-
-    public void setProcessingManager(long processingManager) {
-        this.processingManager = processingManager;
-    }
-
-    public long getDeliveryManager() {
-        return deliveryManager;
-    }
-
-    public void setDeliveryManager(long deliveryManager) {
-        this.deliveryManager = deliveryManager;
-    }
-
-    public long getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(long recipient) {
-        this.recipient = recipient;
     }
 
     public Date getDate() {
@@ -124,5 +92,45 @@ public class Order {
 
     public void setHistory(OrderHistory history) {
         this.history = history;
+    }
+
+    public Contact getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Contact customer) {
+        this.customer = customer;
+    }
+
+    public User getReceptionManager() {
+        return receptionManager;
+    }
+
+    public void setReceptionManager(User receptionManager) {
+        this.receptionManager = receptionManager;
+    }
+
+    public User getProcessingManager() {
+        return processingManager;
+    }
+
+    public void setProcessingManager(User processingManager) {
+        this.processingManager = processingManager;
+    }
+
+    public User getDeliveryManager() {
+        return deliveryManager;
+    }
+
+    public void setDeliveryManager(User deliveryManager) {
+        this.deliveryManager = deliveryManager;
+    }
+
+    public Contact getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(Contact recipient) {
+        this.recipient = recipient;
     }
 }

@@ -1,14 +1,18 @@
 package com.itechart.deliveryservice.dao.impl;
 
+import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
-import com.itechart.deliveryservice.entity.Order;
-import com.itechart.deliveryservice.entity.OrderState;
+import com.itechart.deliveryservice.dao.UserDao;
+import com.itechart.deliveryservice.entity.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 import static junit.framework.Assert.*;
 
@@ -18,9 +22,36 @@ public class OrderDaoIntegrationTest {
 
     @Autowired
     OrderDao orderDao;
+    @Autowired
+    UserDao userDao;
+    @Autowired
+    ContactDao contactDao;
+
+    private Contact contact;
+    private User user;
+
 
     public OrderDaoIntegrationTest() {
         super();
+    }
+
+    @Before
+    public final void before() {
+
+        user = new User();
+        user.setNickName("processingManager");
+        user.setPassword("sha2PassHere");
+        user.setRole(UserRole.ADMINISTRATOR);
+        userDao.save(user);
+
+        contact = new Contact();
+        contact.setName("info");
+        contact.setSurname("info");
+        contact.setMiddleName("info");
+        contact.setDateOfBirth(new Date());
+        contact.setEmail("info@gmail.com");
+        contactDao.save(contact);
+
     }
 
     @Test
@@ -36,10 +67,10 @@ public class OrderDaoIntegrationTest {
     public void shouldFindStoredOrder() {
         Order orderToStore = createOrder("FindOrder");
         orderDao.save(orderToStore);
-        Order storedUser = orderDao.getById(orderToStore.getId());
-        assertNotNull(storedUser);
-        assertEquals(orderToStore.getCustomer(), storedUser.getCustomer());
-        assertEquals(orderToStore.getRecipient(), storedUser.getRecipient());
+        Order storedOrder = orderDao.getById(orderToStore.getId());
+        assertNotNull(storedOrder);
+        assertEquals(orderToStore.getCustomer(), storedOrder.getCustomer());
+        assertEquals(orderToStore.getRecipient(), storedOrder.getRecipient());
     }
 
     @Test
@@ -68,12 +99,12 @@ public class OrderDaoIntegrationTest {
 
     private Order createOrder(String description) {
         Order order = new Order();
-        order.setCost(100);
-        order.setCustomer(1);
-        order.setReceptionManager(2);
-        order.setProcessingManager(3);
-        order.setDeliveryManager(4);
-        order.setRecipient(5);
+        order.setCost("100");
+        order.setCustomer(contact);
+        order.setReceptionManager(user);
+        order.setProcessingManager(user);
+        order.setDeliveryManager(user);
+        order.setRecipient(contact);
         order.setState(OrderState.NEW);
         order.setDescription(description);
         return order;
