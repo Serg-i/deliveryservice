@@ -11,7 +11,17 @@
                 <a>owner.id</a>
                 <b>ownerId</b>
         </field>
-        </mapping>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.User</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.LoginInfoDTO</class-b>
+        <field>
+            <a>nickName</a>
+            <b>name</b>
+        </field>
+    </mapping>
+
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.Contact</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.ContactDTO</class-b>
