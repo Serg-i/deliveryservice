@@ -11,6 +11,26 @@
                 <a>owner.id</a>
                 <b>ownerId</b>
         </field>
+        </mapping>
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.Contact</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.ContactDTO</class-b>
+        <field>
+            <a>address.city</a>
+            <b>city</b>
+        </field>
+        <field>
+            <a>address.street</a>
+            <b>street</b>
+        </field>
+        <field>
+            <a>address.flat</a>
+            <b>flat</b>
+        </field>
+        <field>
+            <a>address.home</a>
+            <b>home</b>
+        </field>
     </mapping>
 
     <mapping map-null="false">
