@@ -1,7 +1,7 @@
-<div class="page-header">
-    <h1>Заказы<small></small></h1>
-</div>
 <div class="container-fluid">
+    <div class="page-header">
+        <h1>Заказы<small></small></h1>
+    </div>
     <div class="panel-body">
         <div class=" text-right">
             <div class="btn-group">
@@ -19,21 +19,23 @@
                 <thead>
                 <tr>
                     <td><span class="label label-primary"></span></td>
+                    <td><span class="label label-primary">Состояние</span></td>
                     <td><span class="label label-primary">Зказчик</span></td>
                     <td><span class="label label-primary">Получатель</span></td>
                     <td><span class="label label-primary">Дата</span></td>
-                    <td><span class="label label-primary">Состояние</span></td>
+                    <td><span class="label label-primary">Стоимость</span></td>
+                    <td><span class="label label-primary">Описание</span></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="order in orders">
                     <td><input type="checkbox" ></td>
-                    <td><a ng-click="editOrder(order.id)">
-                        <span class="label label-default">{{ order.customer }}</span>
-                    </a></td>
+                    <td><span class="label label-primary">{{ order.state }}</span></td>
+                    <td><span class="label label-default">{{ order.customer }}</span></td>
                     <td><span class="label label-default">{{ order.recipient }}</span></td>
                     <td><span class="label label-default">{{ order.date }}</span></td>
-                    <td><span class="label label-primary">{{ order.state }}</span></td>
+                    <td><span class="label label-default">{{ order.cost }}</span></td>
+                    <td><span class="label label-default">{{ order.description }}</span></td>
                 </tr>
                 </tbody>
             </table>

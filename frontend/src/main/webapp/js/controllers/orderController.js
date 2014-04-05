@@ -1,7 +1,7 @@
-var app = angular.module('orderControllers', []);
+var app = angular.module('myApp.orderControllers', []);
 
 app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location',
-    function ($scope, OrderREST, $location) {
+    function ($scope, OrderREST,  $location) {
 
         // callback for ng-click 'editOrder':
         $scope.editOrder = function (orderId) {
@@ -29,8 +29,8 @@ app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location',
         $scope.orders = OrderREST.readAll();
     }]);
 
-app.controller('NewOrderCtrl', ['$scope', 'OrderREST', '$location',
-    function ($scope, OrderREST, $location) {
+app.controller('NewOrderCtrl', ['$scope', 'OrderREST',  '$location',
+    function ($scope, OrderREST,  $location) {
 
         // callback for ng-click 'saveOrder':
         $scope.saveOrder = function () {
@@ -40,7 +40,7 @@ app.controller('NewOrderCtrl', ['$scope', 'OrderREST', '$location',
     }]);
 
 app.controller('EditOrderCtrl', ['$scope', 'OrderREST', '$location',
-    function ($scope, OrderREST, $location) {
+    function ($scope, OrderREST,  $location) {
 
         // callback for ng-click 'saveOrder':
         $scope.saveOrder = function () {
@@ -49,8 +49,8 @@ app.controller('EditOrderCtrl', ['$scope', 'OrderREST', '$location',
         };
     }]);
 
-app.controller('SearchOrderCtrl', ['$scope', 'OrderREST', '$location',
-    function ($scope, OrderREST, $location) {
+app.controller('SearchOrderCtrl', ['$scope', 'OrderREST',   '$location',
+    function ($scope, OrderREST,  $location) {
 
         // callback for ng-click 'searchOrder':
         $scope.searchOrder = function () {

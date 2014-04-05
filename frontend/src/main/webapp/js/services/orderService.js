@@ -2,7 +2,7 @@
 
 /* Services */
 
-angular.module("orderService", ["ngResource"]).
+angular.module("myApp.orderService", ["ngResource"]).
     factory("OrderREST", function($resource) {
         return $resource("/api/orders/:id", {}, {
             readAll: {method: "GET", params: {id: ''}, isArray: true},
