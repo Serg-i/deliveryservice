@@ -22,7 +22,7 @@ public class Contact {
     
     private String middleName;
     
-    private Date dateOfBirth;  // TODO: change to Joda-time or other
+    private Date dateOfBirth;
     
     private String email;
     
