@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('myApp.directives', []);
+var app = angular.module('myApp.backgroundDirective', []);
 
 
     app.directive('backImg',function() {

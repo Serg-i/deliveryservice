@@ -3,7 +3,11 @@
 // Declare app level module which depends on filters, and services
 var app = angular.module('myApp', [
   'ngRoute',
-  'myApp.directives',
+
+  'myApp.breadcrumbsControllers',
+  'myApp.breadcrumbsDirectives',
+  'myApp.breadcrumbsServices',
+  'myApp.backgroundDirective',
   'myApp.navList',
   'myApp.orderControllers',
   'myApp.orderService',

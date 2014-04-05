@@ -1,7 +1,7 @@
-var app = angular.module('myApp.orderControllers', []);
+var app = angular.module('myApp.orderControllers', ['myApp.breadcrumbsServices']);
 
-app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location',
-    function ($scope, OrderREST,  $location) {
+app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location','BreadCrumbsService',
+    function ($scope, OrderREST,  $location, BreadCrumbsService) {
 
         // callback for ng-click 'editOrder':
         $scope.editOrder = function (orderId) {
@@ -19,11 +19,13 @@ app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location',
 
         // callback for ng-click 'createOreder':
         $scope.createOrder = function () {
+            BreadCrumbsService.push( 'home', {href: '#/api/new_order',label: 'Новый заказ'} );
             $location.path('/api/new_order');
         };
 
         // callback for ng-click 'searchOrder':
         $scope.searchOrder = function () {
+            BreadCrumbsService.push( 'home', {href: '#/api/search_order',label: 'Поиск заказа'} );
             $location.path('/api/search_order');
         };
         $scope.orders = OrderREST.readAll();

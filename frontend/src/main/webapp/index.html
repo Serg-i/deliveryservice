@@ -8,7 +8,7 @@
 </head>
 <body back-img="img/bg.jpg" ng-controller="navCtrl">
 
-<div class="navbar navbar-default container-fluid" >
+<div class="navbar navbar-default">
     <div class="navbar-header">
         <a class="navbar-brand" href="#/api/orders">Home</a>
     </div>
@@ -24,6 +24,11 @@
         </ul>
     </div>
 </div>
+<div class="container-fluid" ng-controller="breadcrumbsCtrl" ng-init = 'pushSomething()'>
+    <ul id="home" bread-crumbs></ul>
+</div>
+
+
 <div ng-view></div>
 
 <div class="modal-footer">
@@ -37,9 +42,12 @@
 <script src="lib/bootstrap/bootstrap.min.js"></script>
 
 <script src="js/app.js"></script>
-<script src="js/directives.js"></script>
+<script src="js/directives/backgroundDirective.js"></script>
 <script src="js/controllers/navController.js"></script>
-<script src="js/controllers/beadcrumbsController.js"></script>
+
+<script src="js/controllers/breadcrumbsController.js"></script>
+<script src="js/services/breadcrumbsService.js"></script>
+<script src="js/directives/breadcrumbsDirective.js"></script>
 
 <script src="js/controllers/orderController.js"></script>
 <script src="js/services/orderService.js"></script>
