@@ -39,7 +39,7 @@ public class OrderDaoIntegrationTest {
     public final void before() {
 
         user = new User();
-        user.setNickName("processingManager");
+        user.setUsername("processingManager");
         user.setPassword("sha2PassHere");
         user.setRole(UserRole.ADMINISTRATOR);
         userDao.save(user);

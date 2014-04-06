@@ -17,7 +17,7 @@
         <class-a>com.itechart.deliveryservice.entity.User</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.LoginInfoDTO</class-b>
         <field>
-            <a>nickName</a>
+            <a>username</a>
             <b>name</b>
         </field>
     </mapping>
@@ -63,15 +63,15 @@
             <b>recipientSurname</b>
         </field>
         <field>
-            <a>receptionManager.nickName</a>
+            <a>receptionManager.username</a>
             <b>receptionManager</b>
         </field>
         <field>
-            <a>processingManager.nickName</a>
+            <a>processingManager.username</a>
             <b>processingManager</b>
         </field>
         <field>
-            <a>deliveryManager.nickName</a>
+            <a>deliveryManager.username</a>
             <b>deliveryManager</b>
         </field>
     </mapping>
@@ -101,7 +101,7 @@
         <class-a>com.itechart.deliveryservice.entity.OrderChange</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.OrderChangeDTO</class-b>
         <field>
-            <a>userChangedStatus.nickname</a>
+            <a>userChangedStatus.username</a>
             <b>userChangedStatusNickname</b>
         </field>
     </mapping>

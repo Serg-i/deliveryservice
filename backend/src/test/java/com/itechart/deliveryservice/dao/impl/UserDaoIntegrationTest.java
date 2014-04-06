@@ -1,6 +1,8 @@
 package com.itechart.deliveryservice.dao.impl;
 
+import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.UserDao;
+import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.User;
 import com.itechart.deliveryservice.entity.UserRole;
 import org.junit.Test;
@@ -21,6 +23,9 @@ public class UserDaoIntegrationTest {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    ContactDao contactDao;
+
     public UserDaoIntegrationTest() {
         super();
     }
@@ -40,7 +45,7 @@ public class UserDaoIntegrationTest {
         userDao.save(userToStore);
         User storedUser = userDao.getById(userToStore.getId());
         assertNotNull(storedUser);
-        assertEquals(userToStore.getNickName(), storedUser.getNickName());
+        assertEquals(userToStore.getUsername(), storedUser.getUsername());
     }
 
     @Test
@@ -67,12 +72,34 @@ public class UserDaoIntegrationTest {
         assertNull(user);
     }
 
+    @Test
+    @Transactional
+    public void shouldUpdateContact() {
+        User user = createUser("Won't be updated");
+        userDao.save(user);
+        Contact contact = createContact();
+        user.setContact(contact);
+        contactDao.save(contact);
+        contact.setSurname("Updated surname");
+        userDao.merge(user);
+        user = userDao.getById(user.getId());
+        assertEquals("Updated surname", user.getContact().getSurname());
+    }
+
     private User createUser(String name) {
         User user = new User();
-        user.setNickName(name);
+        user.setUsername(name);
         user.setPassword("sha1PassHere");
         user.setRole(UserRole.ADMINISTRATOR);
         return user;
+    }
+
+    private Contact createContact() {
+        Contact contact = new Contact();
+        contact.setName("Contact");
+        contact.setSurname("Lee");
+        contact.setEmail("email@email.com");
+        return contact;
     }
 
 }

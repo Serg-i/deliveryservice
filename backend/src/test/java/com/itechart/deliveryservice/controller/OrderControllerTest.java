@@ -176,7 +176,7 @@ public class OrderControllerTest {
         dispatcher.getRegistry().addSingletonResource(obj);
 
         user = new User();
-        user.setNickName("receptionManager");
+        user.setUsername("receptionManager");
         user.setPassword("sha1PassHere");
         user.setRole(UserRole.ADMINISTRATOR);
         userDao.save(user);

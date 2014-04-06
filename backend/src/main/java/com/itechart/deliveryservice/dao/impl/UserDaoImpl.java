@@ -16,7 +16,7 @@ public class UserDaoImpl extends DaoImpl<User> implements UserDao {
 
     public User getByName(String name) {
 
-        Query q = getEntityManager().createQuery("select c from User c where c.nickName = :name");
+        Query q = getEntityManager().createQuery("select c from User c where c.username = :name");
         q.setParameter("name", name);
         return (User)q.getSingleResult();
     }

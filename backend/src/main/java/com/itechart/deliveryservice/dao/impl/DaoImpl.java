@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public abstract class DaoImpl<Type> implements Dao<Type> {
 
-    private Class<Type> entityClass;
+    private final Class<Type> entityClass;
 
     @PersistenceContext
     private EntityManager entityManager;
