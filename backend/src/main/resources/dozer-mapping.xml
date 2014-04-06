@@ -97,4 +97,13 @@
         </field>
     </mapping>
 
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.OrderChange</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.OrderChangeDTO</class-b>
+        <field>
+            <a>userChangedStatus.nickname</a>
+            <b>userChangedStatusNickname</b>
+        </field>
+    </mapping>
+
 </mappings>

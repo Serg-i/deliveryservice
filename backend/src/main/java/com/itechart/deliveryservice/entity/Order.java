@@ -1,7 +1,9 @@
 package com.itechart.deliveryservice.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "orders")
 public class Order {
@@ -39,8 +41,8 @@ public class Order {
     @JoinColumn (name="recipient_id")
     private Contact recipient;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private OrderHistory history;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderChange> changes = new ArrayList<OrderChange>();
 
     public Order() {
         super();
@@ -86,12 +88,12 @@ public class Order {
         this.date = date;
     }
 
-    public OrderHistory getHistory() {
-        return history;
+    public List<OrderChange> getChanges() {
+        return changes;
     }
 
-    public void setHistory(OrderHistory history) {
-        this.history = history;
+    public void setChanges(List<OrderChange> changes) {
+        this.changes = changes;
     }
 
     public Contact getCustomer() {

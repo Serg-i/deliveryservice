@@ -1,11 +1,11 @@
 package com.itechart.deliveryservice.controller;
 
+import com.itechart.deliveryservice.controller.data.OrderChangeDTO;
 import com.itechart.deliveryservice.controller.data.OrderDTO;
 import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.entity.Order;
-import com.itechart.deliveryservice.entity.OrderHistory;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.itechart.deliveryservice.entity.OrderChange;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,17 +34,14 @@ public class OrderController {
     private DozerBeanMapper mapper;
 
     @GET
-    @Transactional
-    @Path("/{id}/history")
-    public Response getHistory(@PathParam("id") long orderId) {
+    @Path("/{id}/orderChanges")
+    public List<OrderChangeDTO> getChanges(@PathParam("id") long orderId) {
         Order order = orderDao.getById(orderId);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return Response.status(OK_STATUS).entity(mapper.writeValueAsString(order.getHistory())).build();
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<OrderChangeDTO> orderChanges = new ArrayList<OrderChangeDTO>(order.getChanges().size());
+        for(OrderChange orderChange : order.getChanges()) {
+            orderChanges.add(mapper.map(orderChange, OrderChangeDTO.class));
         }
-        return null;
+        return orderChanges;
     }
 
     @GET

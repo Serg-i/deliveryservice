@@ -1,12 +1,12 @@
 package com.itechart.deliveryservice.entity;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.joda.time.DateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Entity
 public class OrderChange {
@@ -23,7 +23,7 @@ public class OrderChange {
 
     private String comment;
 
-    private DateTime date;
+    private Date date;
 
     public long getId() {
         return id;
@@ -57,11 +57,11 @@ public class OrderChange {
         this.comment = comment;
     }
 
-    public DateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(DateTime date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

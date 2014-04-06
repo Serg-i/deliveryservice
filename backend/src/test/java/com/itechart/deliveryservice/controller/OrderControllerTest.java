@@ -1,5 +1,6 @@
 package com.itechart.deliveryservice.controller;
 
+import com.itechart.deliveryservice.controller.data.OrderChangeDTO;
 import com.itechart.deliveryservice.controller.data.OrderDTO;
 import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
@@ -23,6 +24,7 @@ import org.jboss.resteasy.mock.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +60,39 @@ public class OrderControllerTest {
 
     @After
     public final void stop() {
+    }
+
+    @Test
+    public void shouldReturnOrderChangesInJSON() throws Exception {
+        Order order = orderDao.getAll().get(0);
+        MockHttpRequest request = MockHttpRequest.get("/api/orders/" + order.getId() + "/orderChanges");
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        String content = response.getContentAsString();
+        List<OrderChangeDTO> orderChangeDTOs = mapper.readValue(content, new TypeReference<List<OrderChangeDTO>>() {
+        });
+        assertEquals(Collections.EMPTY_LIST, orderChangeDTOs);
+        final String COMMENT = "comment";
+        final String NAME = "receptionManager";
+        OrderChange orderChange = new OrderChange();
+        orderChange.setComment(COMMENT);
+        orderChange.setNewState(OrderState.CANCELED);
+        orderChange.setDate(new Date());
+        orderChange.setUserChangedStatus(userDao.getByName(NAME));
+        order.getChanges().add(orderChange);
+        orderDao.save(order);
+        request = MockHttpRequest.get("/api/orders/" + order.getId() + "/orderChanges");
+        response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        content = response.getContentAsString();
+        orderChangeDTOs = mapper.readValue(content, new TypeReference<List<OrderChangeDTO>>() {
+        });
+        assertEquals(1, orderChangeDTOs.size());
+        assertEquals(COMMENT, orderChangeDTOs.get(0).getComment());
+        assertEquals(NAME, orderChangeDTOs.get(0).getUserChangedStatusNickname());
+        assertEquals(OrderState.CANCELED, orderChangeDTOs.get(0).getNewState());
     }
 
     @Test
