@@ -3,16 +3,14 @@ package com.itechart.deliveryservice.dao.impl;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
-import com.itechart.deliveryservice.entity.*;
-import org.junit.Before;
+import com.itechart.deliveryservice.entity.Order;
+import com.itechart.deliveryservice.entity.OrderState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 import static junit.framework.Assert.*;
 
@@ -27,37 +25,23 @@ public class OrderDaoIntegrationTest {
     @Autowired
     ContactDao contactDao;
 
-    private Contact contact;
-    private User user;
-
-
     public OrderDaoIntegrationTest() {
         super();
-    }
-
-    @Before
-    public final void before() {
-
-        user = new User();
-        user.setUsername("processingManager");
-        user.setPassword("sha2PassHere");
-        user.setRole(UserRole.ADMINISTRATOR);
-        userDao.save(user);
-
-        contact = new Contact();
-        contact.setName("info");
-        contact.setSurname("info");
-        contact.setMiddleName("info");
-        contact.setDateOfBirth(new Date());
-        contact.setEmail("info@gmail.com");
-        contactDao.save(contact);
-
     }
 
     @Test
     @Transactional
     public void shouldCreateOrderInDB() {
-        Order order = createOrder("It's the first order!");
+
+        Order order = new Order();
+        order.setCost("100");
+        order.setCustomer(contactDao.getById(1));
+        order.setReceptionManager(userDao.getById(1));
+        order.setProcessingManager(userDao.getById(1));
+        order.setDeliveryManager(userDao.getById(1));
+        order.setRecipient(contactDao.getById(1));
+        order.setState(OrderState.NEW);
+        order.setDescription("description");
         orderDao.save(order);
         assertTrue(order.getId() > 0);
     }
@@ -65,19 +49,16 @@ public class OrderDaoIntegrationTest {
     @Test
     @Transactional
     public void shouldFindStoredOrder() {
-        Order orderToStore = createOrder("FindOrder");
-        orderDao.save(orderToStore);
-        Order storedOrder = orderDao.getById(orderToStore.getId());
+
+        Order storedOrder = orderDao.getById(1);
         assertNotNull(storedOrder);
-        assertEquals(orderToStore.getCustomer(), storedOrder.getCustomer());
-        assertEquals(orderToStore.getRecipient(), storedOrder.getRecipient());
     }
 
     @Test
     @Transactional
-    public void shouldUpdateStateStoredOrder() {
-        Order order = createOrder("UpdateOrder");
-        orderDao.save(order);
+    public void shouldUpdateOrder() {
+
+        Order order = orderDao.getById(1);
         order.setState(OrderState.ACCEPTED);
         orderDao.merge(order);
         Order storedOrder = orderDao.getById(order.getId());
@@ -87,27 +68,14 @@ public class OrderDaoIntegrationTest {
 
     @Test
     @Transactional
-    public void shouldSaveAndAfterDeleteOrder() {
-        Order order = createOrder("DelOrder!");
-        orderDao.save(order);
+    public void shouldDeleteOrder() {
+
+        Order order = orderDao.getById(1);
         Order storedOrder = orderDao.getById(order.getId());
         assertNotNull(storedOrder);
         orderDao.delete(order);
         order = orderDao.getById(order.getId());
         assertNull(order);
-    }
-
-    private Order createOrder(String description) {
-        Order order = new Order();
-        order.setCost("100");
-        order.setCustomer(contact);
-        order.setReceptionManager(user);
-        order.setProcessingManager(user);
-        order.setDeliveryManager(user);
-        order.setRecipient(contact);
-        order.setState(OrderState.NEW);
-        order.setDescription(description);
-        return order;
     }
 
 }

@@ -1,7 +1,10 @@
 package com.itechart.deliveryservice.dao.impl;
 
 import com.itechart.deliveryservice.dao.OrderChangeDao;
+import com.itechart.deliveryservice.dao.OrderDao;
+import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.OrderChange;
+import com.itechart.deliveryservice.entity.OrderState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 import static junit.framework.Assert.*;
@@ -19,6 +23,10 @@ public class OrderChangeDaoIntegrationTest {
 
     @Autowired
     private OrderChangeDao orderChangeDao;
+    @Autowired
+    private OrderDao orderDao;
+    @Autowired
+    private UserDao userDao;
 
     @Test
     @Transactional
@@ -29,60 +37,50 @@ public class OrderChangeDaoIntegrationTest {
     @Test
     @Transactional
     public void testSave() {
+
         OrderChange orderChange = new OrderChange();
+        orderChange.setDate(new Date());
+        orderChange.setNewState(OrderState.NEW);
+        orderChange.setOrder(orderDao.getById(1));
+        orderChange.setUserChangedStatus(userDao.getById(1));
         orderChangeDao.save(orderChange);
+        assertTrue(orderChange.getId() > 0);
         assertEquals(orderChange, orderChangeDao.getById(orderChange.getId()));
     }
 
     @Test
     @Transactional
     public void testMerge() {
+
+        OrderChange orderChange = orderChangeDao.getById(1);
         final String COMMENT = "comment";
-        final String COMMENT_2 = "comment 2";
-        OrderChange orderChange = new OrderChange();
         orderChange.setComment(COMMENT);
-        orderChangeDao.save(orderChange);
-        long id = orderChange.getId();
-        assertEquals(orderChangeDao.getById(id).getComment(), COMMENT);
-        orderChange = new OrderChange();
-        orderChange.setComment(COMMENT_2);
-        orderChange.setId(id);
         orderChangeDao.merge(orderChange);
-        assertEquals(orderChangeDao.getById(id).getComment(), COMMENT_2);
+        assertEquals(orderChangeDao.getById(1).getComment(), COMMENT);
     }
 
     @Test
     @Transactional
     public void testGetAll() {
-        OrderChange orderChange1 = new OrderChange();
-        OrderChange orderChange2 = new OrderChange();
-        orderChangeDao.save(orderChange1);
-        orderChangeDao.save(orderChange2);
+
         List<OrderChange> orderChanges = orderChangeDao.getAll();
-//        assertTrue(orderChanges.size() == 2);
-        assertTrue(orderChanges.contains(orderChange1));
-        assertTrue(orderChanges.contains(orderChange2));
+        assertTrue(orderChanges.size() > 0);
     }
 
     @Test
     @Transactional
     public void testDelete() {
-        OrderChange orderChange = new OrderChange();
-        orderChangeDao.save(orderChange);
-        List<OrderChange> orderChanges = orderChangeDao.getAll();
-        assertTrue(orderChanges.contains(orderChange));
+
+        OrderChange orderChange = orderChangeDao.getById(1);
+        assertNotNull(orderChange);
         orderChangeDao.delete(orderChange);
-        orderChanges = orderChangeDao.getAll();
-        assertFalse(orderChanges.contains(orderChange));
+        assertNull(orderChangeDao.getById(orderChange.getId()));
     }
 
     @Test
     @Transactional
     public void testCount() {
-        OrderChange orderChange = new OrderChange();
-        orderChangeDao.save(orderChange);
-//        assertEquals(orderChangeDao.getCount(), 1);
-        orderChangeDao.delete(orderChange);
-//        assertEquals(orderChangeDao.getCount(), 0);
+
+        assertTrue(orderChangeDao.getCount() > 0);
     }
 }

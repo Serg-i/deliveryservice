@@ -33,7 +33,11 @@ public class UserDaoIntegrationTest {
     @Test
     @Transactional
     public void shouldCreateUserInDB() {
-        User user = createUser("I'm the first user!");
+
+        User user = new User();
+        user.setUsername("I'm the first user!");
+        user.setPassword("sha1PassHere");
+        user.setRole(UserRole.ADMINISTRATOR);
         userDao.save(user);
         assertTrue(user.getId() > 0);
     }
@@ -41,18 +45,16 @@ public class UserDaoIntegrationTest {
     @Test
     @Transactional
     public void shouldFindStoredUser() {
-        User userToStore = createUser("FindMe");
-        userDao.save(userToStore);
-        User storedUser = userDao.getById(userToStore.getId());
+
+        User storedUser = userDao.getById(1);
         assertNotNull(storedUser);
-        assertEquals(userToStore.getUsername(), storedUser.getUsername());
     }
 
     @Test
     @Transactional
     public void shouldUpdateStoredUser() {
-        User user = createUser("UpdateMePls");
-        userDao.save(user);
+
+        User user = userDao.getById(1);
         user.setRole(UserRole.COURIER);
         userDao.merge(user);
         User storedUser = userDao.getById(user.getId());
@@ -63,10 +65,9 @@ public class UserDaoIntegrationTest {
     @Test
     @Transactional
     public void shouldSaveAndAfterDeleteUser() {
-        User user = createUser("DEL me pls!");
-        userDao.save(user);
-        User storedUser = userDao.getById(user.getId());
-        assertNotNull(storedUser);
+
+        User user = userDao.getById(1);
+        assertNotNull(user);
         userDao.delete(user);
         user = userDao.getById(user.getId());
         assertNull(user);
@@ -75,9 +76,12 @@ public class UserDaoIntegrationTest {
     @Test
     @Transactional
     public void shouldUpdateContact() {
-        User user = createUser("Won't be updated");
-        userDao.save(user);
-        Contact contact = createContact();
+
+        User user = userDao.getById(1);
+        Contact contact = new Contact();
+        contact.setName("Contact");
+        contact.setSurname("Lee");
+        contact.setEmail("email@email.com");
         user.setContact(contact);
         contactDao.save(contact);
         contact.setSurname("Updated surname");
@@ -86,20 +90,12 @@ public class UserDaoIntegrationTest {
         assertEquals("Updated surname", user.getContact().getSurname());
     }
 
-    private User createUser(String name) {
-        User user = new User();
-        user.setUsername(name);
-        user.setPassword("sha1PassHere");
-        user.setRole(UserRole.ADMINISTRATOR);
-        return user;
-    }
+    @Test
+    @Transactional
+    public void shouldFindByUserName() {
 
-    private Contact createContact() {
-        Contact contact = new Contact();
-        contact.setName("Contact");
-        contact.setSurname("Lee");
-        contact.setEmail("email@email.com");
-        return contact;
+        User user = userDao.getById(1);
+        assertNotNull(userDao.getByName(user.getUsername()));
     }
 
 }

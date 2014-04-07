@@ -11,19 +11,20 @@ public class OrderChange {
     private long id;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="order_id")
+    @JoinColumn(name="order_id", nullable = false)
     private Order order;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "new_state")
+    @Column(name = "new_state", nullable = false)
     private OrderState newState;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn (name = "user_changed_status_id")
+    @JoinColumn (name = "user_changed_status_id", nullable = false)
     private User userChangedStatus;
 
     private String comment;
 
+    @Column(nullable = false)
     private Date date;
 
     public long getId() {
