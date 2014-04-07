@@ -3,27 +3,35 @@ package com.itechart.deliveryservice.controller.data;
 
 import java.util.Date;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class ContactDTO {
     private long id;
-
-    @Pattern(regexp = "[a-zA-Zа-яА-Я\\-]{1,30}")
+    private final String regexpname = "^[a-zA-Z]+$";
+    @Pattern(regexp = regexpname)
+    @Size(max = 25)
     private String name;
-    @Pattern(regexp = "[a-zA-Zа-яА-Я\\-]{1,30}")
+    @Pattern(regexp = regexpname)
+    @Size(max = 25)
     private String surname;
-    @Pattern(regexp = "[a-zA-Zа-яА-Я\\-]{1,30}")
+    @Pattern(regexp = regexpname)
+    @Size(max = 25)
     private String middleName;
 
     private Date dateOfBirth;
-    @Pattern(regexp = "^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")
+    @Pattern(regexp = "([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})")
     private String email;
-    @Pattern(regexp = "[a-zA-Zа-яА-Я\\-]{1,50}")
+    @Pattern(regexp = regexpname)
+    @Size(max = 40)
     private String city;
-    @Pattern(regexp = "[a-zA-Zа-яА-Я\\-]{1,50}")
+    @Pattern(regexp = regexpname)
+    @Size(max = 40)
     private String street;
-    @Pattern(regexp = "[a-zA-Zа-яА-Я\\-]{1,10}")
+    @Pattern(regexp = "^[0-9a-z]+$")
+    @Size(max = 10)
     private String flat;
-    @Pattern(regexp = "[a-zA-Zа-яА-Я\\-]{1,10}")
+    @Pattern(regexp = "^[0-9a-z]+$")
+    @Size(max = 10)
     private String home;
 
     public long getId() {

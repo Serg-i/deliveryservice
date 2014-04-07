@@ -105,8 +105,9 @@ public class ContactControllerTest {
         }
     }
 
-  /*  @Test
+   /* @Test
     public void shouldSaveContact() throws Exception{
+
         ContactDTO contactDTO = dozer.map(contact, ContactDTO.class);
 
         String body = mapper.writeValueAsString(contactDTO);
@@ -125,11 +126,12 @@ public class ContactControllerTest {
         assertNotNull(found);
 
     }
-
+     */
     @Test
     public void shouldUpdateContact() throws Exception{
+
         ContactDTO contactDTO = dozer.map(contact, ContactDTO.class);
-        contactDTO.setName("UpdateTest");
+        contactDTO.setCity("minsk");
         String body = mapper.writeValueAsString(contactDTO);
         {
             MockHttpRequest request = MockHttpRequest.put("/api/contacts/" + contact.getId());
@@ -157,13 +159,13 @@ public class ContactControllerTest {
         Contact found = contactDao.getById(contact.getId());
         assertNull(found);
     }
-     */
+
     @Test
     public void shouldFailValidation() throws Exception{
         ContactDTO contactDTO = dozer.map(contact, ContactDTO.class);
         contactDTO.setName("123%^&");
         String body = mapper.writeValueAsString(contactDTO);
-        {
+      {
             MockHttpRequest request = MockHttpRequest.put("/api/contacts/" + contact.getId());
             request.contentType(MediaType.APPLICATION_JSON);
             request.content(body.getBytes());
@@ -188,12 +190,9 @@ public class ContactControllerTest {
         address.setCity("city");
         address.setStreet("street");
         address.setHome("1");
-        address.setFlat("11");
+        address.setFlat("11a");
         contact.setAddress(address);
         contactDao.save(contact);
     }
-
-
-
 }
 

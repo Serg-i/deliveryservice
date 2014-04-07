@@ -24,7 +24,7 @@ public class ContactDaoIntegrationTest {
     }
     @Test
     @Transactional
-    public void shouldCreateOrderInDB() {
+    public void shouldCreateContactInDB() {
         Contact contact = createContact("First", "Contact");
         contactDao.save(contact);
         assertTrue(contact.getId() > 0);
@@ -32,7 +32,7 @@ public class ContactDaoIntegrationTest {
 
     @Test
     @Transactional
-    public void shouldFindStoredOrder() {
+    public void shouldFindStoredContact() {
         Contact contactToStore = createContact("Find", "Contact");
         contactDao.save(contactToStore);
         Contact storedContact = contactDao.getById(contactToStore.getId());
@@ -43,7 +43,7 @@ public class ContactDaoIntegrationTest {
 
     @Test
     @Transactional
-    public void shouldUpdateStateStoredOrder() {
+    public void shouldUpdateStateStoredContact() {
         Contact contact = createContact("Update", "Contact");
         contactDao.save(contact);
         Date today = new Date();
@@ -56,7 +56,7 @@ public class ContactDaoIntegrationTest {
 
     @Test
     @Transactional
-    public void shouldSaveAndAfterDeleteOrder() {
+    public void shouldSaveAndAfterDeleteContact() {
         Contact contact = createContact("Delete", "Contact");
         contactDao.save(contact);
         Contact storedContact = contactDao.getById(contact.getId());
