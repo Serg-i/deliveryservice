@@ -19,9 +19,11 @@ public class Contact {
     
     @Basic(optional = false)
     private String surname;
-    
+
+    @Column(name = "middle_name")
     private String middleName;
-    
+
+    @Column(name = "date_of_birth")
     private Date dateOfBirth;
     
     private String email;
