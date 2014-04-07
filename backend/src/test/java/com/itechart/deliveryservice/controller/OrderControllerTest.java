@@ -63,35 +63,28 @@ public class OrderControllerTest {
 
     @Test
     public void shouldReturnOrderChangesInJSON() throws Exception {
-        Order order = orderDao.getAll().get(0);
-        MockHttpRequest request = MockHttpRequest.get("/api/orders/" + order.getId() + "/orderChanges");
-        MockHttpResponse response = new MockHttpResponse();
-        dispatcher.invoke(request, response);
-        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-        String content = response.getContentAsString();
-        List<OrderChangeDTO> orderChangeDTOs = mapper.readValue(content, new TypeReference<List<OrderChangeDTO>>() {
-        });
-//        assertEquals(Collections.EMPTY_LIST, orderChangeDTOs);
-        final String COMMENT = "comment";
-        final String NAME = "receptionManager";
+
         OrderChange orderChange = new OrderChange();
-        orderChange.setComment(COMMENT);
+        orderChange.setComment("COMMENT");
         orderChange.setNewState(OrderState.CANCELED);
         orderChange.setDate(new Date());
-        orderChange.setUserChangedStatus(userDao.getByName(NAME));
-        order.getChanges().add(orderChange);
+        orderChange.setUserChangedStatus(userDao.getById(1));
+        order.addChange(orderChange);
+        String content = null;
         orderDao.save(order);
-        request = MockHttpRequest.get("/api/orders/" + order.getId() + "/orderChanges");
-        response = new MockHttpResponse();
-        dispatcher.invoke(request, response);
-        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-        content = response.getContentAsString();
-        orderChangeDTOs = mapper.readValue(content, new TypeReference<List<OrderChangeDTO>>() {
+        {
+            MockHttpRequest request = MockHttpRequest.get("/api/orders/" + order.getId() + "/orderChanges");
+            MockHttpResponse response = new MockHttpResponse();
+            dispatcher.invoke(request, response);
+            assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+            content = response.getContentAsString();
+        }
+        List<OrderChangeDTO> list = mapper.readValue(content, new TypeReference<List<OrderChangeDTO>>() {
         });
-//        assertEquals(1, orderChangeDTOs.size());
-//        assertEquals(COMMENT, orderChangeDTOs.get(0).getComment());
-//        assertEquals(NAME, orderChangeDTOs.get(0).getUserChangedStatusNickname());
-//        assertEquals(OrderState.CANCELED, orderChangeDTOs.get(0).getNewState());
+        assertTrue(list.size() > 0);
+        assertEquals(orderChange.getComment(), list.get(list.size() - 1).getComment());
+        assertEquals(orderChange.getUserChangedStatus().getUsername(), list.get(list.size() - 1).getUserChangedStatusNickname());
+        assertEquals(orderChange.getNewState(), list.get(list.size() - 1).getNewState());
     }
 
     @Test
@@ -109,9 +102,8 @@ public class OrderControllerTest {
         }
         List<ShortOrderDTO> list = mapper.readValue(val, new TypeReference<List<ShortOrderDTO>>() {
         });
-//        assertEquals(list.size(), 2);
-//        assertEquals(list.get(0).getState(), order.getState());
-//        assertEquals(list.get(1).getState(), order1.getState());
+        assertEquals(list.get(0).getState(), order.getState());
+        assertEquals(list.get(1).getState(), order1.getState());
     }
 
     @Test
@@ -174,40 +166,9 @@ public class OrderControllerTest {
         ReflectionTestUtils.setField(obj, "mapper", dozer);
         dispatcher.getRegistry().addSingletonResource(obj);
 
-        user = new User();
-        user.setUsername("receptionManager");
-        user.setPassword("sha1PassHere");
-        user.setRole(UserRole.ADMINISTRATOR);
-        userDao.save(user);
-
-        contact = new Contact();
-        contact.setName("customer");
-        contact.setSurname("customer");
-        contact.setMiddleName("customer");
-        contact.setDateOfBirth(new Date());
-        contact.setEmail("customer@email.com");
-        contactDao.save(contact);
-
-        order = new Order();
-        order.setCost("100");
-        order.setCustomer(contact);
-        order.setReceptionManager(user);
-        order.setProcessingManager(user);
-        order.setDeliveryManager(user);
-        order.setRecipient(contact);
-        order.setState(OrderState.NEW);
-        order.setDescription("description");
-        orderDao.save(order);
-
-        order1 = new Order();
-        order1.setCost("150");
-        order1.setCustomer(contact);
-        order1.setReceptionManager(user);
-        order1.setProcessingManager(user);
-        order1.setDeliveryManager(user);
-        order1.setRecipient(contact);
-        order1.setState(OrderState.ACCEPTED);
-        order1.setDescription("description");
-        orderDao.save(order1);
+        user = userDao.getById(1);
+        contact = contactDao.getById(1);
+        order = orderDao.getById(1);
+        order1 = orderDao.getById(2);
     }
 }

@@ -5,11 +5,13 @@ import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.PhoneDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Phone;
-import com.itechart.deliveryservice.entity.PhoneType;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.core.Dispatcher;
+import org.jboss.resteasy.mock.MockDispatcherFactory;
+import org.jboss.resteasy.mock.MockHttpRequest;
+import org.jboss.resteasy.mock.MockHttpResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,15 +21,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-import org.jboss.resteasy.mock.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:test-bean-context.xml"})
@@ -146,23 +145,6 @@ public class PhoneControllerTest {
 
     private void initDb() {
 
-        owner = new Contact();
-        owner.setName("name");
-        owner.setSurname("surname");
-        contactDao.save(owner);
-        Phone phone = new Phone();
-        phone.setCountryCode("375");
-        phone.setOperatorCode("33");
-        phone.setNumber("3333333");
-        phone.setType(PhoneType.HOME);
-        phone.setOwner(owner);
-        phoneDao.save(phone);
-        phone = new Phone();
-        phone.setCountryCode("375");
-        phone.setOperatorCode("29");
-        phone.setNumber("2222222");
-        phone.setType(PhoneType.MOBILE);
-        phone.setOwner(owner);
-        phoneDao.save(phone);
+        owner = contactDao.getById(1);
     }
 }

@@ -16,11 +16,12 @@ INSERT INTO orders (cost, date, description, state, customer_id, delivery_manage
 INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('150', '1990-12-31', 'no', 'ACCEPTED', '1', '5', '4', '3', '1');
 INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('150', '1990-12-31', 'no', 'ACCEPTED', '1', '5', '4', '3', '1');
 
-INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '23', '4445887', 'HOME', '1');
-INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '23', '4445887', 'HOME', '1');
-INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '23', '4445887', 'HOME', '1');
-INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '23', '4445887', 'HOME', '1');
-INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '23', '4445887', 'HOME', '1');
+INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '4445887', '23', 'HOME', '1');
+INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '4445887', '23', 'HOME', '1');
+INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '4445887', '23', 'HOME', '1');
+INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '4445887', '23', 'HOME', '1');
+INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '4445887', '23', 'HOME', '1');
+
 
 INSERT INTO order_change (comment, date, new_state, order_id, user_changed_status_id) VALUES ('no', '1990-12-31', 'NEW', '1', '1');
 INSERT INTO order_change (comment, date, new_state, order_id, user_changed_status_id) VALUES ('no', '1990-12-31', 'NEW', '1', '1');

@@ -2,12 +2,14 @@ package com.itechart.deliveryservice.controller;
 
 import com.itechart.deliveryservice.controller.data.ContactDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
-import com.itechart.deliveryservice.entity.Address;
 import com.itechart.deliveryservice.entity.Contact;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.core.Dispatcher;
+import org.jboss.resteasy.mock.MockDispatcherFactory;
+import org.jboss.resteasy.mock.MockHttpRequest;
+import org.jboss.resteasy.mock.MockHttpResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,11 +19,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-import org.jboss.resteasy.mock.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -47,7 +47,7 @@ public class ContactControllerTest {
         ReflectionTestUtils.setField(obj, "contactDao", contactDao);
         ReflectionTestUtils.setField(obj, "mapper", dozer);
         dispatcher.getRegistry().addSingletonResource(obj);
-        setValues("init");
+        contact = contactDao.getById(1);
     }
 
     @After
@@ -179,20 +179,5 @@ public class ContactControllerTest {
         assertNotSame(contactDTO.getName(), found.getName());
     }
 
-    private void setValues(String surname){
-        contact = new Contact();
-        Address address = new Address();
-        contact.setSurname(surname);
-        contact.setName("name");
-        contact.setMiddleName("middlename");
-        contact.setDateOfBirth(new Date());
-        contact.setEmail(surname + "@gmail.com");
-        address.setCity("city");
-        address.setStreet("street");
-        address.setHome("1");
-        address.setFlat("11a");
-        contact.setAddress(address);
-        contactDao.save(contact);
-    }
 }
 

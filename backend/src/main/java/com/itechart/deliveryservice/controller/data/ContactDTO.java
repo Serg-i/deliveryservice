@@ -1,9 +1,9 @@
 package com.itechart.deliveryservice.controller.data;
 
 
-import java.util.Date;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 public class ContactDTO {
     private long id;
@@ -27,10 +27,10 @@ public class ContactDTO {
     @Pattern(regexp = regexpname)
     @Size(max = 40)
     private String street;
-    @Pattern(regexp = "^[0-9a-z]+$")
+    @Pattern(regexp = "^[0-9a-zA-Z]+$")
     @Size(max = 10)
     private String flat;
-    @Pattern(regexp = "^[0-9a-z]+$")
+    @Pattern(regexp = "^[0-9a-zA-Z]+$")
     @Size(max = 10)
     private String home;
 
