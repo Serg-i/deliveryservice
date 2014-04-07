@@ -102,7 +102,7 @@ public class PhoneControllerTest {
             assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         }
         Phone found = phoneDao.getById(phone.getId());
-        assertEquals(phone.getNumber(), found.getNumber());
+        assertEquals(phoneDTO.getNumber(), found.getNumber());
     }
 
     @Test
