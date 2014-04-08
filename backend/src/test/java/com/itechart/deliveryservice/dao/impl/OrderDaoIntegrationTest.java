@@ -12,7 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import static junit.framework.Assert.*;
 
@@ -97,12 +99,54 @@ public class OrderDaoIntegrationTest {
     public void shouldGetOffsetInCorrectOrder() {
 
         long count = orderDao.getCount();
-        List<Order> first = orderDao.getOrderedOffset(0, (int)count - 1, "date", true);
-        List<Order> second = orderDao.getOrderedOffset(0, (int)count - 1, "date", false);
+        List<Order> first = orderDao.getOffset(0, (int)count - 1, "date", true);
+        List<Order> second = orderDao.getOffset(0, (int)count - 1, "date", false);
         for (int i = 1; i < first.size(); i++)
             assertTrue(first.get(0).getDate().before(first.get(1).getDate()));
         for (int i = 1; i < second.size(); i++)
             assertTrue(second.get(0).getDate().after(second.get(1).getDate()));
     }
 
+    @Test
+    @Transactional
+    public void shouldFindCorrectCountOfOrders() {
+
+        List<Order> list = orderDao.getAll();
+        assertTrue(list.size() > 0);
+        int correctCount = 0;
+        for(Order d : list)
+            if (d.getCost() == list.get(0).getCost())
+                ++correctCount;
+        TreeMap<String, String> mp = new TreeMap<String, String>();
+        mp.put("cost", list.get(0).getCost());
+        assertEquals(correctCount, orderDao.searchCount(mp));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindOrders() {
+
+        List<Order> list = orderDao.getAll();
+        List<Order> toFind = new ArrayList<Order>();
+        assertTrue(list.size() > 0);
+        for(Order d : list)
+            if (d.getCost() == list.get(0).getCost())
+                toFind.add(d);
+        TreeMap<String, String> mp = new TreeMap<String, String>();
+        mp.put("cost", list.get(0).getCost());
+        List<Order> found = orderDao.search(mp, 0, 1);
+        assertTrue(found.size() == 1);
+        assertTrue(toFind.contains(found.get(0)));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindAllInCorrectOrder() {
+
+        long count = orderDao.getCount();
+        TreeMap<String, String> mp = new TreeMap<String, String>();
+        List<Order> found = orderDao.search(mp, 0, (int)count - 1, "date", true);
+        for (int i = 1; i < found.size(); i++)
+            assertTrue(found.get(0).getDate().before(found.get(1).getDate()));
+    }
 }

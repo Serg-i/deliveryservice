@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public abstract class DaoImpl<Type> implements Dao<Type> {
@@ -75,11 +76,63 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
     }
 
     @Override
-    public List<Type> getOrderedOffset(int from, int count, String by, boolean asc) {
+    public List<Type> getOffset(int from, int count, String by, boolean asc) {
 
         CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Type> query = builder.createQuery(entityClass);
         Root<Type> root = query.from(entityClass);
+        if (asc) {
+            query.orderBy(builder.asc(root.get(by)));
+        } else {
+            query.orderBy(builder.desc(root.get(by)));
+        }
+        query.select(root);
+        return getEntityManager()
+                .createQuery(query)
+                .setFirstResult(from)
+                .setMaxResults(count)
+                .getResultList();
+    }
+
+    @Override
+    public long searchCount(Map<String, String> values) {
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        Root<Type> root = query.from(entityClass);
+        for (Map.Entry<String, String> p : values.entrySet()) {
+            query.where(builder.equal(root.get(p.getKey()), p.getValue()));
+        }
+        query.select(builder.count(root));
+        return getEntityManager().createQuery(query).getSingleResult();
+    }
+
+    @Override
+    public List<Type> search(Map<String, String> values, int from, int count) {
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Type> query = builder.createQuery(entityClass);
+        Root<Type> root = query.from(entityClass);
+        for (Map.Entry<String, String> p : values.entrySet()) {
+            query.where(builder.equal(root.get(p.getKey()), p.getValue()));
+        }
+        query.select(root);
+        return getEntityManager()
+                .createQuery(query)
+                .setFirstResult(from)
+                .setMaxResults(count)
+                .getResultList();
+    }
+
+    @Override
+    public List<Type> search(Map<String, String> values, int from, int count, String by, boolean asc) {
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Type> query = builder.createQuery(entityClass);
+        Root<Type> root = query.from(entityClass);
+        for (Map.Entry<String, String> p : values.entrySet()) {
+            query.where(builder.equal(root.get(p.getKey()), p.getValue()));
+        }
         if (asc) {
             query.orderBy(builder.asc(root.get(by)));
         } else {

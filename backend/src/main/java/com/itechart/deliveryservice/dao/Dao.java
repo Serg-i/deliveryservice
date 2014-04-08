@@ -1,6 +1,7 @@
 package com.itechart.deliveryservice.dao;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Dao<Type> {
 
@@ -18,6 +19,11 @@ public interface Dao<Type> {
 
     List<Type> getOffset(int from, int count);
 
-    List<Type> getOrderedOffset(int from, int count, String by, boolean asc);
+    List<Type> getOffset(int from, int count, String by, boolean asc);
 
+    long searchCount(Map<String, String> values);
+
+    List<Type> search(Map<String, String> values, int from, int count);
+
+    List<Type> search(Map<String, String> values, int from, int count, String by, boolean asc);
 }
