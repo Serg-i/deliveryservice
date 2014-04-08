@@ -3,8 +3,8 @@ package com.itechart.deliveryservice.dao.impl;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
-import com.itechart.deliveryservice.entity.*;
-import org.junit.Before;
+import com.itechart.deliveryservice.entity.Order;
+import com.itechart.deliveryservice.entity.OrderState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 import static junit.framework.Assert.*;
 
@@ -27,37 +29,23 @@ public class OrderDaoIntegrationTest {
     @Autowired
     ContactDao contactDao;
 
-    private Contact contact;
-    private User user;
-
-
     public OrderDaoIntegrationTest() {
         super();
-    }
-
-    @Before
-    public final void before() {
-
-        user = new User();
-        user.setNickName("processingManager");
-        user.setPassword("sha2PassHere");
-        user.setRole(UserRole.ADMINISTRATOR);
-        userDao.save(user);
-
-        contact = new Contact();
-        contact.setName("info");
-        contact.setSurname("info");
-        contact.setMiddleName("info");
-        contact.setDateOfBirth(new Date());
-        contact.setEmail("info@gmail.com");
-        contactDao.save(contact);
-
     }
 
     @Test
     @Transactional
     public void shouldCreateOrderInDB() {
-        Order order = createOrder("It's the first order!");
+
+        Order order = new Order();
+        order.setCost("100");
+        order.setCustomer(contactDao.getById(1));
+        order.setReceptionManager(userDao.getById(1));
+        order.setProcessingManager(userDao.getById(1));
+        order.setDeliveryManager(userDao.getById(1));
+        order.setRecipient(contactDao.getById(1));
+        order.setState(OrderState.NEW);
+        order.setDescription("description");
         orderDao.save(order);
         assertTrue(order.getId() > 0);
     }
@@ -65,19 +53,16 @@ public class OrderDaoIntegrationTest {
     @Test
     @Transactional
     public void shouldFindStoredOrder() {
-        Order orderToStore = createOrder("FindOrder");
-        orderDao.save(orderToStore);
-        Order storedOrder = orderDao.getById(orderToStore.getId());
+
+        Order storedOrder = orderDao.getById(1);
         assertNotNull(storedOrder);
-        assertEquals(orderToStore.getCustomer(), storedOrder.getCustomer());
-        assertEquals(orderToStore.getRecipient(), storedOrder.getRecipient());
     }
 
     @Test
     @Transactional
-    public void shouldUpdateStateStoredOrder() {
-        Order order = createOrder("UpdateOrder");
-        orderDao.save(order);
+    public void shouldUpdateOrder() {
+
+        Order order = orderDao.getById(1);
         order.setState(OrderState.ACCEPTED);
         orderDao.merge(order);
         Order storedOrder = orderDao.getById(order.getId());
@@ -87,9 +72,9 @@ public class OrderDaoIntegrationTest {
 
     @Test
     @Transactional
-    public void shouldSaveAndAfterDeleteOrder() {
-        Order order = createOrder("DelOrder!");
-        orderDao.save(order);
+    public void shouldDeleteOrder() {
+
+        Order order = orderDao.getById(1);
         Order storedOrder = orderDao.getById(order.getId());
         assertNotNull(storedOrder);
         orderDao.delete(order);
@@ -97,17 +82,71 @@ public class OrderDaoIntegrationTest {
         assertNull(order);
     }
 
-    private Order createOrder(String description) {
-        Order order = new Order();
-        order.setCost("100");
-        order.setCustomer(contact);
-        order.setReceptionManager(user);
-        order.setProcessingManager(user);
-        order.setDeliveryManager(user);
-        order.setRecipient(contact);
-        order.setState(OrderState.NEW);
-        order.setDescription(description);
-        return order;
+    @Test
+    @Transactional
+    public void shouldGetCorrectOffset() {
+
+        assertTrue(orderDao.getCount() > 3);
+        List<Order> first = orderDao.getOffset(0, 2);
+        List<Order> second = orderDao.getOffset(1, 2);
+        assertEquals(2, first.size());
+        assertEquals(2, second.size());
+        assertEquals(first.get(1), second.get(0));
     }
 
+    @Test
+    @Transactional
+    public void shouldGetOffsetInCorrectOrder() {
+
+        long count = orderDao.getCount();
+        List<Order> first = orderDao.getOffset(0, (int)count - 1, "date", true);
+        List<Order> second = orderDao.getOffset(0, (int)count - 1, "date", false);
+        for (int i = 1; i < first.size(); i++)
+            assertTrue(first.get(0).getDate().before(first.get(1).getDate()));
+        for (int i = 1; i < second.size(); i++)
+            assertTrue(second.get(0).getDate().after(second.get(1).getDate()));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindCorrectCountOfOrders() {
+
+        List<Order> list = orderDao.getAll();
+        assertTrue(list.size() > 0);
+        int correctCount = 0;
+        for(Order d : list)
+            if (d.getCost() == list.get(0).getCost())
+                ++correctCount;
+        TreeMap<String, String> mp = new TreeMap<String, String>();
+        mp.put("cost", list.get(0).getCost());
+        assertEquals(correctCount, orderDao.searchCount(mp));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindOrders() {
+
+        List<Order> list = orderDao.getAll();
+        List<Order> toFind = new ArrayList<Order>();
+        assertTrue(list.size() > 0);
+        for(Order d : list)
+            if (d.getCost() == list.get(0).getCost())
+                toFind.add(d);
+        TreeMap<String, String> mp = new TreeMap<String, String>();
+        mp.put("cost", list.get(0).getCost());
+        List<Order> found = orderDao.search(mp, 0, 1);
+        assertTrue(found.size() == 1);
+        assertTrue(toFind.contains(found.get(0)));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindAllInCorrectOrder() {
+
+        long count = orderDao.getCount();
+        TreeMap<String, String> mp = new TreeMap<String, String>();
+        List<Order> found = orderDao.search(mp, 0, (int)count - 1, "date", true);
+        for (int i = 1; i < found.size(); i++)
+            assertTrue(found.get(0).getDate().before(found.get(1).getDate()));
+    }
 }

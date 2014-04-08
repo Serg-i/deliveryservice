@@ -5,7 +5,7 @@ public enum UserRole {
     ADMINISTRATOR,
     SUPERVISOR,
     ORDER_MANAGER,
-    SECOND_MANAGER,
+    PROCESSING_MANAGER,
     COURIER
 
 }

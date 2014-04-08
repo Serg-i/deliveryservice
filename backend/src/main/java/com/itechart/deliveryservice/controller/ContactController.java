@@ -60,7 +60,7 @@ public class ContactController {
     }
 
     @DELETE
-    @PathParam("/{idContact}")
+    @Path("/{idContact}")
     public void deleteContact(@PathParam("idContact") long idContact){
         Contact contact = contactDao.getById(idContact);
         contactDao.delete(contact);

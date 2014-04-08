@@ -34,14 +34,14 @@ public class Order {
     private User processingManager ;
 
     @ManyToOne
-    @JoinColumn (name="delivery_manager__id")
+    @JoinColumn (name="delivery_manager_id")
     private User deliveryManager ;
 
     @ManyToOne
     @JoinColumn (name="recipient_id")
     private Contact recipient;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="order", cascade = CascadeType.ALL)
     private List<OrderChange> changes = new ArrayList<OrderChange>();
 
     public Order() {
@@ -94,6 +94,13 @@ public class Order {
 
     public void setChanges(List<OrderChange> changes) {
         this.changes = changes;
+    }
+
+    public void addChange(OrderChange change) {
+        this.changes.add(change);
+        if (change.getOrder() != this) {
+            change.setOrder(this);
+        }
     }
 
     public Contact getCustomer() {

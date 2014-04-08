@@ -23,10 +23,9 @@ public class UserAuthenticationProvider implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
-
         com.itechart.deliveryservice.entity.User user
                 = userDao.getByName(username);
-        User ud = new User(user.getNickName(),
+        User ud = new User(user.getUsername(),
                 user.getPassword(),
                 true,
                 true,
