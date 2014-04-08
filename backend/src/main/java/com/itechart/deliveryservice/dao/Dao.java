@@ -16,4 +16,8 @@ public interface Dao<Type> {
 
     long getCount();
 
+    List<Type> getOffset(int from, int count);
+
+    List<Type> getOrderedOffset(int from, int count, String by, boolean asc);
+
 }

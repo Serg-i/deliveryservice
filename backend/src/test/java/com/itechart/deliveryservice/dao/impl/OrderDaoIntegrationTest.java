@@ -12,6 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -76,6 +78,31 @@ public class OrderDaoIntegrationTest {
         orderDao.delete(order);
         order = orderDao.getById(order.getId());
         assertNull(order);
+    }
+
+    @Test
+    @Transactional
+    public void shouldGetCorrectOffset() {
+
+        assertTrue(orderDao.getCount() > 3);
+        List<Order> first = orderDao.getOffset(0, 2);
+        List<Order> second = orderDao.getOffset(1, 2);
+        assertEquals(2, first.size());
+        assertEquals(2, second.size());
+        assertEquals(first.get(1), second.get(0));
+    }
+
+    @Test
+    @Transactional
+    public void shouldGetOffsetInCorrectOrder() {
+
+        long count = orderDao.getCount();
+        List<Order> first = orderDao.getOrderedOffset(0, (int)count - 1, "date", true);
+        List<Order> second = orderDao.getOrderedOffset(0, (int)count - 1, "date", false);
+        for (int i = 1; i < first.size(); i++)
+            assertTrue(first.get(0).getDate().before(first.get(1).getDate()));
+        for (int i = 1; i < second.size(); i++)
+            assertTrue(second.get(0).getDate().after(second.get(1).getDate()));
     }
 
 }

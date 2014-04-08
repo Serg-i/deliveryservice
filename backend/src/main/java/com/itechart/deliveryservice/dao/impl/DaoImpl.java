@@ -60,6 +60,39 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
         return getEntityManager().createQuery(query).getSingleResult();
     }
 
+    @Override
+    public List<Type> getOffset(int from, int count) {
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Type> query = builder.createQuery(entityClass);
+        Root<Type> root = query.from(entityClass);
+        query.select(root);
+        return getEntityManager()
+                .createQuery(query)
+                .setFirstResult(from)
+                .setMaxResults(count)
+                .getResultList();
+    }
+
+    @Override
+    public List<Type> getOrderedOffset(int from, int count, String by, boolean asc) {
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Type> query = builder.createQuery(entityClass);
+        Root<Type> root = query.from(entityClass);
+        if (asc) {
+            query.orderBy(builder.asc(root.get(by)));
+        } else {
+            query.orderBy(builder.desc(root.get(by)));
+        }
+        query.select(root);
+        return getEntityManager()
+                .createQuery(query)
+                .setFirstResult(from)
+                .setMaxResults(count)
+                .getResultList();
+    }
+
     protected EntityManager getEntityManager() {
         return entityManager;
     }
