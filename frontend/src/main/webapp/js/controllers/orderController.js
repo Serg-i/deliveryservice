@@ -1,4 +1,4 @@
-var app = angular.module('myApp.orderControllers', ['myApp.breadcrumbsServices']);
+var app = angular.module('myApp.orderControllers', ['myApp.orderService','myApp.breadcrumbsServices']);
 
 app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location','BreadCrumbsService',
     function ($scope, OrderREST,  $location, BreadCrumbsService) {
@@ -36,7 +36,7 @@ app.controller('NewOrderCtrl', ['$scope', 'OrderREST',  '$location',
 
         // callback for ng-click 'saveOrder':
         $scope.saveOrder = function () {
-            OrderREST.create();
+            OrderREST.create({ headers : {"sdfsd":"dsfsd","sadfas":"dd"}} );
             $location.path('/api/orders');
         };
     }]);
