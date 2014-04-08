@@ -1,6 +1,7 @@
 package com.itechart.deliveryservice.dao.impl;
 
 import com.itechart.deliveryservice.dao.Dao;
+import com.itechart.deliveryservice.utils.SearchParams;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -8,6 +9,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -95,27 +98,23 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
     }
 
     @Override
-    public long searchCount(Map<String, String> values) {
+    public long searchCount(SearchParams params) {
 
         CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         Root<Type> root = query.from(entityClass);
-        for (Map.Entry<String, String> p : values.entrySet()) {
-            query.where(builder.equal(root.get(p.getKey()), p.getValue()));
-        }
+        fillSearchQuery(builder, query, root, params);
         query.select(builder.count(root));
         return getEntityManager().createQuery(query).getSingleResult();
     }
 
     @Override
-    public List<Type> search(Map<String, String> values, int from, int count) {
+    public List<Type> search(SearchParams params, int from, int count) {
 
         CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Type> query = builder.createQuery(entityClass);
         Root<Type> root = query.from(entityClass);
-        for (Map.Entry<String, String> p : values.entrySet()) {
-            query.where(builder.equal(root.get(p.getKey()), p.getValue()));
-        }
+        fillSearchQuery(builder, query, root, params);
         query.select(root);
         return getEntityManager()
                 .createQuery(query)
@@ -125,14 +124,12 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
     }
 
     @Override
-    public List<Type> search(Map<String, String> values, int from, int count, String by, boolean asc) {
+    public List<Type> search(SearchParams params, int from, int count, String by, boolean asc) {
 
         CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Type> query = builder.createQuery(entityClass);
         Root<Type> root = query.from(entityClass);
-        for (Map.Entry<String, String> p : values.entrySet()) {
-            query.where(builder.equal(root.get(p.getKey()), p.getValue()));
-        }
+        fillSearchQuery(builder, query, root, params);
         if (asc) {
             query.orderBy(builder.asc(root.get(by)));
         } else {
@@ -144,6 +141,29 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
                 .setFirstResult(from)
                 .setMaxResults(count)
                 .getResultList();
+    }
+
+    private void fillSearchQuery( CriteriaBuilder builder,
+                                  CriteriaQuery<?> query,
+                                  Root<Type> root,
+                                  SearchParams params) {
+
+        for (Iterator<Map.Entry<String, SearchParams.OpAndValue>> iter
+                     = params.iterator(); iter.hasNext();) {
+
+            Map.Entry<String, SearchParams.OpAndValue> p = iter.next();
+            switch(p.getValue().operator) {
+                case EQUAL:
+                    query.where(builder.equal(root.get(p.getKey()), p.getValue().value));
+                    break;
+                case GREATER:
+                    query.where(builder.greaterThanOrEqualTo(root.<Date>get(p.getKey()), (Date)p.getValue().value));
+                    break;
+                case LESS:
+                    query.where(builder.lessThanOrEqualTo(root.<Date>get(p.getKey()), (Date)p.getValue().value));
+                    break;
+            }
+        }
     }
 
     protected EntityManager getEntityManager() {
