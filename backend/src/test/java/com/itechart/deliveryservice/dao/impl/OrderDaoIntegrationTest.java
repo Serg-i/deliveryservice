@@ -147,7 +147,7 @@ public class OrderDaoIntegrationTest {
         SearchParams sp = new SearchParams();
         List<Order> found = orderDao.search(sp, 0, (int) count - 1, "date", true);
         for (int i = 1; i < found.size(); i++)
-            assertTrue(found.get(0).getDate().before(found.get(1).getDate()));
+            assertTrue(found.get(i-1).getDate().compareTo(found.get(i).getDate()) <= 0);
     }
 
     @Test
@@ -162,6 +162,6 @@ public class OrderDaoIntegrationTest {
         List<Order> list = orderDao.search(sp, 0, (int)count);
         assertEquals(count, list.size());
         for(Order d : list)
-            assertTrue(d.getDate().before(order.getDate()) || d.getDate().equals(order.getDate()));
+            assertTrue(d.getDate().compareTo(order.getDate()) <= 0);
     }
 }

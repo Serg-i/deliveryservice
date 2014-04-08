@@ -6,13 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import javax.persistence.criteria.*;
+import java.util.*;
 
 @Repository
 public abstract class DaoImpl<Type> implements Dao<Type> {
@@ -143,27 +138,39 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
                 .getResultList();
     }
 
+    @SuppressWarnings("unchecked")
     private void fillSearchQuery( CriteriaBuilder builder,
                                   CriteriaQuery<?> query,
                                   Root<Type> root,
                                   SearchParams params) {
 
+
+        List<Predicate> list = new ArrayList<Predicate>();
         for (Iterator<Map.Entry<String, SearchParams.OpAndValue>> iter
                      = params.iterator(); iter.hasNext();) {
 
             Map.Entry<String, SearchParams.OpAndValue> p = iter.next();
+            String[] s = p.getKey().split("\\.");
+
+            Path path = null;
+            if (s.length > 1) {
+                path = root.get(s[0]).get(s[1]);
+            } else {
+                path = root.get(s[0]);
+            }
             switch(p.getValue().operator) {
                 case EQUAL:
-                    query.where(builder.equal(root.get(p.getKey()), p.getValue().value));
+                    list.add(builder.equal(path, p.getValue().value));
                     break;
                 case GREATER:
-                    query.where(builder.greaterThanOrEqualTo(root.<Date>get(p.getKey()), (Date)p.getValue().value));
+                    list.add(builder.greaterThanOrEqualTo((Path<Date>) path, (Date) p.getValue().value));
                     break;
                 case LESS:
-                    query.where(builder.lessThanOrEqualTo(root.<Date>get(p.getKey()), (Date)p.getValue().value));
+                    list.add(builder.lessThanOrEqualTo((Path<Date>) path, (Date) p.getValue().value));
                     break;
             }
         }
+        query.where(list.toArray(new Predicate[list.size()]));
     }
 
     protected EntityManager getEntityManager() {
