@@ -15,7 +15,7 @@ var app = angular.module('myApp', [
   'myApp.contactControllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/login', {templateUrl: 'partials/login.html', label: 'login', controller: 'LoginCtrl'});
+        $routeProvider.when('/api/login', {templateUrl: 'partials/login.html', label: 'login', controller: 'LoginCtrl'});
 
         $routeProvider.when('/api/edit_order', {templateUrl: 'partials/order.html', label: 'edit_order' , controller: 'EditOrderCtrl'});
         $routeProvider.when('/api/new_order', {templateUrl: 'partials/order.html', label: 'new_order', controller: 'NewOrderCtrl'});
@@ -26,5 +26,5 @@ config(['$routeProvider', function($routeProvider) {
 
         $routeProvider.when('/api/contacts', {templateUrl: 'partials/contacts.html', label: 'contacts', controller: 'ContactsCtrl'});
 
-        $routeProvider.otherwise({redirectTo: '/login'});
+        $routeProvider.otherwise({redirectTo: '/api/login'});
 }]);

@@ -30,10 +30,10 @@
                 <tbody>
                 <tr ng-repeat="order in orders">
                     <td><input type="checkbox" ></td>
-                    <td><span class="label label-primary">{{ order.state }}</span></td>
+                    <td><a ng-click="editOrder(order.id)"><span class="label label-primary"> {{ order.state }}</span></a></td>
                     <td><span class="label label-default">{{ order.customer }}</span></td>
                     <td><span class="label label-default">{{ order.recipient }}</span></td>
-                    <td><span class="label label-default">{{ order.date }}</span></td>
+                    <td><span class="label label-default">{{ order.date  | date:'MM/dd/yyyy HH:mm'}}</span></td>
                     <td><span class="label label-default">{{ order.cost }}</span></td>
                     <td><span class="label label-default">{{ order.description }}</span></td>
                 </tr>
