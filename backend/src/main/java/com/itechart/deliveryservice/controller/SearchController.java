@@ -1,8 +1,8 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.CountOfRowsDTO;
 import com.itechart.deliveryservice.controller.data.SearchOrderDTO;
 import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
+import com.itechart.deliveryservice.controller.data.TableDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.entity.Order;
@@ -36,24 +36,18 @@ public class SearchController {
     private DozerBeanMapper mapper;
 
     @GET
-    @Path("/orders/count")
-    public CountOfRowsDTO getCount(@Valid SearchOrderDTO dto) {
-
-        SearchParams sp = dto.createParams();
-        CountOfRowsDTO c = new CountOfRowsDTO();
-        c.setCount((int)orderDao.searchCount(sp));
-        return c;
-    }
-
-    @GET
     @Path("/orders/{page}")
-    public List<ShortOrderDTO> getChanges(@PathParam("page") long page, @Valid SearchOrderDTO dto) {
+    public TableDTO<ShortOrderDTO> getChanges(@PathParam("page") long page, @Valid SearchOrderDTO dto) {
 
         SearchParams sp = dto.createParams();
+        long count = orderDao.searchCount(sp);
+        TableDTO<ShortOrderDTO> table = new TableDTO<ShortOrderDTO>();
+        table.setCount((int)count);
         List<Order> found = orderDao.search(sp, (int)(page-1)* Settings.rows, Settings.rows);
         List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
         for(Order p : found)
             list.add(mapper.map(p, ShortOrderDTO.class));
-        return list;
+        table.setCurrentPage(list);
+        return table;
     }
 }

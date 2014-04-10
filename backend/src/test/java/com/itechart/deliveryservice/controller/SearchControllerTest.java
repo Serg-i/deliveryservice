@@ -1,8 +1,8 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.CountOfRowsDTO;
 import com.itechart.deliveryservice.controller.data.SearchOrderDTO;
 import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
+import com.itechart.deliveryservice.controller.data.TableDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.entity.Order;
@@ -57,37 +57,18 @@ public class SearchControllerTest {
     }
 
     @Test
-    public void shouldReturnCountOfFoundOrders() throws Exception {
+    public void shouldFindOrders() throws Exception {
 
         Order order = orderDao.getById(1);
+
+        int countOfHits = 0;
         List<Order> list = orderDao.getAll();
-        int count = 0;
-        for (Order d : list)
-            if (d.getDate().compareTo(order.getDate()) <= 0)
-                count++;
-        SearchOrderDTO dto = new SearchOrderDTO();
-        dto.setDate(order.getDate());
-        dto.setDateOp(SearchParams.Operator.LESS);
-        String result = null;
-        String body = mapper.writeValueAsString(dto);
-        {
-            MockHttpRequest request = MockHttpRequest.get("/api/search/orders/count");
-            request.contentType(MediaType.APPLICATION_JSON);
-            request.content(body.getBytes());
-            MockHttpResponse response = new MockHttpResponse();
-            dispatcher.invoke(request, response);
-            assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-            result = response.getContentAsString();
-        }
-        CountOfRowsDTO ret = mapper.readValue(result, new TypeReference<CountOfRowsDTO>() {
-        });
-        assertEquals(count, ret.getCount());
-    }
+        for (Order o : list)
+            if (order.getDate().compareTo(o.getDate()) >= 0
+                    && order.getCustomer() == o.getCustomer()
+                    && order.getRecipient() == o.getRecipient())
+                countOfHits++;
 
-    @Test
-    public void shouldReturnFoundOrders() throws Exception {
-
-        Order order = orderDao.getById(1);
         SearchOrderDTO dto = new SearchOrderDTO();
         dto.setDate(order.getDate());
         dto.setDateOp(SearchParams.Operator.LESS);
@@ -104,12 +85,11 @@ public class SearchControllerTest {
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
             result = response.getContentAsString();
         }
-        List<ShortOrderDTO> ret = mapper.readValue(result, new TypeReference<List<ShortOrderDTO>>() {
+        TableDTO<ShortOrderDTO> ret = mapper.readValue(result, new TypeReference<TableDTO<ShortOrderDTO>>() {
         });
-        assertTrue(ret.size() > 0);
-        for(ShortOrderDTO o : ret) {
+        assertEquals(countOfHits, ret.getCurrentPage().size());
+        for(ShortOrderDTO o : ret.getCurrentPage()) {
             boolean exist = false;
-
             assertTrue(order.getDate().compareTo(o.getDate()) >= 0);
             assertEquals(order.getCustomer().getName(), o.getCustomerName());
             assertEquals(order.getRecipient().getName(), o.getRecipientName());
