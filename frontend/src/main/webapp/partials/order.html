@@ -6,6 +6,10 @@
     <div class="panel-body">
         <ul class="list-group">
             <li class="list-group-item">
+                <span class="label">Состояние: </span><br/>
+                <input type="text" class="form-control">
+            </li>
+            <li class="list-group-item">
                 <span class="label">Заказчик:</span><br/>
                 <div class="input-group">
                     <input type="text" class="form-control" id = "customer" ng-model="order.customer">
@@ -16,7 +20,7 @@
             </li>
             <li class="list-group-item">
                 <span class="label">Описание: </span><br/>
-                <textarea class="form-control" id = "discription" ng-model="order.discription"></textarea>
+                <textarea class="form-control" id = "description" ng-model="order.description"></textarea>
             </li>
             <li class="list-group-item">
                 <span class="label">Оценочная сумма: </span><br/>
@@ -59,7 +63,7 @@
                 </div>
             </li>
             <li class="list-group-item">
-                <span class="label">Состояние: </span><br/>
+                <span class="label">Получатель: </span><br/>
                 <select class="form-control" id = "state" ng-model="order.state">
                     <option  name="NEW">Новый</option>
                     <option  name="ACCEPTED">Принят</option>

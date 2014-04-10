@@ -1,9 +1,6 @@
 'use strict';
 
-/* Services */
-
-angular.module("myApp.orderService", ["ngResource"]).
-    factory("OrderREST", function($resource) {
+app.factory("OrderREST", function($resource) {
         return $resource("/api/orders/:id", {}, {
             readAll: {
                 method: "GET",

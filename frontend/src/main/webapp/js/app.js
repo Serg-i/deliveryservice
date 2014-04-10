@@ -1,30 +1,22 @@
 'use strict';
 
-// Declare app level module which depends on filters, and services
 var app = angular.module('myApp', [
-  'ngRoute',
+    'ngRoute',
+    'ngResource'
+]);
+    app.config(['$routeProvider', function($routeProvider) {
 
-  'myApp.breadcrumbsControllers',
-  'myApp.breadcrumbsDirectives',
-  'myApp.breadcrumbsServices',
-  'myApp.backgroundDirective',
-  'myApp.navList',
-  'myApp.orderControllers',
-  'myApp.orderService',
-  'myApp.userControllers',
-  'myApp.contactControllers'
-]).
-config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/api/login', {templateUrl: 'partials/login.html', label: 'login', controller: 'LoginCtrl'});
+        $routeProvider
+            .when('/api/login', {templateUrl: 'partials/login.html', label: 'login', controller: 'AuthCtrl'})
+            .when('/api/edit_order', {templateUrl: 'partials/order.html', label: 'edit_order' , controller: 'EditOrderCtrl'})
+            .when('/api/new_order', {templateUrl: 'partials/order.html', label: 'new_order', controller: 'NewOrderCtrl'})
+            .when('/api/orders', {templateUrl: 'partials/orders.html', label: 'orders', controller: 'OrdersCtrl'})
+            .when('/api/search_order', {templateUrl: 'partials/order-search.html', label: 'search_order', controller: 'SearchOrderCtrl'})
 
-        $routeProvider.when('/api/edit_order', {templateUrl: 'partials/order.html', label: 'edit_order' , controller: 'EditOrderCtrl'});
-        $routeProvider.when('/api/new_order', {templateUrl: 'partials/order.html', label: 'new_order', controller: 'NewOrderCtrl'});
-        $routeProvider.when('/api/orders', {templateUrl: 'partials/orders.html', label: 'orders', controller: 'OrdersCtrl'});
-        $routeProvider.when('/api/search_order', {templateUrl: 'partials/order-search.html', label: 'search_order', controller: 'SearchOrderCtrl'});
+            .when('/api/users', {templateUrl: 'partials/users.html', label: 'users', controller: 'UsersCtrl'})
 
-        $routeProvider.when('/api/users', {templateUrl: 'partials/users.html', label: 'users', controller: 'UsersCtrl'});
+            .when('/api/contacts', {templateUrl: 'partials/contacts.html', label: 'contacts', controller: app.ContactsCtrl})
 
-        $routeProvider.when('/api/contacts', {templateUrl: 'partials/contacts.html', label: 'contacts', controller: 'ContactsCtrl'});
-
-        $routeProvider.otherwise({redirectTo: '/api/login'});
+            .otherwise({redirectTo: '/api/login'});
 }]);
+

@@ -1,8 +1,5 @@
 'use strict';
 
-var app = angular.module('myApp.breadcrumbsDirectives', ['myApp.breadcrumbsServices']);
-
-
 app.directive('breadCrumbs', function($log, BreadCrumbsService) {
     return {
         restrict: 'A',

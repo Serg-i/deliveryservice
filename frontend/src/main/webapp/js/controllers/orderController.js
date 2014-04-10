@@ -1,12 +1,12 @@
-var app = angular.module('myApp.orderControllers', ['myApp.orderService','myApp.breadcrumbsServices']);
+'use strict';
 
 app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location','BreadCrumbsService',
     function ($scope, OrderREST,  $location, BreadCrumbsService) {
 
         // callback for ng-click 'editOrder':
         $scope.editOrder = function (orderId) {
-            $scope.order = OrderREST.readOne({ id: orderId });
             $location.path('/api/edit_order/');
+            $scope.order = OrderREST.readOne({ id: orderId });
         };
 
         // callback for ng-click 'deleteOrder':
@@ -36,14 +36,14 @@ app.controller('NewOrderCtrl', ['$scope', 'OrderREST',  '$location',
 
         // callback for ng-click 'saveOrder':
         $scope.saveOrder = function () {
-            OrderREST.create({ headers : {"sdfsd":"dsfsd","sadfas":"dd"}} );
+            OrderREST.create();
             $location.path('/api/orders');
         };
     }]);
 
 app.controller('EditOrderCtrl', ['$scope', 'OrderREST', '$location',
     function ($scope, OrderREST,  $location) {
-
+        $scope.order = OrderREST.readOne({ id: orderId });
         // callback for ng-click 'saveOrder':
         $scope.saveOrder = function () {
             OrderREST.update({ id: $scope.order.id });

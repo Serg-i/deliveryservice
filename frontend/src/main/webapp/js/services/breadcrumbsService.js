@@ -1,9 +1,6 @@
 'use strict';
 
-/* Services */
-
-angular.module('myApp.breadcrumbsServices', []).
-    factory('BreadCrumbsService', function($rootScope, $log) {
+app.factory('BreadCrumbsService', function($rootScope, $log) {
     var data = {};
     var ensureIdIsRegistered = function(id) {
         if (angular.isUndefined(data[id])) {

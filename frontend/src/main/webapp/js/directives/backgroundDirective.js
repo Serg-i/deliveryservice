@@ -1,10 +1,7 @@
 'use strict';
 
-var app = angular.module('myApp.backgroundDirective', []);
-
-
-    app.directive('backImg',function() {
-    return function(scope, element, attrs) {
+app.directive('backImg',function() {
+    return function($scope, element, attrs) {
         var url = attrs.backImg;
         element.css({
         'background': 'url(' + url +')' +' no-repeat center center fixed',
