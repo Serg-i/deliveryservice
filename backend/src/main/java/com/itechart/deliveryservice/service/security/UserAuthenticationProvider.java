@@ -38,9 +38,8 @@ public class UserAuthenticationProvider implements UserDetailsService {
 
     private List<SimpleGrantedAuthority> getAuthorities(UserRole role) {
 
-        // TODO : add roles
-        List<SimpleGrantedAuthority> authList = new ArrayList<SimpleGrantedAuthority>(2);
-        authList.add(new SimpleGrantedAuthority("ROLE_USER"));
+        List<SimpleGrantedAuthority> authList = new ArrayList<SimpleGrantedAuthority>();
+        authList.add(new SimpleGrantedAuthority("ROLE_"+role.toString()));
         return authList;
     }
 }

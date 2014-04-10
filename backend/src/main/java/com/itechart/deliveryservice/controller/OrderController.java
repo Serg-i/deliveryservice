@@ -9,6 +9,7 @@ import com.itechart.deliveryservice.entity.OrderChange;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,6 +77,7 @@ public class OrderController {
         orderDao.merge(order);
     }
 
+    @Secured("ROLE_ADMINISTRATOR")
     @DELETE
     @Path("/{id}")
     public void update(@PathParam("id") long orderId) {
