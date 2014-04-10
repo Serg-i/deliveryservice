@@ -105,11 +105,14 @@ public class ContactControllerTest {
         }
     }
 
-   /* @Test
+    @Test
     public void shouldSaveContact() throws Exception{
 
+        Contact contact = new Contact();
+        contact.setName("Name");
+        contact.setSurname("Surname");
         ContactDTO contactDTO = dozer.map(contact, ContactDTO.class);
-
+        String val = null;
         String body = mapper.writeValueAsString(contactDTO);
         {
             MockHttpRequest request = MockHttpRequest.post("/api/contacts");
@@ -119,14 +122,14 @@ public class ContactControllerTest {
 
             dispatcher.invoke(request, response);
 
-            assertEquals(HttpServletResponse.SC_CREATED, response.getStatus());
+            assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+            val = response.getContentAsString();
         }
-        Contact found = contactDao.getById(contact.getId());
-
+        ContactDTO saved = mapper.readValue(val, ContactDTO.class);
+        Contact found = contactDao.getById(saved.getId());
         assertNotNull(found);
-
     }
-     */
+
     @Test
     public void shouldUpdateContact() throws Exception{
 

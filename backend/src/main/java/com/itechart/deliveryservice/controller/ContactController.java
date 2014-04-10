@@ -1,18 +1,16 @@
 package com.itechart.deliveryservice.controller;
 import com.itechart.deliveryservice.controller.data.ContactDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
-import com.itechart.deliveryservice.entity.*;
-
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
+import com.itechart.deliveryservice.entity.Contact;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +44,10 @@ public class ContactController {
     }
 
     @POST
-    public void insertContact(@Valid ContactDTO contactDTO){
-          Contact contact = mapper.map(contactDTO, Contact.class);
-          contactDao.save(contact);
+    public ContactDTO insertContact(@Valid ContactDTO contactDTO){
+        Contact contact = mapper.map(contactDTO, Contact.class);
+        contactDao.save(contact);
+        return mapper.map(contact, ContactDTO.class);
     }
 
     @PUT

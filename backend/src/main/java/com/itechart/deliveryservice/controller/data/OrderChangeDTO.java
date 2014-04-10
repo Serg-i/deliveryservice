@@ -7,11 +7,8 @@ import java.util.Date;
 public class OrderChangeDTO {
 
     private OrderState newState;
-
     private String userChangedStatusNickname;
-
     private String comment;
-
     private Date date;
 
     public OrderState getNewState() {

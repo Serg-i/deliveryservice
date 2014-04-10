@@ -1,37 +1,43 @@
 package com.itechart.deliveryservice.controller.data;
 
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import com.itechart.deliveryservice.controller.validators.Alphabetic;
+import com.itechart.deliveryservice.controller.validators.Alphanumeric;
+import com.itechart.deliveryservice.controller.validators.BasicString;
+import com.itechart.deliveryservice.controller.validators.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.Date;
 
 public class ContactDTO {
-    private long id;
-    private final String regexpname = "^[a-zA-Z]+$";
-    @Pattern(regexp = regexpname)
-    @Size(max = 25)
-    private String name;
-    @Pattern(regexp = regexpname)
-    @Size(max = 25)
-    private String surname;
-    @Pattern(regexp = regexpname)
-    @Size(max = 25)
-    private String middleName;
 
+    private long id;
+    @Alphabetic
+    @NotBlank(message = "hello")
+    @BasicString
+    private String name;
+    @Alphabetic
+    @NotBlank
+    @BasicString
+    private String surname;
+    @Alphabetic
+    @BasicString
+    private String middleName;
     private Date dateOfBirth;
-    @Pattern(regexp = "([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})")
+    @Email
+    @BasicString
     private String email;
-    @Pattern(regexp = regexpname)
-    @Size(max = 40)
+    @Alphabetic
+    @BasicString
     private String city;
-    @Pattern(regexp = regexpname)
-    @Size(max = 40)
+    @Alphanumeric
+    @BasicString
     private String street;
-    @Pattern(regexp = "^[0-9a-zA-Z]+$")
-    @Size(max = 10)
+    @Alphanumeric
+    @BasicString
     private String flat;
-    @Pattern(regexp = "^[0-9a-zA-Z]+$")
-    @Size(max = 10)
+    @Alphanumeric
+    @BasicString
     private String home;
 
     public long getId() {

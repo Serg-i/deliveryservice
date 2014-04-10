@@ -1,8 +1,10 @@
 package com.itechart.deliveryservice.controller.data;
 
+import com.itechart.deliveryservice.controller.validators.LongString;
+import com.itechart.deliveryservice.controller.validators.Numeric;
 import com.itechart.deliveryservice.entity.PhoneType;
+import com.sun.istack.NotNull;
 
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class PhoneDTO {
@@ -10,16 +12,17 @@ public class PhoneDTO {
     private long id;
     private long ownerId;
     @Size(max = 4)
-    @Pattern(regexp = "^[0-9]+$")
+    @Numeric
     private String countryCode;
     @Size(max = 3)
-    @Pattern(regexp = "^[0-9]+$")
+    @Numeric
     private String operatorCode;
     @Size(max = 8)
-    @Pattern(regexp = "^[0-9]+$")
+    @Numeric
     private String number;
+    @NotNull
     private PhoneType type;
-    @Size(max = 200)
+    @LongString
     private String comment;
     
     public long getId() {

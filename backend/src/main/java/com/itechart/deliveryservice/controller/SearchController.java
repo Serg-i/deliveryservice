@@ -52,7 +52,7 @@ public class SearchController {
 
     @GET
     @Path("/contacts/{page}")
-    public TableDTO<ShortContactDTO> searchOrders(@PathParam("page") long page, @Valid SearchContactDTO dto) {
+    public TableDTO<ShortContactDTO> searchContacts(@PathParam("page") long page, @Valid SearchContactDTO dto) {
 
         SearchParams sp = dto.createParams();
         long count = contactDao.searchCount(sp);
