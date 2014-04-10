@@ -1,10 +1,9 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.SearchOrderDTO;
-import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
-import com.itechart.deliveryservice.controller.data.TableDTO;
+import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
+import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Order;
 import com.itechart.deliveryservice.utils.SearchParams;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -57,7 +56,7 @@ public class SearchControllerTest {
     }
 
     @Test
-    public void shouldFindOrders() throws Exception {
+         public void shouldFindOrders() throws Exception {
 
         Order order = orderDao.getById(1);
 
@@ -87,12 +86,53 @@ public class SearchControllerTest {
         }
         TableDTO<ShortOrderDTO> ret = mapper.readValue(result, new TypeReference<TableDTO<ShortOrderDTO>>() {
         });
-        assertEquals(countOfHits, ret.getCurrentPage().size());
+        assertEquals(countOfHits, ret.getCount());
         for(ShortOrderDTO o : ret.getCurrentPage()) {
-            boolean exist = false;
             assertTrue(order.getDate().compareTo(o.getDate()) >= 0);
             assertEquals(order.getCustomer().getName(), o.getCustomerName());
             assertEquals(order.getRecipient().getName(), o.getRecipientName());
+        }
+    }
+
+    @Test
+    public void shouldFindContacts() throws Exception {
+
+        Contact contact = contactDao.getById(1);
+
+        SearchContactDTO dto = new SearchContactDTO();
+        dto.setDateOfBirth(contact.getDateOfBirth());
+        dto.setDateOp(SearchParams.Operator.LESS);
+        dto.setName(contact.getName());
+        dto.setSurname(contact.getSurname());
+        dto.setMiddleName(contact.getMiddleName());
+        dto.setCity(contact.getAddress().getCity());
+        dto.setStreet(contact.getAddress().getStreet());
+        dto.setHome(contact.getAddress().getHome());
+        dto.setFlat(contact.getAddress().getFlat());
+
+        String result = null;
+        String body = mapper.writeValueAsString(dto);
+        {
+            MockHttpRequest request = MockHttpRequest.get("/api/search/contacts/1");
+            request.contentType(MediaType.APPLICATION_JSON);
+            request.content(body.getBytes());
+            MockHttpResponse response = new MockHttpResponse();
+            dispatcher.invoke(request, response);
+            assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+            result = response.getContentAsString();
+        }
+        TableDTO<ShortContactDTO> ret = mapper.readValue(result, new TypeReference<TableDTO<ShortContactDTO>>() {
+        });
+        assertTrue(ret.getCurrentPage().size() > 0);
+        for(ShortContactDTO o : ret.getCurrentPage()) {
+            assertTrue(contact.getDateOfBirth().compareTo(o.getDateOfBirth()) >= 0);
+            assertEquals(contact.getName(), o.getName());
+            assertEquals(contact.getSurname(), o.getSurname());
+            assertEquals(contact.getMiddleName(), o.getMiddleName());
+            assertEquals(contact.getAddress().getCity(), o.getCity());
+            assertEquals(contact.getAddress().getStreet(), o.getStreet());
+            assertEquals(contact.getAddress().getFlat(), o.getFlat());
+            assertEquals(contact.getAddress().getHome(), o.getHome());
         }
     }
 

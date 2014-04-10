@@ -1,10 +1,9 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.SearchOrderDTO;
-import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
-import com.itechart.deliveryservice.controller.data.TableDTO;
+import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
+import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Order;
 import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
@@ -37,7 +36,7 @@ public class SearchController {
 
     @GET
     @Path("/orders/{page}")
-    public TableDTO<ShortOrderDTO> getChanges(@PathParam("page") long page, @Valid SearchOrderDTO dto) {
+    public TableDTO<ShortOrderDTO> searchOrders(@PathParam("page") long page, @Valid SearchOrderDTO dto) {
 
         SearchParams sp = dto.createParams();
         long count = orderDao.searchCount(sp);
@@ -50,4 +49,21 @@ public class SearchController {
         table.setCurrentPage(list);
         return table;
     }
+
+    @GET
+    @Path("/contacts/{page}")
+    public TableDTO<ShortContactDTO> searchOrders(@PathParam("page") long page, @Valid SearchContactDTO dto) {
+
+        SearchParams sp = dto.createParams();
+        long count = contactDao.searchCount(sp);
+        TableDTO<ShortContactDTO> table = new TableDTO<ShortContactDTO>();
+        table.setCount((int)count);
+        List<Contact> found = contactDao.search(sp, (int)(page-1)* Settings.rows, Settings.rows);
+        List<ShortContactDTO> list = new ArrayList<ShortContactDTO>();
+        for(Contact p : found)
+            list.add(mapper.map(p, ShortContactDTO.class));
+        table.setCurrentPage(list);
+        return table;
+    }
+
 }
