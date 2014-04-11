@@ -4,9 +4,13 @@ import org.springframework.http.HttpStatus;
 
 public class BusinessLogicException extends Exception{
 
-    private HttpStatus status;
+    public static final String DEFAULT_ERROR_MESSAGE = "Internal Server Error";
+    public static final HttpStatus DEFAULT_ERROR_STATUS =HttpStatus.INTERNAL_SERVER_ERROR;
+
+    private HttpStatus status= DEFAULT_ERROR_STATUS;
 
     public BusinessLogicException() {
+        super(DEFAULT_ERROR_MESSAGE);
     }
 
     public BusinessLogicException(String message) {
@@ -18,7 +22,7 @@ public class BusinessLogicException extends Exception{
     }
 
     public BusinessLogicException(Throwable cause) {
-        super(cause);
+        super(DEFAULT_ERROR_MESSAGE,cause);
     }
 
     public BusinessLogicException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {

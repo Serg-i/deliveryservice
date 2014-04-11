@@ -32,8 +32,8 @@ public class BusinessLogicExceptionHandlerTest {
         MockHttpRequest request = MockHttpRequest.get("/test/BusinessLogicException");
         MockHttpResponse response = new MockHttpResponse();
         dispatcher.invoke(request, response);
-        assertEquals(BusinessLogicExceptionHandler.DEFAULT_ERROR_CODE, response.getStatus());
-        assertEquals(BusinessLogicExceptionHandler.DEFAULT_ERROR_MESSAGE,response.getContentAsString());
+        assertEquals(BusinessLogicException.DEFAULT_ERROR_STATUS.value(), response.getStatus());
+        assertEquals(BusinessLogicException.DEFAULT_ERROR_MESSAGE,response.getContentAsString());
     }
 
     @Test
