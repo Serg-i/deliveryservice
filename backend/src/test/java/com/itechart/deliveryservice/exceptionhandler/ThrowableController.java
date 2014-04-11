@@ -4,8 +4,10 @@ package com.itechart.deliveryservice.exceptionhandler;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Controller;
 
+import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -37,20 +39,29 @@ public class ThrowableController {
     @Path("/BusinessLogicException")
     public void throwBusinessLogicException()
             throws BusinessLogicException {
-        BusinessLogicException exception=new BusinessLogicException();
-        throw exception;
+        throw new BusinessLogicException();
     }
-
-
 
 
     @GET
     @Path("/BusinessLogicException/{code}/{message}")
-    public void throwBussinesLogicException(@PathParam("code") int code,@PathParam("message") String message)
+    public void throwBusinessLogicException(@PathParam("code") int code,@PathParam("message") String message)
             throws BusinessLogicException {
         BusinessLogicException e=new BusinessLogicException(message);
         e.setStatus(HttpStatus.valueOf(code));
         throw e;
+    }
+
+    @GET
+    @Path("/ValidationException")
+    public void throwValidationException(){
+        throw new ValidationException();
+    }
+
+    @GET
+    @Path("/AuthenticationException")
+    public void throwAuthenticationException(){
+        throw new AuthenticationCredentialsNotFoundException("");
     }
 
 
