@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 public class ExceptionHandler implements ExceptionMapper<Exception> {
 
     public static final int ERROR_CODE=500;
-    public static final String ERROR_MESSAGE="Server runtime error";
+    public static final String ERROR_MESSAGE="Server unknown error";
 
     @Override
     public Response toResponse(Exception e) {
