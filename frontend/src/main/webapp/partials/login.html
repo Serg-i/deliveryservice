@@ -7,15 +7,17 @@
         <ul class="list-group">
             <li class="list-group-item">
                 <span class="label">Login: </span><br/>
-                <input type="text" class="form-control" name="username" ng-model="username" required >
+                <input type="text" class="form-control" id="username"
+                       ng-model="credentials.username" required >
             </li>
             <li class="list-group-item">
                 <span class="label">Password: </span><br/>
-                <input type="password" class="form-control" name="password" ng-model="password" required >
+                <input type="password" class="form-control" id="password"
+                       ng-model="credentials.password" required >
             </li>
             <li class="list-group-item text-center">
                 <div class="btn-group">
-                    <a ng-click="login()" class="btn btn-default">Войти</a>
+                    <a ng-click="login(credentials)" class="btn btn-default">Войти</a>
                 </div>
             </li>
         </ul>

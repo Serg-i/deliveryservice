@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ContactCtrl', ['$scope', '$location',
+app.controller('ContactsCtrl', ['$scope', '$location',
     function ($scope, $location) {
 
     }]);

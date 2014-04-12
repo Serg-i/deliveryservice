@@ -1,6 +1,5 @@
 'use strict';
 
-app.controller('UsersCtrl', ['$scope', '$location',
-    function ($scope, $location) {
+app.controller('UsersCtrl',  function ($scope) {
 
-    }]);
+    });
