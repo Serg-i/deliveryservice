@@ -1,7 +1,7 @@
 'use strict';
 
 app.factory("OrderREST", function($resource) {
-        return $resource("/api/orders/:id", {}, {
+        return $resource("/backend/api/orders/:id", {}, {
             readAll: {
                 method: "GET",
                 params: {id: ''},

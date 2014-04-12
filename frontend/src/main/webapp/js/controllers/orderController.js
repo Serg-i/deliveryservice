@@ -1,11 +1,10 @@
 'use strict';
 
-app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location','BreadCrumbsService',
-    function ($scope, OrderREST,  $location, BreadCrumbsService) {
+app.controller('OrdersCtrl',  function ($scope, OrderREST,  BreadCrumbsService, $state) {
 
         // callback for ng-click 'editOrder':
         $scope.editOrder = function (orderId) {
-            $location.path('/api/edit_order/');
+            $state.go('edit_order');
             $scope.order = OrderREST.readOne({ id: orderId });
         };
 
@@ -19,44 +18,44 @@ app.controller('OrdersCtrl', ['$scope', 'OrderREST', '$location','BreadCrumbsSer
 
         // callback for ng-click 'createOreder':
         $scope.createOrder = function () {
+            $state.go('new_order');
             BreadCrumbsService.push( 'home', {href: '#/api/new_order',label: 'Новый заказ'} );
-            $location.path('/api/new_order');
         };
 
         // callback for ng-click 'searchOrder':
         $scope.searchOrder = function () {
+            $state.go('search_order');
             BreadCrumbsService.push( 'home', {href: '#/api/search_order',label: 'Поиск заказа'} );
-            $location.path('/api/search_order');
         };
-        $scope.orders = OrderREST.readAll();
-    }]);
+        $scope.$on('$viewContentLoaded', function () {
+            $scope.orders = OrderREST.readAll();
+        });
+    });
 
-app.controller('NewOrderCtrl', ['$scope', 'OrderREST',  '$location',
-    function ($scope, OrderREST,  $location) {
+app.controller('NewOrderCtrl', function ($scope, OrderREST,  $state) {
 
         // callback for ng-click 'saveOrder':
         $scope.saveOrder = function () {
+            $state.go('orders');
             OrderREST.create();
-            $location.path('/api/orders');
         };
-    }]);
+    });
 
-app.controller('EditOrderCtrl', ['$scope', 'OrderREST', '$location',
-    function ($scope, OrderREST,  $location) {
+app.controller('EditOrderCtrl', function ($scope, OrderREST,  $state) {
         $scope.order = OrderREST.readOne({ id: orderId });
         // callback for ng-click 'saveOrder':
         $scope.saveOrder = function () {
             OrderREST.update({ id: $scope.order.id });
-            $location.path('/api/orders');
+            $state.go('orders');
         };
-    }]);
+    });
 
-app.controller('SearchOrderCtrl', ['$scope', 'OrderREST',   '$location',
-    function ($scope, OrderREST,  $location) {
+app.controller('SearchOrderCtrl', function ($scope, OrderREST,  $state) {
 
         // callback for ng-click 'searchOrder':
         $scope.searchOrder = function () {
             //TODO  $scope.orders = OrderREST.search();
-            $location.path('/api/orders');
+            $state.go('orders');
+            $scope.orders = OrderREST.readAll();
         };
-    }]);
+    });
