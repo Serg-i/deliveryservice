@@ -7,13 +7,13 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.springframework.org/schema/security
 http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <http create-session="stateless">
+    <http create-session="stateless" entry-point-ref="authenticationEntryPoint">
 
         <intercept-url pattern="/api/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/api/contacts/**" access="ROLE_ADMINISTRATOR, ROLE_SUPERVISOR, ROLE_ORDER_MANAGER"/>
-        <intercept-url pattern="/api/orders/**" access="ROLE_ADMINISTRATOR, ROLE_ORDER_MANAGER, ROLE_SECOND_MANAGER, ROLE_COURIER, ROLE_SUPERVISOR" />
+        <intercept-url pattern="/api/orders/**" access="ROLE_ADMINISTRATOR, ROLE_ORDER_MANAGER, ROLE_PROCESSING_MANAGER, ROLE_COURIER, ROLE_SUPERVISOR" />
         <intercept-url pattern="/api/search/contacts" access="ROLE_ADMINISTRATOR, ROLE_ORDER_MANAGER, ROLE_SUPERVISOR"/>
-        <intercept-url pattern="/api/search/orders" access="ROLE_ADMINISTRATOR, ROLE_ORDER_MANAGER, ROLE_SECOND_MANAGER, ROLE_COURIER, ROLE_SUPERVISOR"/>
+        <intercept-url pattern="/api/search/orders" access="ROLE_ADMINISTRATOR, ROLE_ORDER_MANAGER, ROLE_PROCESSING_MANAGER, ROLE_COURIER, ROLE_SUPERVISOR"/>
         <intercept-url pattern="/api/send-mail" access="ROLE_ADMINISTRATOR, ROLE_SUPERVISOR"/>
         <intercept-url pattern="/api/**" access="ROLE_ADMINISTRATOR" />
 
@@ -26,6 +26,10 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
     <beans:bean
                 class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+
+    <beans:bean id="authenticationEntryPoint"
+          class="com.itechart.deliveryservice.service.security.RestAuthenticationEntryPoint">
+    </beans:bean>
 
     <authentication-manager>
         <authentication-provider user-service-ref="userDetailsService" />
