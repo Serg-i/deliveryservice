@@ -3,6 +3,7 @@ package com.itechart.deliveryservice.controller;
 import com.itechart.deliveryservice.controller.data.OrderChangeDTO;
 import com.itechart.deliveryservice.controller.data.OrderDTO;
 import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
+import com.itechart.deliveryservice.controller.data.TableDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
@@ -116,11 +117,13 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void shouldReturnOrdersInJSON() throws Exception {
+    public void shouldReturnOrdersForCourier() throws Exception {
 
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("user4", "1234"));
         String val = null;
         {
-            MockHttpRequest request = MockHttpRequest.get("/api/orders/");
+            MockHttpRequest request = MockHttpRequest.get("/api/orders/p/1");
             MockHttpResponse response = new MockHttpResponse();
 
             dispatcher.invoke(request, response);
@@ -128,10 +131,12 @@ public class OrderControllerTest {
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
             val = response.getContentAsString();
         }
-        List<ShortOrderDTO> list = mapper.readValue(val, new TypeReference<List<ShortOrderDTO>>() {
+        TableDTO<ShortOrderDTO> table = mapper.readValue(val,
+                new TypeReference<TableDTO<ShortOrderDTO>>() {
         });
-        assertEquals(list.get(0).getState(), order.getState());
-        assertEquals(list.get(1).getState(), order1.getState());
+        assertTrue(table.getCount() > 0);
+        assertTrue(table.getPagesCount() > 0);
+        assertTrue(table.getCurrentPage().size() > 0);
     }
 
 /*    @Test

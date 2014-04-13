@@ -146,11 +146,16 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
 
 
         List<Predicate> list = new ArrayList<Predicate>();
-        for (Iterator<Map.Entry<String, SearchParams.OpAndValue>> iter
+        TreeMap<String, ArrayList<Predicate>> map = new TreeMap<String, ArrayList<Predicate>>();
+
+        for (Iterator<SearchParams.Pair> iter
                      = params.iterator(); iter.hasNext();) {
 
-            Map.Entry<String, SearchParams.OpAndValue> p = iter.next();
+            SearchParams.Pair p = iter.next();
             String[] s = p.getKey().split("\\.");
+
+            if(!map.containsKey(p.getKey()))
+                map.put(p.getKey(), new ArrayList<Predicate>());
 
             Path path = null;
             if (s.length > 1) {
@@ -160,16 +165,24 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
             }
             switch(p.getValue().operator) {
                 case EQUAL:
-                    list.add(builder.equal(path, p.getValue().value));
+                    map.get(p.getKey()).add(builder.equal(path, p.getValue().value));
                     break;
                 case GREATER:
-                    list.add(builder.greaterThanOrEqualTo((Path<Date>) path, (Date) p.getValue().value));
+                    map.get(p.getKey()).add(builder.greaterThanOrEqualTo(
+                            (Path<Date>) path, (Date) p.getValue().value));
                     break;
                 case LESS:
-                    list.add(builder.lessThanOrEqualTo((Path<Date>) path, (Date) p.getValue().value));
+                    map.get(p.getKey()).add(builder.lessThanOrEqualTo(
+                            (Path<Date>) path, (Date) p.getValue().value));
                     break;
             }
         }
+        for(Map.Entry<String, ArrayList<Predicate>> ent : map.entrySet()) {
+            Predicate p = builder.or(ent.getValue().toArray(
+                    new Predicate[ent.getValue().size()]));
+            list.add(p);
+        }
+
         query.where(list.toArray(new Predicate[list.size()]));
     }
 
