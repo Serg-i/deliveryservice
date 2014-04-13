@@ -164,4 +164,20 @@ public class OrderDaoIntegrationTest {
         for(Order d : list)
             assertTrue(d.getDate().compareTo(order.getDate()) <= 0);
     }
+
+    @Test
+    @Transactional
+    public void shouldTestSearchParamsOrFeature() {
+
+        List<Order> orders = orderDao.getAll();
+        int right = 0;
+        for (Order o : orders)
+            if (o.getState() == OrderState.ACCEPTED
+                    || o.getState() == OrderState.IN_PROCESSING)
+                right++;
+        SearchParams sp = new SearchParams();
+        sp.addParam("state", OrderState.ACCEPTED);
+        sp.addParam("state", OrderState.IN_PROCESSING);
+        assertEquals(right, orderDao.searchCount(sp));
+    }
 }

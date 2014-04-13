@@ -3,10 +3,13 @@ package com.itechart.deliveryservice.controller;
 import com.itechart.deliveryservice.controller.data.OrderChangeDTO;
 import com.itechart.deliveryservice.controller.data.OrderDTO;
 import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
+import com.itechart.deliveryservice.controller.data.TableDTO;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.*;
 import com.itechart.deliveryservice.exceptionhandler.BadRequestException;
+import com.itechart.deliveryservice.utils.SearchParams;
+import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +53,37 @@ public class OrderController {
     }
 
     @GET
-    @Path("/")
-    public List<ShortOrderDTO> readAll() {
-        List<Order> orders = orderDao.getAll();
+    @Path("/p/{page}")
+    public TableDTO<ShortOrderDTO> readAll(@PathParam("page") int page) {
+
+        List<Order> orders = null;
+        User user = getUser();
+        SearchParams sp = new SearchParams();
+        int count = 0;
+        switch (user.getRole()) {
+            case PROCESSING_MANAGER:
+                sp.addParam("processingManager.id", Long.toString(user.getId()));
+                sp.addParam("state", OrderState.ACCEPTED);
+                sp.addParam("state", OrderState.IN_PROCESSING);
+                break;
+            case COURIER:
+                sp.addParam("deliveryManager.id", Long.toString(user.getId()));
+                sp.addParam("state", OrderState.READY_FOR_DELIVERY);
+                sp.addParam("state", OrderState.DELIVERY);
+                break;
+            default:
+        }
+        count = (int)orderDao.searchCount(sp);
+        int from = Math.min((page - 1) * Settings.rows, Math.max(0, count - Settings.rows));
+        orders = orderDao.search(sp, from, Settings.rows, "date", false);
+        TableDTO<ShortOrderDTO> out = new TableDTO<ShortOrderDTO>();
         List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
         for(Order order : orders)
             list.add(mapper.map(order, ShortOrderDTO.class));
-        return list;
+        out.setCurrentPage(list);
+        out.setCount(count);
+        out.setPagesCount(count / Settings.rows + (count % Settings.rows == 0 ? 0 : 1) );
+        return out;
     }
 
     @GET
@@ -100,9 +127,7 @@ public class OrderController {
     private boolean canAccessOrder(Order order) {
 
         boolean can = false;
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName();
-        User user = userDao.getByName(name);
+        User user = getUser();
         if (user.getRole() == UserRole.SUPERVISOR
                 || user.getRole() == UserRole.ORDER_MANAGER
                 || user.getRole() == UserRole.ADMINISTRATOR)
@@ -114,5 +139,13 @@ public class OrderController {
                 && (order.getState() == OrderState.READY_FOR_DELIVERY
                 || order.getState() == OrderState.DELIVERY);
         return can;
+    }
+
+    private User getUser() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        User user = userDao.getByName(name);
+        return user;
     }
 }

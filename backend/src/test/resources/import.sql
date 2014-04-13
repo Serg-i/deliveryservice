@@ -12,9 +12,9 @@ INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'COURIER
 
 INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('250', '1990-12-2', 'no', 'ACCEPTED', '1', '5', '4', '3', '1');
 INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('250', '1990-12-1', 'no', 'ACCEPTED', '1', '5', '4', '3', '1');
-INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('150', '1990-12-4', 'no', 'ACCEPTED', '1', '5', '4', '3', '1');
+INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('150', '1990-12-4', 'no', 'IN_PROCESSING', '1', '5', '4', '3', '1');
 INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('300', '1990-12-2', 'no', 'ACCEPTED', '1', '5', '4', '3', '1');
-INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('10', '1990-12-5', 'no', 'ACCEPTED', '1', '5', '4', '3', '1');
+INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('10', '1990-12-5', 'no', 'DELIVERY', '1', '5', '4', '3', '1');
 
 INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '4445887', '23', 'HOME', '1');
 INSERT INTO phone (comment, country_code, number, operator_code, type, owner_id) VALUES ('comment', '123', '4445887', '23', 'HOME', '1');
