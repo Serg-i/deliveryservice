@@ -104,7 +104,7 @@ var app = angular.module('myApp', [
 
         $urlRouterProvider.otherwise('/api/login');
     });
-        app.run(function ($rootScope, $state, AUTH_EVENTS, AuthService ) {
+        app.run(function ($rootScope, $state, AuthService ) {
 
             $rootScope.$on('$stateChangeStart', function (event, next) {
                 var authorizedRoles = next.data.authorizedRoles;
