@@ -2,8 +2,8 @@ package com.itechart.deliveryservice.controller.data;
 
 import com.itechart.deliveryservice.entity.OrderState;
 
-import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 public class OrderDTO {
 
@@ -11,23 +11,24 @@ public class OrderDTO {
 
     private OrderState state;
 
+    private long customerId;
+    private long recipientId;
+    private long receptionManagerId;
+    private long processingManagerId;
+    private long deliveryManagerId;
+
     private String customerName;
-
     private String customerSurname;
-
     private String recipientName;
-
     private String recipientSurname;
-
     private String receptionManager;
-
     private String processingManager;
-
     private String deliveryManager;
 
     private Date date;
 
-    @Pattern(regexp = "^[0-9]+$")
+    private List<OrderChangeDTO> changes;
+
     private String cost;
 
     private String description;
@@ -126,5 +127,54 @@ public class OrderDTO {
 
     public void setDeliveryManager(String deliveryManager) {
         this.deliveryManager = deliveryManager;
+    }
+
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
+    public long getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(long recipientId) {
+        this.recipientId = recipientId;
+    }
+
+    public long getReceptionManagerId() {
+        return receptionManagerId;
+    }
+
+    public void setReceptionManagerId(long receptionManagerId) {
+        this.receptionManagerId = receptionManagerId;
+    }
+
+    public long getProcessingManagerId() {
+        return processingManagerId;
+    }
+
+    public void setProcessingManagerId(long processingManagerId) {
+        this.processingManagerId = processingManagerId;
+    }
+
+    public long getDeliveryManagerId() {
+        return deliveryManagerId;
+    }
+
+    public void setDeliveryManagerId(long deliveryManagerId) {
+        this.deliveryManagerId = deliveryManagerId;
+    }
+
+    public void setChanges(List<OrderChangeDTO> changes) {
+        this.changes = changes;
+    }
+
+    public List<OrderChangeDTO> getChanges() {
+        return changes;
     }
 }

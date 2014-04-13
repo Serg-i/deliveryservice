@@ -95,6 +95,31 @@
             <a>deliveryManager.username</a>
             <b>deliveryManager</b>
         </field>
+        <field>
+            <a>customer.id</a>
+            <b>customerId</b>
+        </field>
+        <field>
+            <a>recipient.id</a>
+            <b>recipientId</b>
+        </field>
+        <field>
+            <a>receptionManager.id</a>
+            <b>receptionManagerId</b>
+        </field>
+        <field>
+            <a>processingManager.id</a>
+            <b>processingManagerId</b>
+        </field>
+        <field>
+            <a>deliveryManager.id</a>
+            <b>deliveryManagerId</b>
+        </field>
+        <field>
+            <a>changes</a>
+            <b>changes</b>
+            <b-hint>com.itechart.deliveryservice.controller.data.OrderChangeDTO</b-hint>
+        </field>
     </mapping>
 
     <mapping map-null="false">
