@@ -4,54 +4,59 @@
         <h1>Создать Заказ <small></small></h1>
     </div>
     <div class="panel-body">
+    	<form name="form" novalidate>
         <ul class="list-group">
-            <li class="list-group-item">
+            <li class="list-group-item" ng-class="{ 'has-error' : form.cust.$invalid}">
                 <span class="label">Заказчик:</span><br/>
-                <select class="form-control" ui-select2 ng-model="order.customerId">
+                <select class="form-control" name="cust" ui-select2 ng-model="order.customerId" required>
                     <option ng-repeat="contact in contacts" value="{{ contact.id }}">
                         {{ contact.name }} {{ contact.surname }}
                     </option>
                 </select>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" ng-class="{ 'has-error' : form.rep.$invalid}">
                 <span class="label">Получатель: </span><br/>
-                <select class="form-control" ui-select2 ng-model="order.recipientId">
+                <select class="form-control" name="rep" ui-select2 ng-model="order.recipientId" required>
                     <option ng-repeat="contact in contacts" value="{{ contact.id }}">
                         {{ contact.name }} {{ contact.surname }}
                     </option>
                 </select>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" ng-class="{ 'has-error' : form.pm.$invalid}">
                 <span class="label">Менеджер по обработке: </span><br/>
-                <select class="form-control" ui-select2 ng-model="order.processingManagerId">
+                <select class="form-control" name="pm" ui-select2 ng-model="order.processingManagerId" required>
                     <option ng-repeat="user in users.procissingManagers" value="{{ user.id }}">
                         {{ user.name }} {{ user.surname }}
                     </option>
                 </select>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" ng-class="{ 'has-error' : form.dm.$invalid}">
                 <span class="label">Менеджер по доставке: </span><br/>
-                <select class="form-control" ui-select2 ng-model="order.deliveryManagerId">
+                <select class="form-control" name="dm" ui-select2 ng-model="order.deliveryManagerId" required>
                     <option ng-repeat="user in users.couriers" value="{{ user.id }}">
                         {{ user.name }} {{ user.surname }}
                     </option>
                 </select>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" ng-class="{ 'has-error' : form.description.$invalid && !form.description.$pristine }">
                 <span class="label">Описание: </span><br/>
-                <textarea class="form-control" id = "description" ng-model="order.description"></textarea>
+                <textarea class="form-control" name = "description" ng-model="order.description" ng-maxlength="200"></textarea>
+                <p ng-show="form.description.$error.maxlength" class="help-block">Не более 200 символов.</p>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" ng-class="{ 'has-error' : form.cost.$invalid && !form.cost.$pristine }">
                 <span class="label">Оценочная сумма: </span><br/>
-                <input type="text" class="form-control" id = "cost" ng-model="order.cost">
+                <input type="text" class="form-control" name = "cost" ng-model="order.cost" ng-maxlength="8" ng-pattern=/^[0-9]+$/>
+                <p ng-show="form.cost.$error.pattern" class="help-block">Только цифры.</p>
+                <p ng-show="form.cost.$error.maxlength" class="help-block">Не более 8 цифр.</p>
             </li>
 
             <li class="list-group-item text-center">
                 <div class="btn-group">
-                    <a ng-click="saveOrder(order.id)" class="btn btn-default">Сохранить</a>
+                    <a ng-click="saveOrder(order.id)" class="btn btn-default" ng-disabled="form.$invalid">Сохранить</a>
                 </div>
             </li>
         </ul>
+        </form>
     </div>
     <hr/>
 </div>
