@@ -1,15 +1,20 @@
 'use strict';
 
 app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session',
-    function ($rootScope, USER_ROLES, AuthService, Session) {
+    function ($scope, USER_ROLES, AuthService, Session) {
 
-        $rootScope.currentUser = {
+        $scope.currentUser = {
             name: '',
             role: ''
         };
         Session.userRole= USER_ROLES.guest;
         Session.username= 'GUEST';
 
-        $rootScope.currentUser.name = Session.username;
-        $rootScope.currentUser.role = Session.userRole;
+        $scope.currentUser.name = Session.username;
+        $scope.currentUser.role = Session.userRole;
+
+        $scope.$on( 'newLogin', function() {
+            $scope.currentUser.name = Session.username;
+            $scope.currentUser.role = Session.userRole;
+        } );
     }]);

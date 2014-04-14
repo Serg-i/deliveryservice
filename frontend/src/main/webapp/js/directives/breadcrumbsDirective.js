@@ -20,7 +20,6 @@ app.directive('breadCrumbs', function($log, BreadCrumbsService) {
                     resetCrumbs();
                 };
                 $scope.$on( 'breadcrumbsRefresh', function() {
-                    $log.log( "$on" );
                     resetCrumbs();
                 } );
             }

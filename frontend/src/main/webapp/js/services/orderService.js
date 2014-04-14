@@ -2,14 +2,6 @@
 
 app.factory("OrderREST", function($resource) {
         return $resource("/backend/api/orders/:id", {}, {
-            readAll: {
-                method: "GET",
-                params: {id: ''},
-                isArray: true,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            },
             readOne: {
                 method: 'GET',
                 params: {id: '@id'},
@@ -40,3 +32,15 @@ app.factory("OrderREST", function($resource) {
             }
         });
     });
+
+app.factory("OrdersREST", function($resource) {
+    return $resource("/backend/api/orders/p/:page", {}, {
+        readAll: {
+            method: "GET",
+            params: {page: '@page'},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    });
+});

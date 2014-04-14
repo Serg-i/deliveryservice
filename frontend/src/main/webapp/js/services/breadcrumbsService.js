@@ -11,7 +11,6 @@ app.factory('BreadCrumbsService', function($rootScope, $log) {
         push: function(id, item) {
             ensureIdIsRegistered(id);
             data[id].push(item);
-            $log.log( "$broadcast" );
             $rootScope.$broadcast( 'breadcrumbsRefresh' );
         },
         get: function(id) {
