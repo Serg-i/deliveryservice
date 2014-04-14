@@ -9,7 +9,6 @@ public class ReceiveOrderDTO {
 
     private long customerId;
     private long recipientId;
-    private long receptionManagerId;
     private long processingManagerId;
     private long deliveryManagerId;
 
@@ -40,14 +39,6 @@ public class ReceiveOrderDTO {
 
     public void setRecipientId(long recipientId) {
         this.recipientId = recipientId;
-    }
-
-    public long getReceptionManagerId() {
-        return receptionManagerId;
-    }
-
-    public void setReceptionManagerId(long receptionManagerId) {
-        this.receptionManagerId = receptionManagerId;
     }
 
     public long getProcessingManagerId() {

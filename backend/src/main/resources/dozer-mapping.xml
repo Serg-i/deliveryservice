@@ -159,10 +159,6 @@
             <b>recipientId</b>
         </field>
         <field>
-            <a>receptionManager.id</a>
-            <b>receptionManagerId</b>
-        </field>
-        <field>
             <a>processingManager.id</a>
             <b>processingManagerId</b>
         </field>

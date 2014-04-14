@@ -1,10 +1,15 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.*;
+import com.itechart.deliveryservice.controller.data.OrderDTO;
+import com.itechart.deliveryservice.controller.data.ReceiveOrderDTO;
+import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
+import com.itechart.deliveryservice.controller.data.TableDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
-import com.itechart.deliveryservice.entity.*;
+import com.itechart.deliveryservice.entity.Contact;
+import com.itechart.deliveryservice.entity.Order;
+import com.itechart.deliveryservice.entity.User;
 import com.itechart.deliveryservice.utils.SearchParams;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -28,8 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
-import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -90,32 +93,6 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void shouldReturnOrderChangesInJSON() throws Exception {
-
-        OrderChange orderChange = new OrderChange();
-        orderChange.setComment("COMMENT");
-        orderChange.setNewState(OrderState.CANCELED);
-        orderChange.setDate(new Date());
-        orderChange.setUserChangedStatus(userDao.getById(1));
-        order.addChange(orderChange);
-        String content = null;
-        orderDao.save(order);
-        {
-            MockHttpRequest request = MockHttpRequest.get("/api/orders/" + order.getId() + "/orderChanges");
-            MockHttpResponse response = new MockHttpResponse();
-            dispatcher.invoke(request, response);
-            assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-            content = response.getContentAsString();
-        }
-        List<OrderChangeDTO> list = mapper.readValue(content, new TypeReference<List<OrderChangeDTO>>() {
-        });
-        assertTrue(list.size() > 0);
-        assertEquals(orderChange.getComment(), list.get(list.size() - 1).getComment());
-        assertEquals(orderChange.getUserChangedStatus().getUsername(), list.get(list.size() - 1).getUserChangedStatusNickname());
-        assertEquals(orderChange.getNewState(), list.get(list.size() - 1).getNewState());
-    }
-
-    @Test
     public void shouldReturnOrdersForCourier() throws Exception {
 
         SecurityContextHolder.getContext().setAuthentication(
@@ -143,11 +120,11 @@ public class OrderControllerTest {
 
         ReceiveOrderDTO order = new ReceiveOrderDTO();
         order.setCost("123");
+        assertNotNull(userDao.getById(1));
         order.setCustomerId(1);
         order.setRecipientId(1);
         order.setDeliveryManagerId(1);
         order.setProcessingManagerId(1);
-        order.setReceptionManagerId(1);
         order.setDescription("create_test");
         String body = mapper.writeValueAsString(order);
         {
@@ -172,7 +149,6 @@ public class OrderControllerTest {
         order.setRecipientId(1111);
         order.setDeliveryManagerId(1111);
         order.setProcessingManagerId(1111);
-        order.setReceptionManagerId(1111);
         order.setDescription("create_test");
         String body = mapper.writeValueAsString(order);
         {
@@ -184,25 +160,34 @@ public class OrderControllerTest {
         }
     }
 
-/*    @Test
+    @Test
     public void shouldUpdateOrder() throws Exception {
 
-        OrderDTO orderDTO = dozer.map(order, OrderDTO.class);
-        orderDTO.setState(OrderState.CAN_NOT_BE_EXECUTED);
+        ReceiveOrderDTO orderDTO = dozer.map(order, ReceiveOrderDTO.class);
+        assertNotNull(userDao.getById(2));
+        orderDTO.setDescription("new");
+        orderDTO.setProcessingManagerId(2);
+        orderDTO.setDeliveryManagerId(2);
+        orderDTO.setCustomerId(2);
+        orderDTO.setRecipientId(2);
+        orderDTO.setCost("123");
         String body = mapper.writeValueAsString(orderDTO);
         {
             MockHttpRequest request = MockHttpRequest.put("/api/orders/" + order.getId());
             request.contentType(MediaType.APPLICATION_JSON);
             request.content(body.getBytes());
             MockHttpResponse response = new MockHttpResponse();
-
             dispatcher.invoke(request, response);
-
             assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         }
         Order found = orderDao.getById(order.getId());
-        assertEquals(order.getState(), found.getState());
-    }*/
+        assertEquals("new", found.getDescription());
+        assertEquals("123", found.getCost());
+        assertEquals(2, found.getCustomer().getId());
+        assertEquals(2, found.getRecipient().getId());
+        assertEquals(2, found.getDeliveryManager().getId());
+        assertEquals(2, found.getProcessingManager().getId());
+    }
 
     @Test
     public void shouldDeleteOrder() throws Exception {

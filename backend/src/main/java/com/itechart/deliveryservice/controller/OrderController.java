@@ -5,11 +5,13 @@ import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.*;
 import com.itechart.deliveryservice.exceptionhandler.BadRequestException;
+import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
 import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.ValidationException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,19 +107,23 @@ public class OrderController {
         order.setState(OrderState.NEW);
         order.setReceptionManager(getUser());
         order.setDate(new Date());
-        try {
-            orderDao.save(order);
-        } catch (Exception e) {
-            throw new ValidationException(e);
-        }
+        orderDao.save(order);
     }
 
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @PUT
     @Path("/{id}")
-    public void update(@PathParam("id") long orderId, @Valid OrderDTO orderDTO) {
-        Order order =  mapper.map(orderDTO, Order.class);
-        order.setId(orderId);
-        orderDao.merge(order);
+    public void update(@PathParam("id") long orderId, @Valid ReceiveOrderDTO orderDTO) throws Exception {
+
+        Order upOrder =  mapper.map(orderDTO, Order.class);
+        Order order = orderDao.getById(orderId);
+        if (order == null)
+            throw new BusinessLogicException("This order doesn't exist", HttpStatus.BAD_REQUEST);
+        upOrder.setDate(order.getDate());
+        upOrder.setReceptionManager(order.getReceptionManager());
+        upOrder.setState(order.getState());
+        upOrder.setChanges(order.getChanges());
+        orderDao.merge(upOrder);
     }
 
     @Secured("ROLE_ADMINISTRATOR")

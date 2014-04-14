@@ -17,6 +17,11 @@ public class BusinessLogicException extends Exception{
         super(message);
     }
 
+    public BusinessLogicException(String message, HttpStatus status) {
+        super(message);
+        setStatus(status);
+    }
+
     public BusinessLogicException(String message, Throwable cause) {
         super(message, cause);
     }
