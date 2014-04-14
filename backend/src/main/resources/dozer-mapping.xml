@@ -4,6 +4,7 @@
           xsi:schemaLocation="http://dozer.sourceforge.net
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
+    <!-- PHONES -->
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.Phone</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.PhoneDTO</class-b>
@@ -13,6 +14,7 @@
         </field>
     </mapping>
 
+    <!-- LOGIN -->
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.User</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.LoginInfoDTO</class-b>
@@ -22,6 +24,7 @@
         </field>
     </mapping>
 
+    <!-- CONTACT -->
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.Contact</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.ContactDTO</class-b>
@@ -64,6 +67,7 @@
         </field>
     </mapping>
 
+    <!-- ORDER -->
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.Order</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.OrderDTO</class-b>
@@ -143,6 +147,32 @@
         </field>
     </mapping>
 
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.Order</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.ReceiveOrderDTO</class-b>
+        <field>
+            <a>customer.id</a>
+            <b>customerId</b>
+        </field>
+        <field>
+            <a>recipient.id</a>
+            <b>recipientId</b>
+        </field>
+        <field>
+            <a>receptionManager.id</a>
+            <b>receptionManagerId</b>
+        </field>
+        <field>
+            <a>processingManager.id</a>
+            <b>processingManagerId</b>
+        </field>
+        <field>
+            <a>deliveryManager.id</a>
+            <b>deliveryManagerId</b>
+        </field>
+    </mapping>
+
+    <!-- ORDERCHANGE -->
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.OrderChange</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.OrderChangeDTO</class-b>

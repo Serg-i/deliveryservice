@@ -1,13 +1,11 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.OrderChangeDTO;
-import com.itechart.deliveryservice.controller.data.OrderDTO;
-import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
-import com.itechart.deliveryservice.controller.data.TableDTO;
+import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.*;
+import com.itechart.deliveryservice.utils.SearchParams;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.dozer.DozerBeanMapper;
@@ -29,6 +27,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
 
@@ -137,6 +136,52 @@ public class OrderControllerTest {
         assertTrue(table.getCount() > 0);
         assertTrue(table.getPagesCount() > 0);
         assertTrue(table.getCurrentPage().size() > 0);
+    }
+
+    @Test
+    public void shouldCreateOrder() throws Exception {
+
+        ReceiveOrderDTO order = new ReceiveOrderDTO();
+        order.setCost("123");
+        order.setCustomerId(1);
+        order.setRecipientId(1);
+        order.setDeliveryManagerId(1);
+        order.setProcessingManagerId(1);
+        order.setReceptionManagerId(1);
+        order.setDescription("create_test");
+        String body = mapper.writeValueAsString(order);
+        {
+            MockHttpRequest request = MockHttpRequest.post("/api/orders/");
+            request.contentType(MediaType.APPLICATION_JSON);
+            request.content(body.getBytes());
+            MockHttpResponse response = new MockHttpResponse();
+            dispatcher.invoke(request, response);
+            assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
+        }
+        SearchParams sp = new SearchParams();
+        sp.addParam("description", "create_test");
+        assertTrue(orderDao.searchCount(sp) > 0);
+    }
+
+    @Test(expected = UnhandledException.class)
+    public void shouldFailToCreateOrder() throws Exception {
+
+        ReceiveOrderDTO order = new ReceiveOrderDTO();
+        order.setCost("123");
+        order.setCustomerId(1111);
+        order.setRecipientId(1111);
+        order.setDeliveryManagerId(1111);
+        order.setProcessingManagerId(1111);
+        order.setReceptionManagerId(1111);
+        order.setDescription("create_test");
+        String body = mapper.writeValueAsString(order);
+        {
+            MockHttpRequest request = MockHttpRequest.post("/api/orders/");
+            request.contentType(MediaType.APPLICATION_JSON);
+            request.content(body.getBytes());
+            MockHttpResponse response = new MockHttpResponse();
+            dispatcher.invoke(request, response);
+        }
     }
 
 /*    @Test

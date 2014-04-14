@@ -16,7 +16,7 @@ public class Order {
     private OrderState state;
 
     @ManyToOne
-    @JoinColumn (name="customer_id")
+    @JoinColumn (name="customer_id", nullable = false)
     private Contact customer;
 
     private String description;
@@ -26,19 +26,19 @@ public class Order {
     private String cost;
 
     @ManyToOne
-    @JoinColumn (name="reception_manager_id")
+    @JoinColumn (name="reception_manager_id", nullable = false)
     private User receptionManager ;
 
     @ManyToOne
-    @JoinColumn (name="processing_manager_id")
+    @JoinColumn (name="processing_manager_id", nullable = false)
     private User processingManager ;
 
     @ManyToOne
-    @JoinColumn (name="delivery_manager_id")
+    @JoinColumn (name="delivery_manager_id", nullable = false)
     private User deliveryManager ;
 
     @ManyToOne
-    @JoinColumn (name="recipient_id")
+    @JoinColumn (name="recipient_id", nullable = false)
     private Contact recipient;
 
     @OneToMany(mappedBy="order", cascade = CascadeType.ALL)

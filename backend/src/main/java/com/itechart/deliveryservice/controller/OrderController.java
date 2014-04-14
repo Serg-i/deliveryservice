@@ -1,9 +1,6 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.OrderChangeDTO;
-import com.itechart.deliveryservice.controller.data.OrderDTO;
-import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
-import com.itechart.deliveryservice.controller.data.TableDTO;
+import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.*;
@@ -23,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.ValidationException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Path("/api/orders")
@@ -101,11 +100,17 @@ public class OrderController {
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER"})
     @POST
     @Path("/")
-    public void create(@Valid OrderDTO orderDTO) {
-
+    public void create(@Valid ReceiveOrderDTO orderDTO) throws Exception {
 
         Order order =  mapper.map(orderDTO, Order.class);
-        orderDao.save(order);
+        order.setState(OrderState.NEW);
+        order.setReceptionManager(getUser());
+        order.setDate(new Date());
+        try {
+            orderDao.save(order);
+        } catch (Exception e) {
+            throw new ValidationException(e);
+        }
     }
 
     @PUT
