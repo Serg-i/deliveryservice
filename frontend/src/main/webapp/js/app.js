@@ -2,7 +2,8 @@
 
 var app = angular.module('myApp', [
     'ui.router',
-    'ngResource'
+    'ngResource',
+    'ui.select2'
 ]);
     app.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
 

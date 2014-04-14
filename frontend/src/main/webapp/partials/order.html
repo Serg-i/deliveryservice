@@ -24,12 +24,15 @@
             </li>
             <li class="list-group-item">
                 <span class="label">Менеджер по приему: </span><br/>
-                <div class="input-group">
-                    <input type="text" class="form-control" id = "receptionManager" ng-model="order.receptionManager">
+		    <select class="form-control" ui-select2 ng-model="select2">
+			<option value="one">First</option>
+			<option value="two">Second</option>
+			<option value="three">Third</option>
+		    </select>
+               <!--     <input type="text" class="form-control" id = "receptionManager" ng-model="order.receptionManager">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button">Выбрать</button>
-                        </span>
-                </div>
+                        </span> -->
             </li>
             <li class="list-group-item">
                 <span class="label">Менеджер по обработке: </span><br/>
