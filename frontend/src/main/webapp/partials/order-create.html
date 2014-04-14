@@ -1,0 +1,58 @@
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Создать Заказ <small></small></h1>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="label">Заказчик:</span><br/>
+                <select class="form-control" ui-select2 ng-model="order.customerId">
+                    <option ng-repeat="contact in contacts" value="{{ contact.id }}">
+                        {{ contact.name }} {{ contact.surname }}
+                    </option>
+                </select>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Получатель: </span><br/>
+                <select class="form-control" ui-select2 ng-model="order.recipientId">
+                    <option ng-repeat="contact in contacts" value="{{ contact.id }}">
+                        {{ contact.name }} {{ contact.surname }}
+                    </option>
+                </select>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Менеджер по обработке: </span><br/>
+                <select class="form-control" ui-select2 ng-model="order.processingManagerId">
+                    <option ng-repeat="user in users.procissingManagers" value="{{ user.id }}">
+                        {{ user.name }} {{ user.surname }}
+                    </option>
+                </select>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Менеджер по доставке: </span><br/>
+                <select class="form-control" ui-select2 ng-model="order.deliveryManagerId">
+                    <option ng-repeat="user in users.couriers" value="{{ user.id }}">
+                        {{ user.name }} {{ user.surname }}
+                    </option>
+                </select>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Описание: </span><br/>
+                <textarea class="form-control" id = "description" ng-model="order.description"></textarea>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Оценочная сумма: </span><br/>
+                <input type="text" class="form-control" id = "cost" ng-model="order.cost">
+            </li>
+
+            <li class="list-group-item text-center">
+                <div class="btn-group">
+                    <a ng-click="saveOrder(order.id)" class="btn btn-default">Сохранить</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <hr/>
+</div>
+</div>

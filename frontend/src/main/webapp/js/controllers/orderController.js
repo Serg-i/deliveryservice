@@ -29,12 +29,17 @@ app.controller('OrdersCtrl',  function ($scope, OrderREST, OrdersREST,  BreadCru
         });
     });
 
-app.controller('NewOrderCtrl', function ($scope, OrderREST,  $state) {
+app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserREST, $state) {
 
         $scope.saveOrder = function () {
             $state.go('orders');
-            OrderREST.create();
+            var rest = new OrderREST($scope.order);
+            rest.$create();
         };
+        $scope.$on('$viewContentLoaded', function () {
+            $scope.contacts = ContactREST.getNames();
+            $scope.users = UserREST.getForSelect();
+        });
     });
 
 app.controller('EditOrderCtrl', function ($scope, OrderREST,  $state) {

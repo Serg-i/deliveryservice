@@ -39,7 +39,7 @@ var app = angular.module('myApp', [
             })
             .state('new_order', {
                 url: '/api/new_order',
-                templateUrl: 'partials/order.html',
+                templateUrl: 'partials/order-create.html',
                 controller: 'NewOrderCtrl',
                 data: {
                     authorizedRoles: [

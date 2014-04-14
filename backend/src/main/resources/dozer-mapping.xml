@@ -178,4 +178,18 @@
         </field>
     </mapping>
 
+    <!-- USER -->
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.User</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.UserNameDTO</class-b>
+        <field>
+            <a>contact.name</a>
+            <b>name</b>
+        </field>
+        <field>
+            <a>contact.surname</a>
+            <b>surname</b>
+        </field>
+    </mapping>
+
 </mappings>
