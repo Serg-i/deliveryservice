@@ -1,5 +1,7 @@
 package com.itechart.deliveryservice.controller;
+
 import com.itechart.deliveryservice.controller.data.ContactDTO;
+import com.itechart.deliveryservice.controller.data.ContactNameDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.entity.Contact;
 import org.dozer.DozerBeanMapper;
@@ -64,4 +66,17 @@ public class ContactController {
         Contact contact = contactDao.getById(idContact);
         contactDao.delete(contact);
     }
+
+    @GET
+    @Path("/names")
+    public List<ContactNameDTO> getAllNames() {
+
+        List<Contact> contacts = contactDao.getAll();
+        List<ContactNameDTO> out = new ArrayList<ContactNameDTO>();
+        for (Contact contact: contacts){
+            out.add(mapper.map(contact, ContactNameDTO.class));
+        }
+        return out;
+    }
+
 }

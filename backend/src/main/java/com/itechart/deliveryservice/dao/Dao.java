@@ -27,4 +27,6 @@ public interface Dao<Type> {
     List<Type> search(SearchParams params, int from, int count);
 
     List<Type> search(SearchParams params, int from, int count, String by, boolean asc);
+
+    List<Type> searchAll(SearchParams params);
 }

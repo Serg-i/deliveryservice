@@ -138,6 +138,19 @@ public abstract class DaoImpl<Type> implements Dao<Type> {
                 .getResultList();
     }
 
+    @Override
+    public List<Type> searchAll(SearchParams params) {
+
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Type> query = builder.createQuery(entityClass);
+        Root<Type> root = query.from(entityClass);
+        fillSearchQuery(builder, query, root, params);
+        query.select(root);
+        return getEntityManager()
+                .createQuery(query)
+                .getResultList();
+    }
+
     @SuppressWarnings("unchecked")
     private void fillSearchQuery( CriteriaBuilder builder,
                                   CriteriaQuery<?> query,
