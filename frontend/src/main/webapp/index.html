@@ -12,16 +12,41 @@
 
 <div class="navbar navbar-default"  ng-controller="navBarCtrl">
     <div class="navbar-header">
-        <a class="navbar-brand" ui-sref="orders">Home</a>
+        <a class="navbar-brand" ui-sref="#">iTechArt</a>
     </div>
     <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-            <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders">Заказы</a></li>
-            <li ng-class="setActiveClass('api/users')"><a ui-sref="users">Пользователи</a></li>
-            <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
-        </ul>
+        <div ng-switch on="currentUser.role">
+            <div ng-switch-when="ORDER_MANAGER">
+                <ul class="nav navbar-nav">
+                    <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders">Заказы</a></li>
+                    <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
+                </ul>
+            </div>
+            <div ng-switch-when="PROCESSING_MANAGER">
+                <ul class="nav navbar-nav">
+                    <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders">Заказы</a></li>
+                </ul>
+            </div>
+            <div ng-switch-when="COURIER">
+                <ul class="nav navbar-nav">
+                    <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders">Заказы</a></li>
+                </ul>
+            </div>
+            <div ng-switch-when="GUEST">
+                <ul class="nav navbar-nav">
+                    <li ng-class="setActiveClass('api/login')"><a ui-sref="login">Добро пожаловать!</a></li>
+                </ul>
+            </div>
+            <div ng-switch-default>
+                <ul class="nav navbar-nav">
+                    <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders">Заказы</a></li>
+                    <li ng-class="setActiveClass('api/users')"><a ui-sref="users">Пользователи</a></li>
+                    <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
+                </ul>
+            </div>
+        </div>
         <ul class="nav navbar-nav navbar-right">
-            <li><a ui-sref="orders">{{currentUser.role}}: {{currentUser.name}}</a></li>
+            <li><a ui-sref="#">{{currentUser.role}}: {{currentUser.name}}</a></li>
             <li ng-class="setActiveClass('api/login')"><a ui-sref="login">Sign in</a></li>
         </ul>
     </div>
