@@ -1,14 +1,13 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.OrderDTO;
-import com.itechart.deliveryservice.controller.data.ReceiveOrderDTO;
-import com.itechart.deliveryservice.controller.data.ShortOrderDTO;
-import com.itechart.deliveryservice.controller.data.TableDTO;
+import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
+import com.itechart.deliveryservice.dao.OrderChangeDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Order;
+import com.itechart.deliveryservice.entity.OrderState;
 import com.itechart.deliveryservice.entity.User;
 import com.itechart.deliveryservice.utils.SearchParams;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -47,6 +46,8 @@ public class OrderControllerTest {
     UserDao userDao;
     @Autowired
     OrderDao orderDao;
+    @Autowired
+    OrderChangeDao orderChangeDao;
     @Autowired
     DozerBeanMapper dozer;
 
@@ -205,24 +206,26 @@ public class OrderControllerTest {
         assertNull(found);
     }
 
-/*    @Test
-    public void shouldFailValidation() throws Exception {
+    @Test
+    public void shouldUpdateOrderStateAndAddChangeToHistory() throws Exception {
 
-        OrderDTO orderDTO = dozer.map(order, OrderDTO.class);
-        orderDTO.setCost("string");
-        String body = mapper.writeValueAsString(orderDTO);
+        int history = order.getChanges().size();
+        NewStateDTO st = new NewStateDTO();
+        st.setComment("comment");
+        st.setNewState(OrderState.CAN_NOT_BE_EXECUTED);
+        String body = mapper.writeValueAsString(st);
         {
-            MockHttpRequest request = MockHttpRequest.put("/api/orders/" + order.getId());
+            MockHttpRequest request = MockHttpRequest.put("/api/orders/" + order.getId() + "/state");
             request.contentType(MediaType.APPLICATION_JSON);
             request.content(body.getBytes());
             MockHttpResponse response = new MockHttpResponse();
             dispatcher.invoke(request, response);
-
-            assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
+            assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         }
         Order found = orderDao.getById(order.getId());
-        assertNotSame(orderDTO.getCost(), found.getCost());
-    }*/
+        assertEquals(OrderState.CAN_NOT_BE_EXECUTED, found.getState());
+        assertEquals(history + 1, found.getChanges().size());
+    }
 
     private void initDb() {
 
@@ -230,6 +233,7 @@ public class OrderControllerTest {
         OrderController obj = new OrderController();
         ReflectionTestUtils.setField(obj, "orderDao", orderDao);
         ReflectionTestUtils.setField(obj, "userDao", userDao);
+        ReflectionTestUtils.setField(obj, "orderChangeDao", orderChangeDao);
         ReflectionTestUtils.setField(obj, "mapper", dozer);
         //this user should be in import.sql with role - ADMINISTRATOR
         SecurityContextHolder.getContext().setAuthentication(

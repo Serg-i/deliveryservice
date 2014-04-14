@@ -73,5 +73,8 @@ public class OrderChange {
 
     public void setOrder(Order order) {
         this.order = order;
+        if (!order.getChanges().contains(this)) {
+            order.addChange(this);
+        }
     }
 }

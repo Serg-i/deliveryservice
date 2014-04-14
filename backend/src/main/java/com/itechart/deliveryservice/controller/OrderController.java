@@ -1,10 +1,10 @@
 package com.itechart.deliveryservice.controller;
 
 import com.itechart.deliveryservice.controller.data.*;
+import com.itechart.deliveryservice.dao.OrderChangeDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.*;
-import com.itechart.deliveryservice.exceptionhandler.BadRequestException;
 import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
 import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
@@ -12,7 +12,6 @@ import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,18 +38,9 @@ public class OrderController {
     @Autowired
     private UserDao userDao;
     @Autowired
+    private OrderChangeDao orderChangeDao;
+    @Autowired
     private DozerBeanMapper mapper;
-
-    @GET
-    @Path("/{id}/orderChanges")
-    public List<OrderChangeDTO> getChanges(@PathParam("id") long orderId) {
-        Order order = orderDao.getById(orderId);
-        List<OrderChangeDTO> orderChanges = new ArrayList<OrderChangeDTO>(order.getChanges().size());
-        for(OrderChange orderChange : order.getChanges()) {
-            orderChanges.add(mapper.map(orderChange, OrderChangeDTO.class));
-        }
-        return orderChanges;
-    }
 
     @GET
     @Path("/p/{page}")
@@ -92,9 +82,9 @@ public class OrderController {
 
         Order order = orderDao.getById(orderId);
         if (order == null)
-            throw new BadRequestException();
+            throw new BusinessLogicException("This order doesn't exist", HttpStatus.BAD_REQUEST);
         if (!canAccessOrder(order))
-            throw new AccessDeniedException("User is not allowed to see that order");
+            throw new BusinessLogicException("Access Denied", HttpStatus.FORBIDDEN);
         return mapper.map(order, OrderDTO.class);
     }
 
@@ -113,7 +103,8 @@ public class OrderController {
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @PUT
     @Path("/{id}")
-    public void update(@PathParam("id") long orderId, @Valid ReceiveOrderDTO orderDTO) throws Exception {
+    public void update(@PathParam("id") long orderId,
+                       @Valid ReceiveOrderDTO orderDTO) throws Exception {
 
         Order upOrder =  mapper.map(orderDTO, Order.class);
         Order order = orderDao.getById(orderId);
@@ -129,9 +120,32 @@ public class OrderController {
     @Secured("ROLE_ADMINISTRATOR")
     @DELETE
     @Path("/{id}")
-    public void update(@PathParam("id") long orderId) {
+    public void delete(@PathParam("id") long orderId) {
         Order order = orderDao.getById(orderId);
         orderDao.delete(order);
+    }
+
+    @PUT
+    @Path("/{id}/state")
+    public void updateState(@PathParam("id") long orderId,
+                             @Valid NewStateDTO state) throws Exception {
+
+        OrderState st = state.getNewState();
+        Order order = orderDao.getById(orderId);
+        if (order == null)
+            throw new BusinessLogicException("This order doesn't exist", HttpStatus.BAD_REQUEST);
+        if (!canAccessOrder(order) || !canSetOrderState(order, st))
+            throw new BusinessLogicException("Access Denied", HttpStatus.FORBIDDEN);
+        OrderChange oc = new OrderChange();
+        oc.setComment(state.getComment());
+        oc.setUserChangedStatus(getUser());
+        oc.setOrder(order);
+        oc.setDate(new Date());
+        oc.setNewState(st);
+
+        order.setState(st);
+        orderDao.merge(order);
+        orderChangeDao.save(oc);
     }
 
     private boolean canAccessOrder(Order order) {
@@ -149,6 +163,52 @@ public class OrderController {
                 && (order.getState() == OrderState.READY_FOR_DELIVERY
                 || order.getState() == OrderState.DELIVERY);
         return can;
+    }
+
+    private boolean canSetOrderState(Order order, OrderState state) {
+
+        User user = getUser();
+        UserRole role = user.getRole();
+        OrderState cur = order.getState();
+        if (cur == OrderState.CANCELED
+                || cur == OrderState.CLOSED)
+            return false;
+        if (role == UserRole.ADMINISTRATOR)
+            return true;
+        switch (state) {
+            case CAN_NOT_BE_EXECUTED:
+                return true;
+            case CANCELED:
+                if (role == UserRole.ORDER_MANAGER || role == UserRole.SUPERVISOR)
+                    return true;
+                break;
+            case ACCEPTED:
+                if (cur == OrderState.NEW && role == UserRole.ORDER_MANAGER)
+                    return true;
+                break;
+            case IN_PROCESSING:
+                if (cur == OrderState.ACCEPTED && order.getProcessingManager() == user)
+                    return true;
+                break;
+            case READY_FOR_DELIVERY:
+                if (cur == OrderState.IN_PROCESSING && order.getProcessingManager() == user)
+                    return true;
+                break;
+            case DELIVERY:
+                if (cur == OrderState.READY_FOR_DELIVERY && order.getDeliveryManager() == user)
+                    return true;
+                break;
+            case CLOSED:
+                if (cur == OrderState.DELIVERY && order.getDeliveryManager() == user)
+                    return true;
+                break;
+            case NEW:
+                if (cur == OrderState.CAN_NOT_BE_EXECUTED
+                        && role == UserRole.ORDER_MANAGER || role == UserRole.SUPERVISOR)
+                    return true;
+                break;
+        }
+        return false;
     }
 
     private User getUser() {
