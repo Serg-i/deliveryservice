@@ -6,7 +6,7 @@ app.factory('AuthService', function ($http, $resource, Session, BasicAuth) {
 
             BasicAuth.setCredentials(credentials.username, credentials.password);
             return $http({method: 'GET', url: '/backend/api/login'}).success(function(data){
-                Session.create( data.name, data.role);
+                Session.create( data.name, data.role, 'auth-authorized');
             });
         },
         isAuthenticated: function () {

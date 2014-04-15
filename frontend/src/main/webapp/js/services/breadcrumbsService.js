@@ -24,4 +24,4 @@ app.factory('BreadCrumbsService', function($rootScope, $log) {
             }
         }
     };
-})
+});
