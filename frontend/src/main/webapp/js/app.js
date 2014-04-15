@@ -37,6 +37,20 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
+            .state('view_order', {
+                url: '/api/view_order?id',
+                templateUrl: 'partials/order-view.html',
+                controller: 'ViewOrderCtrl',
+                data: {
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager,
+                        USER_ROLES.processing_manager,
+                        USER_ROLES.courier
+                    ]
+                }
+            })
             .state('new_order', {
                 url: '/api/new_order',
                 templateUrl: 'partials/order-create.html',

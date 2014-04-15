@@ -3,8 +3,7 @@
 app.controller('OrdersCtrl',  function ($scope, OrderREST, OrdersREST,  BreadCrumbsService, $state) {
 
         $scope.editOrder = function (orderId) {
-            $state.go('edit_order');
-            $scope.order = OrderREST.readOne({ id: orderId });
+            $state.go('view_order', {id: orderId});
         };
 
         $scope.deleteOrder = function (checkedOrders) {
@@ -28,6 +27,37 @@ app.controller('OrdersCtrl',  function ($scope, OrderREST, OrdersREST,  BreadCru
             $scope.page = OrdersREST.readAll({ page: 1 });
         });
     });
+
+app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, OrderState, OrderStateREST, $state) {
+
+        $scope.changeOrderState = function () {
+             $scope.stateChange = false;
+             var rest = new OrderStateREST($scope.state);
+             rest.$updateState({ id:$stateParams.id }, function(data){
+                $state.transitionTo($state.current, $stateParams, {
+                    reload: true,
+                    inherit: false,
+                    notify: true
+                });
+            });
+        };
+        $scope.$on('$viewContentLoaded', function () {
+            $scope.stateChange = false;
+            OrderREST.readOne({
+                id : $stateParams.id
+            }, function(data) {
+                $scope.possibleStates = OrderState.possible(data.state);
+            	data.name = data.name + " " + data.surname;
+            	data.state = OrderState.getlocal(data.state);
+            	for (var i = 0; i<data.changes.length; i++)
+            		data.changes[i].newState = OrderState.getlocal(data.changes[i].newState);
+                $scope.order = data;
+                if ($scope.possibleStates.length > 0)
+                    $scope.stateChange = true;
+            });
+        });
+    });
+
 
 app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserREST, $state) {
 

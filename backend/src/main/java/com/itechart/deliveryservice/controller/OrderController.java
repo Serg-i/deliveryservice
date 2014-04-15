@@ -145,7 +145,6 @@ public class OrderController {
 
         order.setState(st);
         orderDao.merge(order);
-        orderChangeDao.save(oc);
     }
 
     private boolean canAccessOrder(Order order) {
