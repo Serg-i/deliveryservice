@@ -24,8 +24,8 @@ var app = angular.module('myApp', [
                 }
             })
             .state('edit_order', {
-                url: '/api/edit_order',
-                templateUrl: 'partials/order.html',
+                url: '/api/edit_order?id',
+                templateUrl: 'partials/order-edit.html',
                 controller: 'EditOrderCtrl',
                 data: {
                     authorizedRoles: [
@@ -53,7 +53,7 @@ var app = angular.module('myApp', [
             })
             .state('new_order', {
                 url: '/api/new_order',
-                templateUrl: 'partials/order-create.html',
+                templateUrl: 'partials/order-edit.html',
                 controller: 'NewOrderCtrl',
                 data: {
                     authorizedRoles: [

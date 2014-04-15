@@ -9,7 +9,6 @@
             </div>
             <div class="btn-group">
                 <a ng-click="createOrder()" class="btn btn-default">Новый</a>
-                <a ng-click="deleteOrder($scope.checkedOrders)" class="btn btn-default">Удалить</a>
             </div>
         </div>
         <br/>
@@ -30,7 +29,7 @@
                 <tbody>
                 <tr ng-repeat="order in page.currentPage">
                     <td><input type="checkbox" ></td>
-                    <td><a ng-click="editOrder(order.id)"><span class="label label-primary"> {{ order.state }}</span></a></td>
+                    <td><a ng-click="viewOrder(order.id)"><span class="label label-primary"> {{ order.state }}</span></a></td>
                     <td><span class="label label-default">{{ order.customerName }} {{ order.customerSurname }}</span></td>
                     <td><span class="label label-default">{{ order.recipientName }} {{ order.recipientSurname }}</span></td>
                     <td><span class="label label-default">{{ order.date  | date:'MM/dd/yyyy HH:mm'}}</span></td>

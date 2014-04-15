@@ -4,51 +4,60 @@
         <h1>Заказ <small></small></h1>
     </div>
     <div class="panel-body">
-        <ul class="list-group">
-            <li class="list-group-item">
-                <span class="label">Заказчик:</span><br/>
-                <div class="input-group">
-                    <input type="text" class="form-control" id = "customer" ng-model="order.customerName" readonly>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Выбрать</button>
-                        </span>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <span class="label">Получатель: </span><br/>
-                <div class="input-group">
-                    <input type="text" class="form-control" id = "recipient" ng-model="order.recipientName" readonly>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Выбрать</button>
-                        </span>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <span class="label">Менеджер по приему: </span><br/>
-                <input type="text" class="form-control" id = "receptionManager" ng-model="order.receptionManager" readonly>
-            </li>
-            <li class="list-group-item">
-                <span class="label">Менеджер по обработке: </span><br/>
-                <input type="text" class="form-control" id = "processingManager" ng-model="order.processingManager" readonly>
-            </li>
-            <li class="list-group-item">
-                <span class="label">Менеджер по доставке: </span><br/>
-                <input type="text" class="form-control" id = "deliveryManager" ng-model="order.deliveryManager" readonly>
-            </li>
-            <li class="list-group-item">
-                <span class="label">Описание: </span><br/>
-                <textarea class="form-control" id = "description" ng-model="order.description" readonly></textarea>
-            </li>
-            <li class="list-group-item">
-                <span class="label">Оценочная сумма: </span><br/>
-                <input type="text" class="form-control" id = "cost" ng-model="order.cost" readonly>
-            </li>
+        <div class=" text-right">
+            <div class="btn-group">
+                <a ng-click="editOrder()" class="btn btn-default">Изменить</a>
+                <a ng-click="deleteOrder()" class="btn btn-default">Удалить</a>
+            </div>
+        </div>
+        <br/>
+        <div class="panel panel-default">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="label">Заказчик:</span><br/>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id = "customer" ng-model="order.customerName" readonly>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">Выбрать</button>
+                            </span>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <span class="label">Получатель: </span><br/>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id = "recipient" ng-model="order.recipientName" readonly>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">Выбрать</button>
+                            </span>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <span class="label">Менеджер по приему: </span><br/>
+                    <input type="text" class="form-control" id = "receptionManager" ng-model="order.receptionManager" readonly>
+                </li>
+                <li class="list-group-item">
+                    <span class="label">Менеджер по обработке: </span><br/>
+                    <input type="text" class="form-control" id = "processingManager" ng-model="order.processingManager" readonly>
+                </li>
+                <li class="list-group-item">
+                    <span class="label">Менеджер по доставке: </span><br/>
+                    <input type="text" class="form-control" id = "deliveryManager" ng-model="order.deliveryManager" readonly>
+                </li>
+                <li class="list-group-item">
+                    <span class="label">Описание: </span><br/>
+                    <textarea class="form-control" id = "description" ng-model="order.description" readonly></textarea>
+                </li>
+                <li class="list-group-item">
+                    <span class="label">Оценочная сумма: </span><br/>
+                    <input type="text" class="form-control" id = "cost" ng-model="order.cost" readonly>
+                </li>
 
-            <li class="list-group-item">
-                <span class="label">Состояние: </span><br/>
-                <input type="text" class="form-control" id = "state" ng-model="order.state" readonly>
-            </li>
-        </ul>
+                <li class="list-group-item">
+                    <span class="label">Состояние: </span><br/>
+                    <input type="text" class="form-control" id = "state" ng-model="order.state" readonly>
+                </li>
+            </ul>
+        </div>
     </div>
     <form name="form" ng-show="stateChange" novalidate>
     <hr/>
