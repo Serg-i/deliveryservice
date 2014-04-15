@@ -1,0 +1,104 @@
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Заказ <small></small></h1>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="label">Заказчик:</span><br/>
+                <div class="input-group">
+                    <input type="text" class="form-control" id = "customer" ng-model="order.customerName" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Выбрать</button>
+                        </span>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Получатель: </span><br/>
+                <div class="input-group">
+                    <input type="text" class="form-control" id = "recipient" ng-model="order.recipientName" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Выбрать</button>
+                        </span>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Менеджер по приему: </span><br/>
+                <input type="text" class="form-control" id = "receptionManager" ng-model="order.receptionManager" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Менеджер по обработке: </span><br/>
+                <input type="text" class="form-control" id = "processingManager" ng-model="order.processingManager" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Менеджер по доставке: </span><br/>
+                <input type="text" class="form-control" id = "deliveryManager" ng-model="order.deliveryManager" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Описание: </span><br/>
+                <textarea class="form-control" id = "description" ng-model="order.description" readonly></textarea>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Оценочная сумма: </span><br/>
+                <input type="text" class="form-control" id = "cost" ng-model="order.cost" readonly>
+            </li>
+
+            <li class="list-group-item">
+                <span class="label">Состояние: </span><br/>
+                <input type="text" class="form-control" id = "state" ng-model="order.state" readonly>
+            </li>
+        </ul>
+    </div>
+    <form name="form" ng-show="stateChange" novalidate>
+    <hr/>
+    <div class="panel panel-default">
+        <div class="panel-heading">Изменить состояние</div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item" ng-class="{ 'has-error' : form.state_select.$invalid}">
+                    <span class="label">Состояние:</span><br/>
+                    <select class="form-control" name = "state_select" ng-model="state.newState" required>
+                        <option ng-repeat="current in possibleStates" value="{{ current.value }}">
+                            {{ current.display }}
+                        </option>
+                    </select>
+                </li>
+                <li class="list-group-item" ng-class="{ 'has-error' : form.comment.$invalid && !form.comment.$pristine}">
+                    <span class="label">Комментарий: </span><br/>
+                    <textarea class="form-control" name = "comment" ng-model="state.comment" ng-maxlength="200"></textarea>
+                    <p ng-show="form.comment.$error.maxlength" class="help-block">Не более 200 символов.</p>
+                </li>
+                <li class="list-group-item text-center">
+                    <div class="btn-group">
+                        <a ng-click="changeOrderState()" class="btn btn-default" ng-disabled="form.$invalid">Изменить</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </form>
+    <hr/>
+    <div class="panel panel-default">
+        <div class="panel-heading">История</div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td><span class="label label-primary">Дата и время</span></td>
+                <td><span class="label label-primary">Новый статус</span></td>
+                <td><span class="label label-primary">Кто изменил статус</span></td>
+                <td><span class="label label-primary">Комментарий</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="change in order.changes">
+                <td><span class="label label-default">{{change.date  | date:'MM/dd/yyyy HH:mm'}}</span></td>
+                <td><span class="label label-default">{{change.newState}}</span></td>
+                <td><span class="label label-default">{{change.userChangedStatusNickname}}</span></td>
+                <td><span class="label label-default">{{change.comment}}</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
