@@ -1,23 +1,21 @@
 'use strict';
 
-app.controller('OrdersCtrl',  function ($stateParams, $scope, OrderREST, OrdersREST,  BreadCrumbsService, $state) {
+app.controller('OrdersCtrl',  function ($stateParams, $scope, OrderREST, OrdersREST, $state) {
 
         $scope.toPage = function (topage) {
             $state.go('orders', {page: topage});
         };
 
         $scope.viewOrder = function (orderId) {
-            $state.go('view_order', {id: orderId});
+            $state.go('.view', {id: orderId});
         };
 
         $scope.createOrder = function () {
-            $state.go('new_order');
-            BreadCrumbsService.push( 'home', {href: '#/api/new_order',label: 'Новый заказ'} );
+            $state.go('.new');
         };
 
         $scope.searchOrder = function () {
             $state.go('search_order');
-            BreadCrumbsService.push( 'home', {href: '#/api/search_order',label: 'Поиск заказа'} );
         };
 
         $scope.$on('$viewContentLoaded', function () {
@@ -35,10 +33,10 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, Order
 
         $scope.deleteOrder = function() {
             OrderREST.delete({id: $stateParams.id});
-            $state.go('orders', {page: 1});
+            $state.go('orders');
         };
         $scope.editOrder = function() {
-            $state.go('edit_order', {id: $stateParams.id});
+            $state.go('.edit', {id: $stateParams.id});
         };
         $scope.changeOrderState = function () {
              $scope.stateChange = false;
@@ -71,7 +69,7 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, Order
 app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserREST, $state) {
 
         $scope.saveOrder = function () {
-            $state.go('orders', {page: 1});
+            $state.go('orders');
             var rest = new OrderREST($scope.order);
             rest.$create();
         };
@@ -85,7 +83,7 @@ app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserRES
 app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactREST, OrderREST, UserREST, $state) {
 
         $scope.saveOrder = function () {
-            $state.go('orders', {page: 1});
+            $state.go('orders.view');
             var rest = new OrderREST($scope.order);
             rest.$update({id : $stateParams.id});
         };

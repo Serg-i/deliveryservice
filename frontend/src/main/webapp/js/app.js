@@ -4,8 +4,9 @@ var app = angular.module('myApp', [
     'ui.router',
     'ngResource',
     'ui.select2',
-    'ui.bootstrap'
-]);
+    'ui.bootstrap',
+    'ncy-angular-breadcrumb'
+])
     app.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
 
         $stateProvider
@@ -24,53 +25,69 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('edit_order', {
-                url: '/api/edit_order?id',
-                templateUrl: 'partials/order-edit.html',
-                controller: 'EditOrderCtrl',
-                data: {
-                    authorizedRoles: [
-                        USER_ROLES.admin,
-                        USER_ROLES.supervisor,
-                        USER_ROLES.order_manager,
-                        USER_ROLES.processing_manager,
-                        USER_ROLES.courier
-                    ]
-                }
-            })
-            .state('view_order', {
-                url: '/api/view_order?id',
-                templateUrl: 'partials/order-view.html',
-                controller: 'ViewOrderCtrl',
-                data: {
-                    authorizedRoles: [
-                        USER_ROLES.admin,
-                        USER_ROLES.supervisor,
-                        USER_ROLES.order_manager,
-                        USER_ROLES.processing_manager,
-                        USER_ROLES.courier
-                    ]
-                }
-            })
-            .state('new_order', {
-                url: '/api/new_order',
-                templateUrl: 'partials/order-edit.html',
-                controller: 'NewOrderCtrl',
-                data: {
-                    authorizedRoles: [
-                        USER_ROLES.admin,
-                        USER_ROLES.supervisor,
-                        USER_ROLES.order_manager,
-                        USER_ROLES.processing_manager,
-                        USER_ROLES.courier
-                    ]
-                }
-            })
             .state('orders', {
-                url: '/api/orders/?page',
+                url: '/api/orders/{page}',
                 templateUrl: 'partials/orders.html',
                 controller: 'OrdersCtrl',
                 data: {
+                    ncyBreadcrumbLabel: 'Заказы',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager,
+                        USER_ROLES.processing_manager,
+                        USER_ROLES.courier
+                    ]
+                }
+            })
+            .state('orders.view', {
+                url: '/view/{id}',
+                views: {
+              	     "@": {
+                        templateUrl: 'partials/order-view.html',
+                        controller: 'ViewOrderCtrl'
+                     }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Заказ',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager,
+                        USER_ROLES.processing_manager,
+                        USER_ROLES.courier
+                    ]
+                }
+            })
+            .state('orders.view.edit', {
+                url: '/edit',
+                views: {
+              	     "@": {
+                        templateUrl: 'partials/order-edit.html',
+                        controller: 'EditOrderCtrl'
+                     }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Редактировать',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager,
+                        USER_ROLES.processing_manager,
+                        USER_ROLES.courier
+                    ]
+                }
+            })
+            .state('orders.new', {
+                url: '/new',
+                views: {
+              	     "@": {
+                        templateUrl: 'partials/order-edit.html',
+                        controller: 'NewOrderCtrl'
+                     }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Новый',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,
