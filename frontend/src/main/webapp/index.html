@@ -10,64 +10,69 @@
 </head>
 <body ng-controller="appCtrl" back-img="img/bg.jpg">
 
-<div class="navbar navbar-default"  ng-controller="navBarCtrl">
-    <div class="navbar-header">
-        <a class="navbar-brand" ui-sref="#">iTechArt</a>
-    </div>
-    <div class="collapse navbar-collapse">
-        <div ng-switch on="currentUser.role">
-            <div ng-switch-when="ORDER_MANAGER">
-            <ul class="nav navbar-nav">
-                <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
-                <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
-            </ul>
+<div ng-controller="AlertCtrl">
+    <div class="navbar navbar-default"  ng-controller="navBarCtrl">
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="#">iTechArt</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <div ng-switch on="currentUser.role">
+                <div ng-switch-when="ORDER_MANAGER">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                        <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
+                    </ul>
+                </div>
+                <div ng-switch-when="PROCESSING_MANAGER">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                    </ul>
+                </div>
+                <div ng-switch-when="COURIER">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                    </ul>
+                </div>
+                <div ng-switch-when="GUEST">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="setActiveClass('api/login')"><a ui-sref="login">Добро пожаловать!</a></li>
+                    </ul>
+                </div>
+                <div ng-switch-default>
+                    <ul class="nav navbar-nav">
+                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                        <li ng-class="setActiveClass('api/users')"><a ui-sref="users">Пользователи</a></li>
+                        <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
+                    </ul>
+                </div>
             </div>
-            <div ng-switch-when="PROCESSING_MANAGER">
-                <ul class="nav navbar-nav">
-                    <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
-                </ul>
-            </div>
-            <div ng-switch-when="COURIER">
-                <ul class="nav navbar-nav">
-                    <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
-                </ul>
-            </div>
-            <div ng-switch-when="GUEST">
-                <ul class="nav navbar-nav">
-                    <li ng-class="setActiveClass('api/login')"><a ui-sref="login">Добро пожаловать!</a></li>
-                </ul>
-            </div>
-            <div ng-switch-default>
-                <ul class="nav navbar-nav">
-                    <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
-                    <li ng-class="setActiveClass('api/users')"><a ui-sref="users">Пользователи</a></li>
-                    <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
-                </ul>
+            <div ng-switch on="currentUser.isAuthorized">
+                <div ng-switch-when="auth-authorized">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a ui-sref="#">{{currentUser.role}}: {{currentUser.name}}</a></li>
+                        <li><a ui-sref="login" ng-click = "signOut()">Sign out</a></li>
+                    </ul>
+                </div>
+                <div ng-switch-when="auth-not-authorized">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a ui-sref="#">{{currentUser.role}}: {{currentUser.name}}</a></li>
+                        <li ng-class="setActiveClass('api/login')"><a ui-sref="login">Sign in</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div ng-switch on="currentUser.isAuthorized">
-            <div ng-switch-when="auth-authorized">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a ui-sref="#">{{currentUser.role}}: {{currentUser.name}}</a></li>
-                    <li><a ui-sref="login" ng-click = "signOut()">Sign out</a></li>
-                </ul>
-            </div>
-            <div ng-switch-when="auth-not-authorized">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a ui-sref="#">{{currentUser.role}}: {{currentUser.name}}</a></li>
-                    <li ng-class="setActiveClass('api/login')"><a ui-sref="login">Sign in</a></li>
-                </ul>
+    </div>
+    <div ng-switch on="currentUser.isAuthorized">
+        <div ng-switch-when="auth-authorized">
+            <div class="container-fluid">
+                <div ncy-breadcrumb></div>
             </div>
         </div>
-    </div>
-</div>
-<div ng-switch on="currentUser.isAuthorized">
-    <div ng-switch-when="auth-authorized">
-        <div class="container-fluid">
-            <div ncy-breadcrumb></div>
+        <div ng-switch-default>
         </div>
     </div>
-    <div ng-switch-default>
+    <div class = "errorPanel">
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
     </div>
 </div>
 
@@ -100,6 +105,7 @@
 <script src="js/controllers/orderController.js"></script>
 <script src="js/controllers/contactController.js"></script>
 <script src="js/controllers/userController.js"></script>
+<script src="js/controllers/alertCtrl.js"></script>
 
 <script src="js/directives/backgroundDirective.js"></script>
 

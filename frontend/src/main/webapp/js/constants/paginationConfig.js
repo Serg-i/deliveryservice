@@ -1,7 +1,7 @@
 'use strict';
 
 app.constant('paginationConfig', {
-  itemsPerPage: 15,
+  itemsPerPage: 10,
   boundaryLinks: true,
   directionLinks: false,
   firstText: 'Первый',

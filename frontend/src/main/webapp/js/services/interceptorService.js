@@ -12,20 +12,16 @@ app.factory('ErrorInterceptor', function ($rootScope, $q, EVENTS) {
     return {
         responseError: function (response) {
             if (response.status === 401) {
-                $rootScope.$broadcast(EVENTS.notAuthenticated,
-                    response);
+                $rootScope.$broadcast('http-error-event', EVENTS.notAuthenticated);
             }
             if (response.status === 403) {
-                $rootScope.$broadcast(EVENTS.notAuthorized,
-                    response);
+                $rootScope.$broadcast('http-error-event', EVENTS.notAuthorized);
             }
             if (response.status === 404) {
-                $rootScope.$broadcast(EVENTS.notFound,
-                    response);
+                $rootScope.$broadcast('http-error-event', EVENTS.notFound);
             }
             if (response.status === 500) {
-                $rootScope.$broadcast(EVENTS.internalServerError,
-                    response);
+                $rootScope.$broadcast('http-error-event', EVENTS.internalServerError);
             }
             return $q.reject(response);
         }

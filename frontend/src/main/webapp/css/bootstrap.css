@@ -4445,7 +4445,7 @@ a.thumbnail.active {
 .alert {
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid transparent;
+  /*border: 1px solid transparent;      */
   border-radius: 0px;
 }
 .alert h4 {
@@ -5184,7 +5184,6 @@ button.close {
   padding: 19px 20px 20px;
   margin-top: 15px;
   text-align: center;
-  //border-top: 1px solid #e5e5e5;
 }
 .modal-footer .btn + .btn {
   margin-bottom: 0;
