@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','BasicAuth','BreadCrumbsService',
-    function ($scope, USER_ROLES, AuthService, Session, BasicAuth, BreadCrumbsService) {
+app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','BasicAuth',
+    function ($scope, USER_ROLES, AuthService, Session, BasicAuth) {
 
         $scope.currentUser = {
             name: '',

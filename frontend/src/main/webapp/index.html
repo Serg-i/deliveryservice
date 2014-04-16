@@ -18,18 +18,18 @@
         <div ng-switch on="currentUser.role">
             <div ng-switch-when="ORDER_MANAGER">
             <ul class="nav navbar-nav">
-                <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                 <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
             </ul>
             </div>
             <div ng-switch-when="PROCESSING_MANAGER">
                 <ul class="nav navbar-nav">
-                    <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                    <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                 </ul>
             </div>
             <div ng-switch-when="COURIER">
                 <ul class="nav navbar-nav">
-                    <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                    <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                 </ul>
             </div>
             <div ng-switch-when="GUEST">
@@ -39,7 +39,7 @@
             </div>
             <div ng-switch-default>
                 <ul class="nav navbar-nav">
-                    <li ng-class="setActiveClass('api/orders')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                    <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                     <li ng-class="setActiveClass('api/users')"><a ui-sref="users">Пользователи</a></li>
                     <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
                 </ul>
@@ -71,7 +71,6 @@
     </div>
 </div>
 
-
 <div ui-view></div>
 
 <div class="modal-footer">
@@ -92,6 +91,7 @@
 <script src="js/app.js"></script>
 
 <script src="js/constants/authRoles.js"></script>
+<script src="js/constants/appEvents.js"></script>
 <script src="js/constants/orderStates.js"></script>
 <script src="js/constants/paginationConfig.js"></script>
 
@@ -114,6 +114,7 @@
 <script src="js/services/contactService.js"></script>
 <script src="js/services/userService.js"></script>
 <script src="js/services/basicAuthService.js"></script>
+<script src="js/services/interceptorService.js"></script>
 
 </body>
 </html>

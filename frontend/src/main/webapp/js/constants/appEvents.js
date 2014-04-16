@@ -1,6 +1,8 @@
 'use strict';
 
-app.constant('AUTH_EVENTS', {
+app.constant('EVENTS', {
+    notFound: 'not-found',
+    internalServerError: 'internal-server-error',
     loginSuccess: 'auth-login-success',
     loginFailed: 'auth-login-failed',
     logoutSuccess: 'auth-logout-success',
