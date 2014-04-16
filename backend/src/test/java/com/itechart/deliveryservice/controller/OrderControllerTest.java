@@ -33,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -224,6 +226,45 @@ public class OrderControllerTest {
         Order found = orderDao.getById(order.getId());
         assertEquals(OrderState.CAN_NOT_BE_EXECUTED, found.getState());
         assertEquals(history + 1, found.getChanges().size());
+    }
+
+    @Test
+    public void shouldFindOrders() throws Exception {
+
+        Order order = orderDao.getById(1);
+
+        int countOfHits = 0;
+        List<Order> list = orderDao.getAll();
+        for (Order o : list)
+            if (order.getDate().compareTo(o.getDate()) >= 0
+                    && order.getCustomer() == o.getCustomer()
+                    && order.getRecipient() == o.getRecipient())
+                countOfHits++;
+
+        SearchOrderDTO dto = new SearchOrderDTO();
+        dto.setDate(order.getDate());
+        dto.setDateOp(SearchParams.Operator.LESS);
+        dto.setCustomer(order.getCustomer().getId());
+        dto.setRecipient(order.getRecipient().getId());
+        String result = null;
+        String body = mapper.writeValueAsString(dto);
+        {
+            MockHttpRequest request = MockHttpRequest.post("/api/orders/search/p/1");
+            request.contentType(MediaType.APPLICATION_JSON);
+            request.content(body.getBytes());
+            MockHttpResponse response = new MockHttpResponse();
+            dispatcher.invoke(request, response);
+            assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+            result = response.getContentAsString();
+        }
+        TableDTO<ShortOrderDTO> ret = mapper.readValue(result, new TypeReference<TableDTO<ShortOrderDTO>>() {
+        });
+        assertEquals(countOfHits, ret.getCount());
+        for(ShortOrderDTO o : ret.getCurrentPage()) {
+            assertTrue(order.getDate().compareTo(o.getDate()) >= 0);
+            assertEquals(order.getCustomer().getName(), o.getCustomerName());
+            assertEquals(order.getRecipient().getName(), o.getRecipientName());
+        }
     }
 
     private void initDb() {

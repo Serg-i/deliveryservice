@@ -46,17 +46,32 @@ app.factory("OrderStateREST", function($resource) {
        });
     });
 
-   
 app.factory("OrdersREST", function($resource) {
-    return $resource("/backend/api/orders/p/:page", {}, {
-        readAll: {
-            method: "GET",
+     return $resource("/backend/api/orders/p/:page", {}, {
+         readAll: {
+             method: "GET",
+             params: {page: '@page'},
+             headers: {
+                 'Content-Type': 'application/json'
+             }
+         }
+     });
+ });
+   
+app.factory("OrdersSearchREST", function($resource) {
+    return $resource("/backend/api/orders/search/p/:page", {}, {
+        search: {
+            method:'POST',
             params: {page: '@page'},
             headers: {
                 'Content-Type': 'application/json'
             }
         }
     });
+});
+
+app.service('OrderSearch', function() {
+    return {params: null};
 });
 
 app.factory("OrderState", function(ORDER_STATE, LOCAL_STATE) {

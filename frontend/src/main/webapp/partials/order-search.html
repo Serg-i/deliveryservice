@@ -6,20 +6,42 @@
     <div class="panel-body">
         <ul class="list-group">
             <li class="list-group-item">
-                <span class="label">Фамилия заказчика: </span><br/>
-                <input type="text" class="form-control">
+                <span class="label">Заказчик:</span><br/>
+                <select class="form-control" name="cust" ui-select2 ng-model="search.customer">
+                    <option ng-repeat="contact in contacts" value="{{ contact.id }}">
+                        {{ contact.name }} {{ contact.surname }}
+                    </option>
+                </select>
             </li>
             <li class="list-group-item">
-                <span class="label">Фамилия получателя: </span><br/>
-                <input type="text" class="form-control">
+                <span class="label">Получатель: </span><br/>
+                <select class="form-control" name="rep" ui-select2 ng-model="search.recipient">
+                    <option ng-repeat="contact in contacts" value="{{ contact.id }}">
+                        {{ contact.name }} {{ contact.surname }}
+                    </option>
+                </select>
             </li>
             <li class="list-group-item">
-                <span class="label">Дата заказа(min): </span><br/>
-                <input type="text" class="form-control">
+                <span class="label">Дата заказа: </span><br/>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="search.date"
+                                   is-open="opened" min="2000-01-01" max="'2050-01-01'" datepicker-options="dateOptions"
+                                   date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </li>
             <li class="list-group-item">
-                <span class="label">Дата заказа(max): </span><br/>
-                <input type="text" class="form-control">
+                <span class="label">Рамки: </span><br/>
+                <select class="form-control" name="date_border" ng-model="search.dateOp">
+                    <option value="LESS">Раньше</option>
+                    <option value="GREATER">Позже</option>
+                </select>
             </li>
             <li class="list-group-item text-center">
                 <a ng-click="searchOrder()" class="btn btn-default">Поиск</a>

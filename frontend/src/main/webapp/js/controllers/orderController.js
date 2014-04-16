@@ -1,6 +1,7 @@
 'use strict';
 
-app.controller('OrdersCtrl',  function ($stateParams, $scope, OrderREST, OrdersREST, $state) {
+app.controller('OrdersCtrl',  function ($stateParams, $scope, OrderREST, OrdersREST,
+                                        OrderSearch, OrdersSearchREST, $state) {
 
         $scope.toPage = function (topage) {
             $state.go('orders', {page: topage});
@@ -15,17 +16,39 @@ app.controller('OrdersCtrl',  function ($stateParams, $scope, OrderREST, OrdersR
         };
 
         $scope.searchOrder = function () {
-            $state.go('search_order');
+            $state.go('.search');
+        };
+
+        $scope.searchDisable = function () {
+            OrderSearch.params = null;
+            $state.transitionTo($state.current, $stateParams, {
+            	reload: true,
+                inherit: false,
+                notify: true
+            });
         };
 
         $scope.$on('$viewContentLoaded', function () {
-            $scope.page = OrdersREST.readAll({
+            if (OrderSearch.params === null) {
+                OrdersREST.readAll({
                     page: $stateParams.page
-                }, function(data) {
+                }, function (data) {
                     $scope.page = data;
                     $scope.curPage = $stateParams.page;
                     $scope.totalItems = $scope.page.count;
                 });
+            } else {
+            	$scope.params = OrderSearch.params;
+            	console.log(JSON.stringify($scope.params));
+                var rest = new OrdersSearchREST($scope.params);
+                rest.$search({
+                    page: $stateParams.page
+                }, function (data) {
+                    $scope.page = data;
+                    $scope.curPage = $stateParams.page;
+                    $scope.totalItems = $scope.page.count;
+                });
+            }
         });
     });
 
@@ -106,11 +129,19 @@ app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactREST, Ord
         });
     });
 
-app.controller('SearchOrderCtrl', function ($scope, OrderREST,  $state) {
-
-        // callback for ng-click 'searchOrder':
-        $scope.searchOrder = function () {
-            //TODO  $scope.orders = OrderREST.search();
-            $state.go('orders');
+app.controller('SearchOrderCtrl', function ($scope, OrderREST, ContactREST, OrderSearch, $state) {
+        $scope.searchOrder = function() {
+            OrderSearch.params = $scope.search;
+            $state.go("orders", {page: 1});
+        },
+        $scope.$on = function () {
+            $scope.search = {};
+            $scope.search.dateOp = "GREATER";
+            ContactREST.getNames({}, function(data){
+                $scope.contacts = data;
+                if (OrderSearch.params !== null) {
+                    $scope.search = OrderSearch.params;
+                }
+            });
         };
     });

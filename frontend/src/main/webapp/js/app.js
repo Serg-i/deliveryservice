@@ -43,10 +43,10 @@ var app = angular.module('myApp', [
             .state('orders.view', {
                 url: '/view/{id}',
                 views: {
-              	     "@": {
+                    "@": {
                         templateUrl: 'partials/order-view.html',
                         controller: 'ViewOrderCtrl'
-                     }
+                    }
                 },
                 data: {
                     ncyBreadcrumbLabel: 'Заказ',
@@ -62,7 +62,7 @@ var app = angular.module('myApp', [
             .state('orders.view.edit', {
                 url: '/edit',
                 views: {
-              	     "@": {
+                     "@": {
                         templateUrl: 'partials/order-edit.html',
                         controller: 'EditOrderCtrl'
                      }
@@ -81,7 +81,7 @@ var app = angular.module('myApp', [
             .state('orders.new', {
                 url: '/new',
                 views: {
-              	     "@": {
+                     "@": {
                         templateUrl: 'partials/order-edit.html',
                         controller: 'NewOrderCtrl'
                      }
@@ -97,11 +97,16 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('search_order', {
+            .state('orders.search', {
                 url: '/api/search_order',
-                templateUrl: 'partials/order-search.html',
-                controller: 'SearchOrderCtrl',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/order-search.html',
+                        controller: 'SearchOrderCtrl'
+                    }
+                },
                 data: {
+                    ncyBreadcrumbLabel: 'Фильтры',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,

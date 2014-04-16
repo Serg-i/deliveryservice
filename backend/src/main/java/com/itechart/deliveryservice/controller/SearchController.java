@@ -1,10 +1,11 @@
 package com.itechart.deliveryservice.controller;
 
-import com.itechart.deliveryservice.controller.data.*;
+import com.itechart.deliveryservice.controller.data.SearchContactDTO;
+import com.itechart.deliveryservice.controller.data.ShortContactDTO;
+import com.itechart.deliveryservice.controller.data.TableDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.entity.Contact;
-import com.itechart.deliveryservice.entity.Order;
 import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
@@ -34,21 +35,6 @@ public class SearchController {
     @Autowired
     private DozerBeanMapper mapper;
 
-    @GET
-    @Path("/orders/{page}")
-    public TableDTO<ShortOrderDTO> searchOrders(@PathParam("page") long page, @Valid SearchOrderDTO dto) {
-
-        SearchParams sp = dto.createParams();
-        long count = orderDao.searchCount(sp);
-        TableDTO<ShortOrderDTO> table = new TableDTO<ShortOrderDTO>();
-        table.setCount((int)count);
-        List<Order> found = orderDao.search(sp, (int)(page-1)* Settings.rows, Settings.rows);
-        List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
-        for(Order p : found)
-            list.add(mapper.map(p, ShortOrderDTO.class));
-        table.setCurrentPage(list);
-        return table;
-    }
 
     @GET
     @Path("/contacts/{page}")

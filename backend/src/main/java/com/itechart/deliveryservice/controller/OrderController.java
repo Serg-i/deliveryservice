@@ -147,6 +147,36 @@ public class OrderController {
         orderDao.merge(order);
     }
 
+    @POST
+    @Path("/search/p/{page}")
+    public TableDTO<ShortOrderDTO> searchOrders(@PathParam("page") long page, @Valid SearchOrderDTO dto) {
+
+        SearchParams sp = dto.createParams();
+        User user = getUser();
+        switch (user.getRole()) {
+            case PROCESSING_MANAGER:
+                sp.addParam("processingManager.id", Long.toString(user.getId()));
+                sp.addParam("state", OrderState.ACCEPTED);
+                sp.addParam("state", OrderState.IN_PROCESSING);
+                break;
+            case COURIER:
+                sp.addParam("deliveryManager.id", Long.toString(user.getId()));
+                sp.addParam("state", OrderState.READY_FOR_DELIVERY);
+                sp.addParam("state", OrderState.DELIVERY);
+                break;
+            default:
+        }
+        long count = orderDao.searchCount(sp);
+        TableDTO<ShortOrderDTO> table = new TableDTO<ShortOrderDTO>();
+        table.setCount((int)count);
+        List<Order> found = orderDao.search(sp, (int)(page-1)* Settings.rows, Settings.rows);
+        List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
+        for(Order p : found)
+            list.add(mapper.map(p, ShortOrderDTO.class));
+        table.setCurrentPage(list);
+        return table;
+    }
+
     private boolean canAccessOrder(Order order) {
 
         boolean can = false;
