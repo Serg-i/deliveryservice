@@ -8,7 +8,7 @@ app.controller('AuthCtrl', function ($scope, $rootScope, AuthService, $state) {
     };
     $scope.login = function (credentials) {
         AuthService.login(credentials).then(function () {
-            $state.go('orders');
+            $state.go('orders', {page: 1});
             $rootScope.$broadcast( 'newLogin' );
         }, function () {
             $state.go('login');

@@ -1,6 +1,10 @@
 'use strict';
 
-app.controller('OrdersCtrl',  function ($scope, OrderREST, OrdersREST,  BreadCrumbsService, $state) {
+app.controller('OrdersCtrl',  function ($stateParams, $scope, OrderREST, OrdersREST,  BreadCrumbsService, $state) {
+
+        $scope.toPage = function (topage) {
+            $state.go('orders', {page: topage});
+        };
 
         $scope.viewOrder = function (orderId) {
             $state.go('view_order', {id: orderId});
@@ -17,7 +21,13 @@ app.controller('OrdersCtrl',  function ($scope, OrderREST, OrdersREST,  BreadCru
         };
 
         $scope.$on('$viewContentLoaded', function () {
-            $scope.page = OrdersREST.readAll({ page: 1 });
+            $scope.page = OrdersREST.readAll({
+                    page: $stateParams.page
+                }, function(data) {
+                    $scope.page = data;
+                    $scope.curPage = $stateParams.page;
+                    $scope.totalItems = $scope.page.count;
+                });
         });
     });
 
@@ -61,7 +71,7 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, Order
 app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserREST, $state) {
 
         $scope.saveOrder = function () {
-            $state.go('orders');
+            $state.go('orders', {page: 1});
             var rest = new OrderREST($scope.order);
             rest.$create();
         };
@@ -75,7 +85,7 @@ app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserRES
 app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactREST, OrderREST, UserREST, $state) {
 
         $scope.saveOrder = function () {
-            $state.go('orders');
+            $state.go('orders', {page: 1});
             var rest = new OrderREST($scope.order);
             rest.$update({id : $stateParams.id});
         };

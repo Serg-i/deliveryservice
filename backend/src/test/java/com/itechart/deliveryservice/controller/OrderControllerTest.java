@@ -112,7 +112,6 @@ public class OrderControllerTest {
                 new TypeReference<TableDTO<ShortOrderDTO>>() {
         });
         assertTrue(table.getCount() > 0);
-        assertTrue(table.getPagesCount() > 0);
         assertTrue(table.getCurrentPage().size() > 0);
     }
 

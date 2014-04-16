@@ -64,15 +64,15 @@ public class OrderController {
             default:
         }
         count = (int)orderDao.searchCount(sp);
-        int from = Math.min((page - 1) * Settings.rows, Math.max(0, count - Settings.rows));
-        orders = orderDao.search(sp, from, Settings.rows, "date", false);
+        int pageCount = count / Settings.rows + (count % Settings.rows == 0 ? 0 : 1);
+        page = Math.min(page - 1, pageCount - 1);
+        orders = orderDao.search(sp, page * Settings.rows, Settings.rows, "date", false);
         TableDTO<ShortOrderDTO> out = new TableDTO<ShortOrderDTO>();
         List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
         for(Order order : orders)
             list.add(mapper.map(order, ShortOrderDTO.class));
         out.setCurrentPage(list);
         out.setCount(count);
-        out.setPagesCount(count / Settings.rows + (count % Settings.rows == 0 ? 0 : 1) );
         return out;
     }
 

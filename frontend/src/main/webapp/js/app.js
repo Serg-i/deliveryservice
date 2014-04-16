@@ -3,7 +3,8 @@
 var app = angular.module('myApp', [
     'ui.router',
     'ngResource',
-    'ui.select2'
+    'ui.select2',
+    'ui.bootstrap'
 ]);
     app.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
 
@@ -66,7 +67,7 @@ var app = angular.module('myApp', [
                 }
             })
             .state('orders', {
-                url: '/api/orders',
+                url: '/api/orders/?page',
                 templateUrl: 'partials/orders.html',
                 controller: 'OrdersCtrl',
                 data: {
