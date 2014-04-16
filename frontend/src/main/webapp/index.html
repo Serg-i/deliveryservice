@@ -49,13 +49,13 @@
             <div ng-switch on="currentUser.isAuthorized">
                 <div ng-switch-when="auth-authorized">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a ui-sref="#">{{currentUser.role}}: {{currentUser.name}}</a></li>
+                        <li><a ui-sref="#">{{rusRole.role}}: {{currentUser.name}}</a></li>
                         <li><a ui-sref="login" ng-click = "signOut()">Sign out</a></li>
                     </ul>
                 </div>
                 <div ng-switch-when="auth-not-authorized">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a ui-sref="#">{{currentUser.role}}: {{currentUser.name}}</a></li>
+                        <li><a ui-sref="#">{{rusRole.role}}: {{currentUser.name}}</a></li>
                         <li ng-class="setActiveClass('api/login')"><a ui-sref="login">Sign in</a></li>
                     </ul>
                 </div>

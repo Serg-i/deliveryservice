@@ -7,6 +7,9 @@ app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','
             name: '',
             role: ''
         };
+        $scope.rusRole = {
+            role: ''
+        };
 
         var convertToRus = function(role) {
             switch (role){
@@ -31,8 +34,9 @@ app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','
         var initGuest = function() {
             Session.destroy();
             $scope.currentUser.name = Session.username;
-            $scope.currentUser.role = convertToRus(Session.userRole);
+            $scope.currentUser.role = Session.userRole;
             $scope.currentUser.isAuthorized = Session.isAuthorized;
+            $scope.rusRole.role = convertToRus(Session.userRole);
 
             BasicAuth.setCredentials('','');
         }
@@ -41,8 +45,9 @@ app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','
 
         $scope.$on( 'newLogin', function() {
             $scope.currentUser.name = Session.username;
-            $scope.currentUser.role = convertToRus(Session.userRole);
+            $scope.currentUser.role = Session.userRole;
             $scope.currentUser.isAuthorized = Session.isAuthorized;
+            $scope.rusRole.role = convertToRus(Session.userRole);
         } );
 
         $scope.signOut = function () {
