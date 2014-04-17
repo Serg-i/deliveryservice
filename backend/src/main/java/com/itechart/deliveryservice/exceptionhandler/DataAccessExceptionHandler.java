@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 @Component
 public class DataAccessExceptionHandler implements ExceptionMapper<DataAccessException> {
 
-    public static final int ERROR_CODE=500;
+    public static final int ERROR_CODE=403;
     public static final String DATA_ACCESS_ERROR_MESSAGE="Data Access error";
 
     @Override
