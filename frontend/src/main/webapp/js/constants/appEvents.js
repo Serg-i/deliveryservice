@@ -9,5 +9,7 @@ app.constant('EVENTS', {
     sessionTimeout: 'auth-session-timeout',
     notAuthenticated: 'auth-not-authenticated',
     notAuthorized: 'auth-not-authorized',
-    isAuthorized: 'auth-authorized'
+    isAuthorized: 'auth-authorized',
+    serverError: 'server-error',
+    clientError: 'client-error'
 });

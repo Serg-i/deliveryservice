@@ -44,7 +44,7 @@ public class OrderController {
 
     @GET
     @Path("/p/{page}")
-    public TableDTO<ShortOrderDTO> readAll(@PathParam("page") int page) {
+    public TableDTO<ShortOrderDTO> readAll(@PathParam("page") int page) throws Exception {
 
         List<Order> orders = null;
         User user = getUser();
@@ -82,7 +82,7 @@ public class OrderController {
 
         Order order = orderDao.getById(orderId);
         if (order == null)
-            throw new BusinessLogicException("This order doesn't exist", HttpStatus.BAD_REQUEST);
+            throw new BusinessLogicException("This order doesn't exist", HttpStatus.NOT_FOUND);
         if (!canAccessOrder(order))
             throw new BusinessLogicException("Access Denied", HttpStatus.FORBIDDEN);
         return mapper.map(order, OrderDTO.class);
@@ -109,7 +109,7 @@ public class OrderController {
         Order upOrder =  mapper.map(orderDTO, Order.class);
         Order order = orderDao.getById(orderId);
         if (order == null)
-            throw new BusinessLogicException("This order doesn't exist", HttpStatus.BAD_REQUEST);
+            throw new BusinessLogicException("This order doesn't exist", HttpStatus.NOT_FOUND);
         upOrder.setDate(order.getDate());
         upOrder.setReceptionManager(order.getReceptionManager());
         upOrder.setState(order.getState());
@@ -133,7 +133,7 @@ public class OrderController {
         OrderState st = state.getNewState();
         Order order = orderDao.getById(orderId);
         if (order == null)
-            throw new BusinessLogicException("This order doesn't exist", HttpStatus.BAD_REQUEST);
+            throw new BusinessLogicException("This order doesn't exist", HttpStatus.NOT_FOUND);
         if (!canAccessOrder(order) || !canSetOrderState(order, st))
             throw new BusinessLogicException("Access Denied", HttpStatus.FORBIDDEN);
         OrderChange oc = new OrderChange();
