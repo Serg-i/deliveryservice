@@ -4148,6 +4148,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   padding-left: 0;
   margin: 20px 0;
   border-radius: 0px;
+  cursor: pointer;
 }
 .pagination > li {
   display: inline;
@@ -4159,10 +4160,10 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   padding: 6px 12px;
   margin-left: -1px;
   line-height: 1.42857143;
-  color: #428bca;
+  color: #666666;
   text-decoration: none;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid #969079;
 }
 .pagination > li:first-child > a,
 .pagination > li:first-child > span {
@@ -4179,9 +4180,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
-  color: #2a6496;
+  color: #666666;
   background-color: #eee;
-  border-color: #ddd;
+  border-color: #969079;
 }
 .pagination > .active > a,
 .pagination > .active > span,
@@ -4191,9 +4192,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .pagination > .active > span:focus {
   z-index: 2;
   color: #fff;
-  cursor: default;
-  background-color: #428bca;
-  border-color: #428bca;
+  cursor: pointer;
+  background-color: rgba(150, 144, 121,0.8);
+  border-color: #969079;
 }
 .pagination > .disabled > span,
 .pagination > .disabled > span:hover,
