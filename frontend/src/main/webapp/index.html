@@ -19,18 +19,18 @@
             <div ng-switch on="currentUser.role">
                 <div ng-switch-when="ORDER_MANAGER">
                     <ul class="nav navbar-nav">
-                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                        <li ng-class="setActiveClass('api/orders/1')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                         <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
                     </ul>
                 </div>
                 <div ng-switch-when="PROCESSING_MANAGER">
                     <ul class="nav navbar-nav">
-                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                        <li ng-class="setActiveClass('api/orders/1')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                     </ul>
                 </div>
                 <div ng-switch-when="COURIER">
                     <ul class="nav navbar-nav">
-                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                        <li ng-class="setActiveClass('api/orders/1')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                     </ul>
                 </div>
                 <div ng-switch-when="GUEST">
@@ -40,7 +40,7 @@
                 </div>
                 <div ng-switch-default>
                     <ul class="nav navbar-nav">
-                        <li ng-class="setActiveClass('api/orders/')"><a ui-sref="orders({page: 1})">Заказы</a></li>
+                        <li ng-class="setActiveClass('api/orders/1')"><a ui-sref="orders({page: 1})">Заказы</a></li>
                         <li ng-class="setActiveClass('api/users')"><a ui-sref="users">Пользователи</a></li>
                         <li ng-class="setActiveClass('api/contacts')"><a ui-sref="contacts">Контакты</a></li>
                     </ul>
