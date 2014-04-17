@@ -5,13 +5,13 @@
     <div class="panel-body">
         <div class=" text-right">
             <div class="btn-group">
-                <a href="#/api/search-contact" class="btn btn-default">Поиск</a>
-                <a href="#/api/email" class="btn btn-default">Отправить письмо</a>
+                <a ng-click="searchContact()" class="btn btn-default">Поиск</a>
+                <a ng-click="sendEmail($scope.checkedContacts)" class="btn btn-default">Отправить письмо</a>
             </div>
             <div class="btn-group">
-                <a href="#/api/contact" class="btn btn-default">Новый</a>
-                <a href="#/api/contact" class="btn btn-default">Редактировать</a>
-                <button type="button" class="btn btn-default">Удалить</button>
+                <a ng-click="createContact()" class="btn btn-default">Новый</a>
+                <a ng-click="editContact()" class="btn btn-default">Редактировать</a>        <!-- contactID ? -->
+               <a ng-click="deleteContact($scope.checkedContacts)" class="btn btn-default">Удалить</a>
             </div>
         </div>
         <br/>
@@ -19,19 +19,20 @@
             <div class="panel-heading">Контакты</div>
             <table class="table">
                 <thead>
-                <tr>
+                 <tr>
                     <td><span class="label label-primary"></span></td>
                     <td><span class="label label-primary">Полное имя</span></td>
-                    <td><span class="label label-primary">Дата рождения</span></td>
-                    <td><span class="label label-primary">Адрес</span></td>
+                    <td><span class="label label-primary">Дата рождения </span></td>
+                    <td><span class="label label-primary">Адрес </span></td>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr ng-repeat="contact in contacts">
                     <td><input type="checkbox"></td>
-                    <td><a href="#/api/contact"><span class="label label-default">Имя имя пам-парам</span></a></td>
-                    <td><span class="label label-default">Новый статус</span></td>
-                    <td><span class="label label-default">Кто изменил статус</span></td>
+                    <td><a ng-click="EditContact()"><span class="label label-default">{{ contact.surname }} {{ contact.name }} {{ contact.middleName }}</span></a></td>
+                    <td><span class="label label-default">{{ contact.dateOfBirth }}</span></td>
+                    <td><span class="label label-default">{{ contact.city }} {{ contact.street }} {{ contact.home }} {{ contact.flat }}</span></td>
+
                 </tr>
                 </tbody>
             </table>

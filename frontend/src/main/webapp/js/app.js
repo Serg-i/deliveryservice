@@ -138,6 +138,42 @@ var app = angular.module('myApp', [
                         USER_ROLES.order_manager
                     ]
                 }
+            })
+            .state('new_contact', {
+                url: '/api/new_contact',
+                templateUrl: 'partials/contact.html',
+                controller: 'NewContactCtrl',
+                data: {
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
+                    ]
+                }
+            })
+            .state('edit_contact', {
+                url: '/api/contacts',
+                templateUrl: 'partials/contact.html',
+                controller: 'EditContactCtrl',
+                data: {
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
+                    ]
+                }
+            })
+            .state('search_contact', {
+                url: '/api/search_contact',
+                templateUrl: 'partials/contact_search.html',
+                controller: 'SearchContactCtrl',
+                data: {
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
+                    ]
+                }
             });
 
         $urlRouterProvider.otherwise('/api/login');
