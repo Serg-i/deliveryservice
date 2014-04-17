@@ -1,11 +1,39 @@
 'use strict';
 
 app.factory("ContactREST", function($resource) {
-    return $resource("/backend/api/contacts/:sub:id", {}, {
-        getNames: {
+    return $resource("/backend/api/contacts/:id", {}, {
+        readAll: {
             method: "GET",
-            params: {id: '', sub: 'names'},
+            params: {id: ''},
             isArray: true,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        },
+        readOne: {
+            method: 'GET',
+            params: {id: '@id'},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        },
+        create: {
+            method:'POST',
+            params: {id: ''},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        },
+        update: {
+            method:'PUT',
+            params: {id: '@id'},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        },
+        delete: {
+            method:'DELETE',
+            params: {id: '@id'},
             headers: {
                 'Content-Type': 'application/json'
             }
