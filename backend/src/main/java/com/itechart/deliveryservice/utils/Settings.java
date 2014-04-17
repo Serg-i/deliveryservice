@@ -2,5 +2,5 @@ package com.itechart.deliveryservice.utils;
 
 public class Settings {
 
-    public final static int rows = 15;
+    public final static int rows = 10;
 }

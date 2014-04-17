@@ -18,7 +18,6 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <td><span class="label label-primary"></span></td>
                     <td><span class="label label-primary">Состояние</span></td>
                     <td><span class="label label-primary">Зказчик</span></td>
                     <td><span class="label label-primary">Получатель</span></td>
@@ -29,7 +28,6 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="order in page.currentPage">
-                    <td><input type="checkbox" ></td>
                     <td><a ng-click="viewOrder(order.id)"><span class="label label-primary"> {{ order.state }}</span></a></td>
                     <td><span class="label label-default">{{ order.customerName }} {{ order.customerSurname }}</span></td>
                     <td><span class="label label-default">{{ order.recipientName }} {{ order.recipientSurname }}</span></td>

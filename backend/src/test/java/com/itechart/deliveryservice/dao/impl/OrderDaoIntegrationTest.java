@@ -102,9 +102,9 @@ public class OrderDaoIntegrationTest {
         List<Order> first = orderDao.getOffset(0, (int) count - 1, "date", true);
         List<Order> second = orderDao.getOffset(0, (int) count - 1, "date", false);
         for (int i = 1; i < first.size(); i++)
-            assertTrue(first.get(0).getDate().before(first.get(1).getDate()));
+            assertTrue(first.get(i-1).getDate().compareTo(first.get(i).getDate()) <= 0);
         for (int i = 1; i < second.size(); i++)
-            assertTrue(second.get(0).getDate().after(second.get(1).getDate()));
+            assertTrue(second.get(i-1).getDate().compareTo(second.get(i).getDate()) >= 0);
     }
 
     @Test
