@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.itechart.deliveryservice.utils.Utils.firstItem;
+
 @Path("/api/orders")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
@@ -64,9 +66,7 @@ public class OrderController {
             default:
         }
         count = (int)orderDao.searchCount(sp);
-        int pageCount = count / Settings.rows + (count % Settings.rows == 0 ? 0 : 1);
-        page = Math.min(page - 1, pageCount - 1);
-        orders = orderDao.search(sp, page * Settings.rows, Settings.rows, "date", false);
+        orders = orderDao.search(sp, firstItem(page, count), Settings.rows, "date", false);
         TableDTO<ShortOrderDTO> out = new TableDTO<ShortOrderDTO>();
         List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
         for(Order order : orders)
@@ -149,7 +149,7 @@ public class OrderController {
 
     @POST
     @Path("/search/p/{page}")
-    public TableDTO<ShortOrderDTO> searchOrders(@PathParam("page") long page, @Valid SearchOrderDTO dto) {
+    public TableDTO<ShortOrderDTO> searchOrders(@PathParam("page") int page, @Valid SearchOrderDTO dto) {
 
         SearchParams sp = dto.createParams();
         User user = getUser();
@@ -166,10 +166,10 @@ public class OrderController {
                 break;
             default:
         }
-        long count = orderDao.searchCount(sp);
+        int count = (int)orderDao.searchCount(sp);
         TableDTO<ShortOrderDTO> table = new TableDTO<ShortOrderDTO>();
         table.setCount((int)count);
-        List<Order> found = orderDao.search(sp, (int)(page-1)* Settings.rows, Settings.rows);
+        List<Order> found = orderDao.search(sp, firstItem(page, count), Settings.rows);
         List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
         for(Order p : found)
             list.add(mapper.map(p, ShortOrderDTO.class));

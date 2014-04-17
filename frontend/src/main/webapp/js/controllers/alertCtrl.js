@@ -11,17 +11,17 @@ app.controller('AlertCtrl', function ($scope, EVENTS, $timeout) {
         $scope.index.push($scope.mark++);
         var mk = $scope.mark - 1;
         $timeout(function () {
- 		closeWithMark(mk);
- 	}, 5000);
+            closeWithMark(mk);
+        }, 5000);
     };
 
     var closeWithMark = function(mark) {
-    	for (var i = 0; i < $scope.alerts.length; i++)
-    		if ($scope.index[i] == mark) {
-    			$scope.alerts.splice(i, 1);
-        		$scope.index.splice(i, 1);
-        		break;
-    		}
+        for (var i = 0; i < $scope.alerts.length; i++)
+            if ($scope.index[i] == mark) {
+                $scope.alerts.splice(i, 1);
+                $scope.index.splice(i, 1);
+                break;
+            }
     };
     
     $scope.closeAlert = function(index) {
