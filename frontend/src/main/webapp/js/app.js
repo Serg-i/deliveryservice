@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 var app = angular.module('myApp', [
     'ui.router',
@@ -128,10 +128,11 @@ var app = angular.module('myApp', [
                 }
             })
             .state('contacts', {
-                url: '/api/contacts',
+                url: '/api/contacts/{page}',
                 templateUrl: 'partials/contacts.html',
                 controller: 'ContactsCtrl',
                 data: {
+                    ncyBreadcrumbLabel: 'Контакты',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,
@@ -139,11 +140,16 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('new_contact', {
-                url: '/api/new_contact',
-                templateUrl: 'partials/contact.html',
-                controller: 'NewContactCtrl',
+            .state('contacts.new', {
+                url: '/new',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/contact.html',
+                        controller: 'NewContactCtrl'
+                    }
+                },
                 data: {
+                    ncyBreadcrumbLabel: 'Новый',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,
@@ -151,11 +157,16 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('edit_contact', {
-                url: '/api/contacts',
-                templateUrl: 'partials/contact.html',
-                controller: 'EditContactCtrl',
+            .state('contacts.edit', {
+                url: '/edit',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/contact.html',
+                        controller: 'EditContactCtrl'
+                    }
+                },
                 data: {
+                    ncyBreadcrumbLabel: 'Редактировать',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,
@@ -163,11 +174,16 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('search_contact', {
+            .state('contacts.search', {
                 url: '/api/search_contact',
-                templateUrl: 'partials/contact_search.html',
-                controller: 'SearchContactCtrl',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/contact-search.html',
+                        controller: 'SearchOrderCtrl'
+                    }
+                },
                 data: {
+                    ncyBreadcrumbLabel: 'Фильтры',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,

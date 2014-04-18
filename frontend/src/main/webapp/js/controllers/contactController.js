@@ -1,71 +1,84 @@
 'use strict';
 
-app.controller('ContactsCtrl',  function ($scope, ContactREST,  BreadCrumbsService, $state) {
+app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, ContactsREST,
+    ContactSearch, ContactsSearchREST, $state) {
 
-    // callback for ng-click 'editContact':
-    $scope.editContact = function (contactId) {
-        $state.go('edit_contact');
-        $scope.contact = ContactREST.readOne({ id: contactId });
+    $scope.toPage = function (toPage) {
+        $state.go('contacts', {page: toPage});
     };
-
-    // callback for ng-click 'deleteContact':
-    $scope.deleteContact = function (checkedContacts) {
-        for (var contactId in checkedContacts) {
-            ContactREST.delete({ id: contactId });
-        }
-        $scope.contacts = ContactREST.readAll();
-    };
-
-    // callback for ng-click 'createContact':
+    $scope.viewContact = function(contactId){
+        $state.go('.view', {id: contactId});
+    }
     $scope.createContact = function () {
-        $state.go('new_contact');
-        BreadCrumbsService.push( 'home', {href: '#/api/new_contact',label: 'Новый контакт'} );
+        $state.go('.new');
     };
 
-    // callback for ng-click 'searchContact':
     $scope.searchContact = function () {
-        $state.go('search_contact');
-        BreadCrumbsService.push( 'home', {href: '#/api/search_contact',label: 'Поиск контакта'} );
+        $state.go('.search');
     };
 
-    $scope.sendEmail = function(checkedOrders){
-        // TODO: sendEmail
-    };
     $scope.$on('$viewContentLoaded', function () {
-        $scope.contacts = ContactREST.readAll();
+        loadData();
     });
+
+    var loadData = function() {
+        if (ContactSearch.params === null) {
+            ContactsREST.readAll({
+                page: $stateParams.page
+            }, initTable);
+        } else {
+            $scope.params = ContactSearch.params;
+            var rest = new ContactsSearchREST($scope.params);
+            rest.$search({
+                page: $stateParams.page
+            }, initTable);
+        }
+    };
+
+    var initTable = function(data) {
+        $scope.page = data;
+        $scope.curPage = $stateParams.page;
+        $scope.totalItems = $scope.page.count;
+    };
+
+
+
+app.controller('ViewContactCtrl', function ($stateParams, $scope, ContactREST,
+                                          $state, Session, USER_ROLES) {
+
+    $scope.deleteContact = function() {
+        ContactREST.delete({
+            id: $stateParams.id
+        }, function(data) {
+            $state.go('contacts');
+        }, function(error) {
+        });
+    };
+
+    $scope.editContact = function() {
+        $state.go('.edit', {id: $stateParams.id});
+    };
+
+
+
+    $scope.$on('$viewContentLoaded', function () {
+        loadData();
+    });
+
+    var loadData = function() {
+        $scope.stateChange = false;
+        ContactREST.readOne({
+            id : $stateParams.id
+        }, function(data) {
+           // $scope.possibleStates = OrderState.possible(data.state);
+            data.name = data.name + " " + data.surname;
+
+        }, function(error) {
+            $state.go('contacts');
+        });
+    };
+
+
 });
 
-app.controller('NewContactCtrl', function ($scope, ContactREST,  $state) {
-
-    // callback for ng-click 'saveContact':
-    $scope.saveContact = function () {
-        $state.go('contacts');
-        ContactREST.create();
-    };
-});
-
-app.controller('EditContactCtrl', function ($scope, ContactREST,  $state) {
-    $scope.contact = ContactREST.readOne({ id: contactId });
-    // callback for ng-click 'saveContact':
-    $scope.saveContact = function () {
-        ContactREST.update({ id: $scope.contact.id });
-        $state.go('contacts');
-    };
-});
-
-app.controller('SearchContactCtrl', function ($scope, ContactREST,  $state) {
-
-    // callback for ng-click 'searchContact':
-    $scope.searchContact = function () {
-        //TODO  $scope.contacts = ContactREST.search();
-        $state.go('contacts');
-        $scope.contacts = ContactREST.readAll();
-    };
-});
-
-app.controller('SendEmailCtrl', function($scope, ContactREST, $state){
-    $scope.sendEmail = function(){
-     //TODO: sendEmail function
-    };
 });

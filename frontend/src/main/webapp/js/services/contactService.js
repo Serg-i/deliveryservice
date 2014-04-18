@@ -1,15 +1,8 @@
 'use strict';
 
 app.factory("ContactREST", function($resource) {
-    return $resource("/backend/api/contacts/:id", {}, {
-        readAll: {
-            method: "GET",
-            params: {id: ''},
-            isArray: true,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        },
+    return $resource("/backend/api/contacts/:id:rpath", {}, {
+
         readOne: {
             method: 'GET',
             params: {id: '@id'},
@@ -39,4 +32,31 @@ app.factory("ContactREST", function($resource) {
             }
         }
     });
+});
+app.factory("ContactsREST", function($resource) {
+    return $resource("/backend/api/contacts/p/:page", {}, {
+        readAll: {
+            method: "GET",
+            params: {page: '@page'},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    });
+});
+
+app.factory("ContactsSearchREST", function($resource) {
+    return $resource("/backend/api/contacts/search/p/:page", {}, {
+        search: {
+            method:'POST',
+            params: {page: '@page'},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    });
+});
+
+app.service('ContactSearch', function() {
+    return {params: null};
 });
