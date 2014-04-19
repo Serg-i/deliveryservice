@@ -2,9 +2,12 @@ package com.itechart.deliveryservice.controller;
 
 import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
+import com.itechart.deliveryservice.dao.OrderDao;
+import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.Contact;
+import com.itechart.deliveryservice.entity.Order;
+import com.itechart.deliveryservice.entity.User;
 import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
-import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
@@ -30,7 +33,11 @@ import static com.itechart.deliveryservice.utils.Utils.firstItem;
 public class ContactController {
 
     @Autowired
-    private ContactDao contactDao;
+    ContactDao contactDao;
+    @Autowired
+    UserDao userDao;
+    @Autowired
+    OrderDao orderDao;
     @Autowired
     private DozerBeanMapper mapper;
 
@@ -75,10 +82,30 @@ public class ContactController {
 
     @DELETE
     @Path("/{idContact}")
-    public void delete(@PathParam("idContact") long idContact){
+    public void delete(@PathParam("idContact") long idContact) throws Exception{
         Contact contact = contactDao.getById(idContact);
-        contactDao.delete(contact);
-        //TODO: deny delete when user or order contains contact
+        boolean accepted = true;
+        List<User> users = userDao.getAll();
+        List<Order> orders = orderDao.getAll();
+
+        for (User user: users){
+            if (user.getContact().equals(contact)){
+                accepted = false;
+                throw new BusinessLogicException("Deletion forbidden, user contains this contact", HttpStatus.METHOD_NOT_ALLOWED);
+            }
+        }
+
+        if (accepted){
+            for (Order order: orders){
+               if (order.getCustomer().equals(contact)
+                       || order.getRecipient().equals(contact)
+                       || order.getDeliveryManager().getContact().equals(contact)
+                       || order.getProcessingManager().getContact().equals(contact)
+                       || order.getReceptionManager().getContact().equals(contact)){
+                   throw new BusinessLogicException("Deletion forbidden, order contains this contact", HttpStatus.METHOD_NOT_ALLOWED);
+               }  else contactDao.delete(contact);
+            }
+        }
     }
 
     @GET

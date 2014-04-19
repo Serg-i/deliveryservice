@@ -1,8 +1,14 @@
 package com.itechart.deliveryservice.controller;
 
 import com.itechart.deliveryservice.controller.data.ContactDTO;
+import com.itechart.deliveryservice.controller.data.TableDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
+import com.itechart.deliveryservice.dao.OrderDao;
+import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.Contact;
+import com.itechart.deliveryservice.entity.Order;
+import com.itechart.deliveryservice.entity.User;
+import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.dozer.DozerBeanMapper;
@@ -10,6 +16,7 @@ import org.jboss.resteasy.core.Dispatcher;
 import org.jboss.resteasy.mock.MockDispatcherFactory;
 import org.jboss.resteasy.mock.MockHttpRequest;
 import org.jboss.resteasy.mock.MockHttpResponse;
+import org.jboss.resteasy.spi.UnhandledException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -33,6 +39,10 @@ public class ContactControllerTest {
 
     @Autowired
     ContactDao contactDao;
+    @Autowired
+    UserDao userDao;
+    @Autowired
+    OrderDao orderDao;
     @Autowired
     DozerBeanMapper dozer;
 
@@ -46,6 +56,8 @@ public class ContactControllerTest {
         ContactController obj = new ContactController();
         ReflectionTestUtils.setField(obj, "contactDao", contactDao);
         ReflectionTestUtils.setField(obj, "mapper", dozer);
+        ReflectionTestUtils.setField(obj, "orderDao", orderDao);
+        ReflectionTestUtils.setField(obj, "userDao", userDao);
         dispatcher.getRegistry().addSingletonResource(obj);
         contact = contactDao.getById(1);
     }
@@ -83,26 +95,16 @@ public class ContactControllerTest {
     public void shouldGetAllContacts() throws Exception{
         String val;
         {
-            MockHttpRequest request = MockHttpRequest.get("/api/contacts");
+            MockHttpRequest request = MockHttpRequest.get("/api/contacts/p/1");
             MockHttpResponse response = new MockHttpResponse();
             dispatcher.invoke(request, response);
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
             val = response.getContentAsString();
         }
-        List<ContactDTO> contacts = mapper.readValue(val, new TypeReference<List<ContactDTO>>() {
-        });
-        assertEquals(contacts.size(), contactDao.getAll().size());
-        for (int i = 0; i < contacts.size(); i++) {
-            assertEquals(contacts.get(i).getName(), contactDao.getAll().get(i).getName());
-            assertEquals(contacts.get(i).getSurname(), contactDao.getAll().get(i).getSurname());
-            assertEquals(contacts.get(i).getMiddleName(), contactDao.getAll().get(i).getMiddleName());
-            assertEquals(contacts.get(i).getEmail(), contactDao.getAll().get(i).getEmail());
-            assertEquals(contacts.get(i).getDateOfBirth(), contactDao.getAll().get(i).getDateOfBirth());
-            assertEquals(contacts.get(i).getCity(), contactDao.getAll().get(i).getAddress().getCity());
-            assertEquals(contacts.get(i).getStreet(), contactDao.getAll().get(i).getAddress().getStreet());
-            assertEquals(contacts.get(i).getHome(), contactDao.getAll().get(i).getAddress().getHome());
-            assertEquals(contacts.get(i).getFlat(), contactDao.getAll().get(i).getAddress().getFlat());
-        }
+       TableDTO<ContactDTO> contacts = mapper.readValue(val, new TypeReference<TableDTO<ContactDTO>>(){});
+       assertTrue(contacts.getCount() > 0);
+       assertTrue(contacts.getCurrentPage().size() > 0);
+
     }
 
     @Test
@@ -132,7 +134,6 @@ public class ContactControllerTest {
 
     @Test
     public void shouldUpdateContact() throws Exception{
-
         ContactDTO contactDTO = dozer.map(contact, ContactDTO.class);
         contactDTO.setCity("minsk");
         String body = mapper.writeValueAsString(contactDTO);
@@ -153,13 +154,14 @@ public class ContactControllerTest {
 
     @Test
     public void shouldDeleteContact() throws Exception{
+        Contact del = contactDao.getById(17);
         {
-            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + contact.getId());
+            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + del.getId());
             MockHttpResponse response = new MockHttpResponse();
             dispatcher.invoke(request, response);
             assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         }
-        Contact found = contactDao.getById(contact.getId());
+        Contact found = contactDao.getById(del.getId());
         assertNull(found);
     }
 
@@ -181,6 +183,33 @@ public class ContactControllerTest {
         Contact found = contactDao.getById(contact.getId());
         assertNotSame(contactDTO.getName(), found.getName());
     }
+
+    @Test (expected = UnhandledException.class)
+    public void shouldDenyDeleteContactFromUser() throws Exception{
+        User user =  userDao.getById(1);
+        user.setContact(contact);
+        {
+            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + contact.getId());
+            MockHttpResponse response = new MockHttpResponse();
+            dispatcher.invoke(request, response);
+            assertEquals(HttpServletResponse.SC_METHOD_NOT_ALLOWED, response.getStatus());
+        }
+        assertNotNull(contactDao.getById(contact.getId()));
+    }
+
+    @Test (expected = UnhandledException.class)
+    public void shouldDenyDeleteContactFromOrder() throws Exception{
+        Order order = orderDao.getById(1);
+        order.setCustomer(contact);
+        {
+            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + contact.getId());
+            MockHttpResponse response = new MockHttpResponse();
+            dispatcher.invoke(request, response);
+            assertEquals(HttpServletResponse.SC_METHOD_NOT_ALLOWED, response.getStatus());
+        }
+
+    }
+
 
 }
 
