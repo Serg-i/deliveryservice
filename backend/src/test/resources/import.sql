@@ -16,6 +16,7 @@ INSERT INTO contact (city, flat, home, street, date_of_birth, email, middle_name
 INSERT INTO contact (city, flat, home, street, date_of_birth, email, middle_name, name, surname) VALUES ('Slough', '65', '23', 'Street', '1987-12-31', 'gmail@mail.com', 'Polikarpovich', 'Brian', 'Connolly');
 INSERT INTO contact (city, flat, home, street, date_of_birth, email, middle_name, name, surname) VALUES ('London', '23', '432', 'Dublin', '1934-12-31', 'gmail@yandex.com', 'Andreevich', 'Peter', 'Cook');
 INSERT INTO contact (city, flat, home, street, date_of_birth, email, middle_name, name, surname) VALUES ('Pasadena', '665', '432', 'Street', '1974-12-31', 'mail@mail.com', 'Sergeevich', 'Michael', 'Elphick');
+INSERT INTO contact (city, flat, home, street, date_of_birth, email, middle_name, name, surname) VALUES ('Delhi', '45', '324', 'Street', '1977-06-15', 'mail@gmail.com', 'Sergeevich', 'Kasi', 'Thakor');
 
 INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'ADMINISTRATOR', 'admin', '1');
 INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'SUPERVISOR', 'user1', '2');

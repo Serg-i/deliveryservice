@@ -85,31 +85,26 @@ public class ContactController {
     @Path("/{idContact}")
     public void delete(@PathParam("idContact") long idContact) throws Exception{
         Contact contact = contactDao.getById(idContact);
-        boolean accepted = true;
         List<User> users = userDao.getAll();
         List<Order> orders = orderDao.getAll();
 
         for (User user: users){
             if (user.getContact().equals(contact)){
-                accepted = false;
                 throw new BusinessLogicException("Deletion forbidden, user contains this contact", HttpStatus.METHOD_NOT_ALLOWED);
             }
         }
-        if (accepted){
-            for (Order order: orders){
+        for (Order order: orders){
                 if (order.getState()!= OrderState.CANCELED
                         && order.getState()!= OrderState.CLOSED
-                    &&
-
-                    (order.getCustomer().equals(contact)
+                        &&
+                        (order.getCustomer().equals(contact)
                             || order.getRecipient().equals(contact)
                             || order.getDeliveryManager().getContact().equals(contact)
                             || order.getProcessingManager().getContact().equals(contact)
                             || order.getReceptionManager().getContact().equals(contact))){
                         throw new BusinessLogicException("Deletion forbidden, order contains this contact", HttpStatus.METHOD_NOT_ALLOWED);
-                    }  else contactDao.delete(contact);
+                }  else contactDao.delete(contact);
         }
-    }
     }
 
     @GET
