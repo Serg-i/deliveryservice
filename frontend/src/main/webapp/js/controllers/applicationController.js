@@ -31,18 +31,6 @@ app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','
             return "";
         }
 
-        var initGuest = function() {
-            Session.destroy();
-            $scope.currentUser.name = Session.username;
-            $scope.currentUser.role = Session.userRole;
-            $scope.currentUser.isAuthorized = Session.isAuthorized;
-            $scope.rusRole.role = convertToRus(Session.userRole);
-
-            BasicAuth.setCredentials('','');
-        }
-
-        initGuest();
-
         $scope.$on( 'newLogin', function() {
             $scope.currentUser.name = Session.username;
             $scope.currentUser.role = Session.userRole;
@@ -50,7 +38,10 @@ app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','
             $scope.rusRole.role = convertToRus(Session.userRole);
         } );
 
+        AuthService.init();
+
+
         $scope.signOut = function () {
-            initGuest();
+            AuthService.initGuest();
         };
     }]);

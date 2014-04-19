@@ -5,7 +5,8 @@ var app = angular.module('myApp', [
     'ngResource',
     'ui.select2',
     'ui.bootstrap',
-    'ncy-angular-breadcrumb'
+    'ncy-angular-breadcrumb',
+    'ngStorage'
 ])
     app.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
 
