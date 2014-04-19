@@ -7,6 +7,7 @@ import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Order;
+import com.itechart.deliveryservice.entity.OrderState;
 import com.itechart.deliveryservice.entity.User;
 import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -49,6 +50,7 @@ public class ContactControllerTest {
     private Dispatcher dispatcher;
     private ObjectMapper mapper = new ObjectMapper();
     private Contact contact;
+    private Contact del;
 
     @Before
     public void init(){
@@ -60,6 +62,7 @@ public class ContactControllerTest {
         ReflectionTestUtils.setField(obj, "userDao", userDao);
         dispatcher.getRegistry().addSingletonResource(obj);
         contact = contactDao.getById(1);
+        del = contactDao.getById(17);
     }
 
     @After
@@ -154,7 +157,9 @@ public class ContactControllerTest {
 
     @Test
     public void shouldDeleteContact() throws Exception{
-        Contact del = contactDao.getById(17);
+        Order order = orderDao.getById(1);
+        order.setCustomer(del);
+        order.setState(OrderState.CANCELED);
         {
             MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + del.getId());
             MockHttpResponse response = new MockHttpResponse();
@@ -187,22 +192,22 @@ public class ContactControllerTest {
     @Test (expected = UnhandledException.class)
     public void shouldDenyDeleteContactFromUser() throws Exception{
         User user =  userDao.getById(1);
-        user.setContact(contact);
+        user.setContact(del);
         {
-            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + contact.getId());
+            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + del.getId());
             MockHttpResponse response = new MockHttpResponse();
             dispatcher.invoke(request, response);
             assertEquals(HttpServletResponse.SC_METHOD_NOT_ALLOWED, response.getStatus());
         }
-        assertNotNull(contactDao.getById(contact.getId()));
+        assertNotNull(contactDao.getById(del.getId()));
     }
 
     @Test (expected = UnhandledException.class)
     public void shouldDenyDeleteContactFromOrder() throws Exception{
         Order order = orderDao.getById(1);
-        order.setCustomer(contact);
+        order.setCustomer(del);
         {
-            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + contact.getId());
+            MockHttpRequest request = MockHttpRequest.delete("/api/contacts/" + del.getId());
             MockHttpResponse response = new MockHttpResponse();
             dispatcher.invoke(request, response);
             assertEquals(HttpServletResponse.SC_METHOD_NOT_ALLOWED, response.getStatus());
