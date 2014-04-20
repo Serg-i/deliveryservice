@@ -40,8 +40,8 @@ public class MailController {
 
         Letter letter = new Letter();
 
-        letter.setAddressFrom(Settings.mailAddressFrom);
-        letter.setAddressFrom(Settings.mailPassword);
+        letter.setAddressFrom(Settings.getMailAddressFrom());
+        letter.setAddressFrom(Settings.getMailPassword());
 
         letter.setContactTo(contacts);
         letter.setSubject(letterDTO.getSubject());

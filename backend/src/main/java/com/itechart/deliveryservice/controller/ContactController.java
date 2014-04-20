@@ -56,7 +56,7 @@ public class ContactController {
      public TableDTO<ShortContactDTO> readAll(@PathParam("page") int page) throws Exception{
 
          int count = (int) contactDao.getCount();
-         List<Contact> contacts = contactDao.getOffset(firstItem(page, count), Settings.rows);
+         List<Contact> contacts = contactDao.getOffset(firstItem(page, count), Settings.getRows());
          TableDTO<ShortContactDTO> out = new TableDTO<ShortContactDTO>();
          List<ShortContactDTO> list = new ArrayList<ShortContactDTO>();
          for(Contact contact: contacts)

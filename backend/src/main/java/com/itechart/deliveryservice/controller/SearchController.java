@@ -44,7 +44,8 @@ public class SearchController {
         long count = contactDao.searchCount(sp);
         TableDTO<ShortContactDTO> table = new TableDTO<ShortContactDTO>();
         table.setCount((int)count);
-        List<Contact> found = contactDao.search(sp, (int)(page-1)* Settings.rows, Settings.rows);
+        List<Contact> found = contactDao.search(sp,
+                (int)(page-1) * Settings.getRows(), Settings.getRows());
         List<ShortContactDTO> list = new ArrayList<ShortContactDTO>();
         for(Contact p : found)
             list.add(mapper.map(p, ShortContactDTO.class));
