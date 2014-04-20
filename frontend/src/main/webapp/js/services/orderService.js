@@ -1,7 +1,7 @@
 'use strict';
 
 app.factory("OrderREST", function($resource) {
-        return $resource("/backend/api/orders/:id:rpath", {}, {
+        return $resource("/backend/api/orders/:id", {}, {
             readOne: {
                 method: 'GET',
                 params: {id: '@id'},
@@ -37,7 +37,7 @@ app.factory("OrderREST", function($resource) {
 app.factory("OrderStateREST", function($resource) {
         return $resource("/backend/api/orders/:id/state", {}, {
             updateState: {
-            	method:'PUT',
+                method:'PUT',
                 params: {id: '@id'},
                 headers: {
                     'Content-Type': 'application/json'
@@ -74,30 +74,41 @@ app.service('OrderSearch', function() {
     return {params: null};
 });
 
-app.factory("OrderState", function(ORDER_STATE, LOCAL_STATE) {
+app.factory("OrderState", function(ORDER_STATE, LOCAL_STATE, Session, USER_ROLES) {
     return {
         possible: function (state) {
             var states = new Array();
-            var ind = 0;
             if (state == ORDER_STATE.canceled || state == ORDER_STATE.closed)
                 return states;
-            if (state == ORDER_STATE.bad) {
-                states[ind++] = {value: ORDER_STATE.new, display: LOCAL_STATE.new};
+            if (state == ORDER_STATE.bad && (Session.userRole == USER_ROLES.supervisor
+                || Session.userRole == USER_ROLES.order_manager)) {
+                states.push({value: ORDER_STATE.new, display: LOCAL_STATE.new});
                 return states;
             }
-            if (state == ORDER_STATE.new)
-                states[ind++] = {value : ORDER_STATE.accepted, display : LOCAL_STATE.accepted};
-            if (state == ORDER_STATE.accepted)
-                states[ind++] = {value : ORDER_STATE.processing, display : LOCAL_STATE.processing};
-            if (state == ORDER_STATE.processing)
-                states[ind++] = {value : ORDER_STATE.ready, display : LOCAL_STATE.ready};
-            if (state == ORDER_STATE.ready)
-                states[ind++] = {value : ORDER_STATE.delivery, display : LOCAL_STATE.delivery};
-            if (state == ORDER_STATE.delivery)
-                states[ind++] = {value : ORDER_STATE.closed, display : LOCAL_STATE.closed};
+            
+            if (state == ORDER_STATE.new 
+                && Session.userRole == USER_ROLES.order_manager)
+                states.push({value : ORDER_STATE.accepted, display : LOCAL_STATE.accepted});
+            if (state == ORDER_STATE.accepted 
+                && Session.userRole == USER_ROLES.processing_manager)
+                states.push({value : ORDER_STATE.processing, display : LOCAL_STATE.processing});
+            if (state == ORDER_STATE.processing 
+                && Session.userRole == USER_ROLES.processing_manager)
+                states.push({value : ORDER_STATE.ready, display : LOCAL_STATE.ready});
+            if (state == ORDER_STATE.ready 
+                && Session.userRole == USER_ROLES.courier)
+                states.push({value : ORDER_STATE.delivery, display : LOCAL_STATE.delivery});
+            if (state == ORDER_STATE.delivery 
+                && Session.userRole == USER_ROLES.courier)
+                states.push({value : ORDER_STATE.closed, display : LOCAL_STATE.closed});
 
-            states[ind++] = {value: ORDER_STATE.bad, display: LOCAL_STATE.bad};
+            if (Session.userRole == USER_ROLES.supervisor
+                || Session.userRole == USER_ROLES.order_manager)
+                states.push({value: ORDER_STATE.canceled, display: LOCAL_STATE.canceled});
+            if (Session.userRole != USER_ROLES.admin)
+                states.push({value: ORDER_STATE.bad, display: LOCAL_STATE.bad});
             return states;
+            
         },
         getlocal: function (state) {
             switch (state) {

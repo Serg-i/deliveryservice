@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','BasicAuth',
-    function ($scope, USER_ROLES, AuthService, Session, BasicAuth) {
+app.controller('appCtrl',
+    function ($rootScope, $scope, USER_ROLES, AuthService, Session, BasicAuth,
+                           OrderSearch) {
 
         $scope.currentUser = {
             name: '',
@@ -36,6 +37,7 @@ app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','
             $scope.currentUser.role = Session.userRole;
             $scope.currentUser.isAuthorized = Session.isAuthorized;
             $scope.rusRole.role = convertToRus(Session.userRole);
+            OrderSearch.params = null;
         } );
 
         AuthService.init();
@@ -44,4 +46,4 @@ app.controller('appCtrl', ['$rootScope', 'USER_ROLES', 'AuthService','Session','
         $scope.signOut = function () {
             AuthService.initGuest();
         };
-    }]);
+    });

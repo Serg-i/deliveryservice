@@ -6,8 +6,8 @@
     <div class="panel-body">
         <div class=" text-right">
             <div class="btn-group">
-                <a ng-click="editOrder()" class="btn btn-default" ng-show="editVisible">Изменить</a>
-                <a ng-click="deleteOrder()" class="btn btn-default" ng-show="deleteVisible">Удалить</a>
+                <a ng-if="editVisible == true" ng-click="editOrder()" class="btn btn-default">Изменить</a>
+                <a ng-if="deleteVisible == true" ng-click="deleteOrder()" class="btn btn-default">Удалить</a>
             </div>
         </div>
         <br/>

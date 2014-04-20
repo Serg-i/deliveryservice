@@ -4,7 +4,7 @@ app.constant('paginationConfig', {
   itemsPerPage: 10,
   boundaryLinks: true,
   directionLinks: false,
-  firstText: 'Первый',
-  lastText: 'Последний',
+  firstText: 'Начало',
+  lastText: 'Конец',
   rotate: true
 });

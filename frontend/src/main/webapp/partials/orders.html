@@ -5,11 +5,11 @@
     <div class="panel-body">
         <div class=" text-right">
             <div class="btn-group">
-                <a ng-click="searchDisable()" class="btn btn-default">Убрать</a>
+                <a ng-click="searchDisable()" class="btn btn-default">Сбросить</a>
                 <a ng-click="searchOrder()" class="btn btn-default">Фильтры</a>
             </div>
             <div class="btn-group">
-                <a ng-click="createOrder()" class="btn btn-default" ng-show="newVisible">Новый</a>
+                <a ng-if="newVisible == true" ng-click="createOrder()" class="btn btn-default">Новый</a>
             </div>
         </div>
         <br/>
