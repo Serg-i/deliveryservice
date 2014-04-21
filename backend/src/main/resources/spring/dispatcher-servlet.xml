@@ -13,7 +13,8 @@
         http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
    <context:component-scan base-package="com.itechart.deliveryservice"/>
-   <context:property-placeholder location="classpath:persistence-mysql.properties" />
+   <context:property-placeholder location="classpath:persistence-mysql.properties" ignore-unresolvable="true"/>
+   <context:property-placeholder location="classpath:settings.properties" ignore-unresolvable="true"/>
 
    <bean id="entityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
       <property name="dataSource" ref="dataSource" />
@@ -47,6 +48,17 @@
             <value>dozer-mapping.xml</value>
         </list>
     </property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.itechart.deliveryservice.utils.Settings.fill"/>
+        <property name="arguments">
+            <list>
+                <value type="java.lang.Integer">${setting.rows}</value>
+                <value type="java.lang.String">${setting.mailAddressFrom}</value>
+                <value type="java.lang.String">${setting.mailPassword}</value>
+            </list>
+        </property>
     </bean>
 
     <tx:annotation-driven />

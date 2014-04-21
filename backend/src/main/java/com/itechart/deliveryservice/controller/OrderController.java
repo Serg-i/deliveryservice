@@ -66,7 +66,7 @@ public class OrderController {
             default:
         }
         count = (int)orderDao.searchCount(sp);
-        orders = orderDao.search(sp, firstItem(page, count), Settings.rows, "date", false);
+        orders = orderDao.search(sp, firstItem(page, count), Settings.getRows(), "date", false);
         TableDTO<ShortOrderDTO> out = new TableDTO<ShortOrderDTO>();
         List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
         for(Order order : orders)
@@ -169,7 +169,7 @@ public class OrderController {
         int count = (int)orderDao.searchCount(sp);
         TableDTO<ShortOrderDTO> table = new TableDTO<ShortOrderDTO>();
         table.setCount((int)count);
-        List<Order> found = orderDao.search(sp, firstItem(page, count), Settings.rows);
+        List<Order> found = orderDao.search(sp, firstItem(page, count), Settings.getRows());
         List<ShortOrderDTO> list = new ArrayList<ShortOrderDTO>();
         for(Order p : found)
             list.add(mapper.map(p, ShortOrderDTO.class));

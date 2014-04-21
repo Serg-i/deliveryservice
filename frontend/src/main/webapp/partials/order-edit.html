@@ -26,7 +26,7 @@
                 <span class="label">Менеджер по обработке: </span><br/>
                 <select class="form-control" name="pm" ui-select2 ng-model="order.processingManagerId" required>
                     <option ng-repeat="user in users.procissingManagers" value="{{ user.id }}">
-                        {{ user.name }} {{ user.surname }}
+                        {{ user.username }}
                     </option>
                 </select>
             </li>
@@ -34,7 +34,7 @@
                 <span class="label">Менеджер по доставке: </span><br/>
                 <select class="form-control" name="dm" ui-select2 ng-model="order.deliveryManagerId" required>
                     <option ng-repeat="user in users.couriers" value="{{ user.id }}">
-                        {{ user.name }} {{ user.surname }}
+                        {{ user.username }}
                     </option>
                 </select>
             </li>

@@ -62,14 +62,8 @@
             </div>
         </div>
     </div>
-    <div ng-switch on="currentUser.isAuthorized">
-        <div ng-switch-when="auth-authorized">
-            <div class="container-fluid">
-                <div ncy-breadcrumb></div>
-            </div>
-        </div>
-        <div ng-switch-default>
-        </div>
+    <div class="container-fluid" ng-show="currentUser.isAuthorized == 'auth-authorized'">
+        <div ncy-breadcrumb></div>
     </div>
     <div class = "errorPanel">
         <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
@@ -91,6 +85,7 @@
 <script src="lib/bootstrap/bootstrap.min.js"></script>
 <script src="lib/angular-ui/ui-bootstrap-tpls-0.10.0.min.js"></script>
 <script src="lib/angular-ui/angular-breadcrumb.min.js"></script>
+<script src="lib/angular-ui/ngStorage.min.js"></script>
 
 <script src="js/app.js"></script>
 

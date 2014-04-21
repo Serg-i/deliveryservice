@@ -1,7 +1,7 @@
 'use strict';
 
 app.factory("ContactREST", function($resource) {
-    return $resource("/backend/api/contacts/:id:rpath", {}, {
+    return $resource("/backend/api/contacts/:id", {}, {
 
         readOne: {
             method: 'GET',
@@ -50,6 +50,18 @@ app.factory("ContactsSearchREST", function($resource) {
         search: {
             method:'POST',
             params: {page: '@page'},
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    });
+});
+
+app.factory("ContactNamesREST", function($resource) {
+    return $resource("/backend/api/contacts/names", {}, {
+        getNames: {
+            method:'GET',
+            isArray: true,
             headers: {
                 'Content-Type': 'application/json'
             }

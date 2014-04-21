@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('AuthCtrl', function ($scope, $rootScope, AuthService, $state) {
+app.controller('AuthCtrl', function ($scope, AuthService, $state) {
 
     $scope.credentials = {
         username: '',
@@ -9,7 +9,6 @@ app.controller('AuthCtrl', function ($scope, $rootScope, AuthService, $state) {
     $scope.login = function (credentials) {
         AuthService.login(credentials).then(function () {
             $state.go('orders', {page: 1});
-            $rootScope.$broadcast( 'newLogin' );
         }, function () {
             $state.go('login');
         });

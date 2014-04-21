@@ -55,14 +55,13 @@ app.controller('OrdersCtrl',  function ($stateParams, $scope, OrderREST, OrdersR
         var roleRestriction = function() {
             $scope.newVisible = false;
             if (Session.userRole == USER_ROLES.admin
-                || Session.userRole == USER_ROLES.supervisor
                 || Session.userRole == USER_ROLES.order_manager)
                 $scope.newVisible = true;
         }
     });
 
-app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, OrderState,
-                                          OrderStateREST, $state, Session, USER_ROLES) {
+app.controller('ViewOrderCtrl', function ($stateParams, $scope, $filter, OrderREST, OrderState,
+                                          OrderStateREST, $state, Session, USER_ROLES, ORDER_STATE) {
 
         $scope.deleteOrder = function() {
             OrderREST.delete({
@@ -83,8 +82,10 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, Order
              rest.$updateState({
                  id: $stateParams.id
              }, function(data) {
-                if (Session.userRole == USER_ROLES.courier
-                    || Session.userRole == USER_ROLES.processing_manager)
+                if ((Session.userRole == USER_ROLES.courier 
+                        && $scope.state.newState == ORDER_STATE.closed)
+                    || (Session.userRole == USER_ROLES.processing_manager 
+                        && $scope.state.newState == ORDER_STATE.ready))
                     $state.go('orders');
                 else
                     loadData();
@@ -103,8 +104,10 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, Order
                 id : $stateParams.id
             }, function(data) {
                 $scope.possibleStates = OrderState.possible(data.state);
-                data.name = data.name + " " + data.surname;
+                data.customerName = data.customerName + " " + data.customerSurname;
+                data.recipientName = data.recipientName + " " + data.recipientSurname;
                 data.state = OrderState.getlocal(data.state);
+                data.changes = $filter('orderBy')(data.changes, 'date', 'true');
                 for (var i = 0; i < data.changes.length; i++)
                     data.changes[i].newState = OrderState.getlocal(data.changes[i].newState);
                 $scope.order = data;
@@ -128,7 +131,7 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, OrderREST, Order
         }
     });
 
-app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserREST, $state) {
+app.controller('NewOrderCtrl', function ($scope, ContactNamesREST, OrderREST, UserREST, $state) {
 
         $scope.saveOrder = function () {
             var rest = new OrderREST($scope.order);
@@ -140,7 +143,7 @@ app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserRES
         };
         $scope.$on('$viewContentLoaded', function () {
             $scope.head = "Создать заказ";
-            ContactREST.getNames({
+            ContactNamesREST.getNames({
             }, function(data) {
                 $scope.contacts = data;
                 UserREST.getForSelect({
@@ -155,7 +158,7 @@ app.controller('NewOrderCtrl', function ($scope, ContactREST, OrderREST, UserRES
         });
     });
 
-app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactREST, OrderREST, UserREST, $state) {
+app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactNamesREST, OrderREST, UserREST, $state) {
 
         $scope.saveOrder = function () {
             var rest = new OrderREST($scope.order);
@@ -168,7 +171,7 @@ app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactREST, Ord
         };
         $scope.$on('$viewContentLoaded', function () {
             $scope.head = "Редактировать заказ";
-            ContactREST.getNames({
+            ContactNamesREST.getNames({
             }, function(data) {
                 //if names received
                 $scope.contacts = data;
@@ -200,7 +203,7 @@ app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactREST, Ord
          });
     });
 
-app.controller('SearchOrderCtrl', function ($scope, OrderREST, ContactREST, OrderSearch, $state) {
+app.controller('SearchOrderCtrl', function ($scope, OrderREST, ContactNamesREST, OrderSearch, $state) {
         $scope.searchOrder = function() {
             OrderSearch.params = $scope.search;
             $state.go("orders", {page: 1});
@@ -208,7 +211,7 @@ app.controller('SearchOrderCtrl', function ($scope, OrderREST, ContactREST, Orde
         $scope.$on('$viewContentLoaded', function () {
             $scope.search = {};
             $scope.search.dateOp = "GREATER";
-            ContactREST.getNames({
+            ContactNamesREST.getNames({
             }, function(data){
                 $scope.contacts = data;
                 if (OrderSearch.params !== null) {

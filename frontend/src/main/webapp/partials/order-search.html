@@ -8,6 +8,8 @@
             <li class="list-group-item">
                 <span class="label">Заказчик:</span><br/>
                 <select class="form-control" name="cust" ui-select2 ng-model="search.customer">
+                    <option value="">
+                    </option>
                     <option ng-repeat="contact in contacts" value="{{ contact.id }}">
                         {{ contact.name }} {{ contact.surname }}
                     </option>
@@ -16,6 +18,8 @@
             <li class="list-group-item">
                 <span class="label">Получатель: </span><br/>
                 <select class="form-control" name="rep" ui-select2 ng-model="search.recipient">
+                    <option value="">
+                    </option>
                     <option ng-repeat="contact in contacts" value="{{ contact.id }}">
                         {{ contact.name }} {{ contact.surname }}
                     </option>
