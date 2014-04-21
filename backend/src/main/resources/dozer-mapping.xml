@@ -184,4 +184,35 @@
         <class-b>com.itechart.deliveryservice.controller.data.UserNameDTO</class-b>
     </mapping>
 
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.User</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.UserDTO</class-b>
+        <field>
+            <a>contact.id</a>
+            <b>contactId</b>
+        </field>
+        <field>
+            <a>contact.name</a>
+            <b>contactName</b>
+        </field>
+        <field>
+            <a>contact.surname</a>
+            <b>contactSurname</b>
+        </field>
+        <field>
+            <a>contact.middleName</a>
+            <b>contactMiddleName</b>
+        </field>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.User</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.UserUpdateDTO</class-b>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a>com.itechart.deliveryservice.entity.User</class-a>
+        <class-b>com.itechart.deliveryservice.controller.data.UserCreateDTO</class-b>
+    </mapping>
+
 </mappings>
