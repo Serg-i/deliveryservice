@@ -1,0 +1,107 @@
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Контакт <small></small></h1>
+    </div>
+    <div class="panel-body">
+        <div class=" text-right">
+            <div class="btn-group">
+                <a ng-click="editContact()" class="btn btn-default">Изменить</a>
+                <a ng-click="deleteContact()" class="btn btn-default">Удалить</a>
+            </div>
+        </div>
+        <ul class="list-group">
+            <li id = "name" class="list-group-item">
+                <span class="label">Имя*: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.name" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Фамилия*: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.surname" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Отчество: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.middleName" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Дата рождения: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.dateOfBirth " readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Email: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.email" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Адрес: </span><br/>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Город: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.city" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Улица: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.street" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Дом: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.home" readonly>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Квартира: </span><br/>
+                <input type="text" class="form-control" ng-model="contact.flat" readonly>
+            </li>
+
+
+        </ul>
+    </div>
+    <hr/>
+    <div class=" text-right">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default">Новый</button>
+            <button type="button" class="btn btn-default">Редактировать</button>
+            <button type="button" class="btn btn-default">Удалить</button>
+        </div>
+    </div>
+    <br/>
+    <div class="panel panel-default">
+        <div class="panel-heading">Телефоны</div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <td><span class="label label-primary"></span></td>
+                    <td><span class="label label-primary">Телефон</span></td>
+                    <td><span class="label label-primary">Описание</span></td>
+                    <td><span class="label label-primary">Комментарий</span></td>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><span class="label label-default">Телефон</span></td>
+                        <td><span class="label label-default">Описание</span></td>
+                        <td><span class="label label-default">Комментарий</span></td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+    <hr/>
+    <div class="panel panel-default">
+        <div class="panel-heading">Заказы</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td><span class="label label-primary">Дата</span></td>
+                    <td><span class="label label-primary">Описание</span></td>
+                    <td><span class="label label-primary">Сумма</span></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="label label-default">Дафыв фыа</span></td>
+                    <td><span class="label label-default">фыва фыв </span></td>
+                    <td><span class="label label-default">Кфыв фыва в</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

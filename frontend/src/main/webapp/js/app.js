@@ -140,11 +140,28 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
+            .state('contacts.view', {
+                url: '/view/{id}',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/contact-view.html',
+                        controller: 'ViewContactCtrl'
+                    }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Контакт',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
+                        ]
+                }
+            })
             .state('contacts.new', {
                 url: '/new',
                 views: {
                     "@": {
-                        templateUrl: 'partials/contact.html',
+                        templateUrl: 'partials/contact-edit.html',
                         controller: 'NewContactCtrl'
                     }
                 },
@@ -157,11 +174,11 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('contacts.edit', {
+            .state('contacts.view.edit', {
                 url: '/edit',
                 views: {
                     "@": {
-                        templateUrl: 'partials/contact.html',
+                        templateUrl: 'partials/contact-edit.html',
                         controller: 'EditContactCtrl'
                     }
                 },
