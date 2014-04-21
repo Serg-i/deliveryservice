@@ -82,12 +82,12 @@
         </ul>
           </form>
     </div>
-    <hr/>
+    </hr>
+    <span ng-controller="PhoneCtrl">
     <div class=" text-right">
         <div class="btn-group">
-            <button type="button" class="btn btn-default">Новый</button>
-            <button type="button" class="btn btn-default">Редактировать</button>
-            <button type="button" class="btn btn-default">Удалить</button>
+            <button type="button" ng-click="newPhone()" class="btn btn-default">Новый</button>
+            <button type="button" ng-click="deletePhones()" class="btn btn-default">Удалить</button>
         </div>
     </div>
     <br/>
@@ -98,21 +98,67 @@
             <tr>
                 <td><span class="label label-primary"></span></td>
                 <td><span class="label label-primary">Телефон</span></td>
-                <td><span class="label label-primary">Описание</span></td>
+                <td><span class="label label-primary">Тип</span></td>
                 <td><span class="label label-primary">Комментарий</span></td>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td><span class="label label-default">Телефон</span></td>
-                <td><span class="label label-default">Описание</span></td>
-                <td><span class="label label-default">Комментарий</span></td>
+            <tr ng-repeat="phone in phones" ng-if="phone.deleted == false">
+                <td><input type="checkbox" ng-model="phone.checked"></td>
+                <td><a ng-click="editPhone($index)"><span class="label label-primary"> +{{phone.countryCode}}{{phone.operatorCode}}{{phone.number}}</span></a></td>
+                <td><span class="label label-default">{{toLocalType(phone.type)}}</span></td>
+                <td><span class="label label-default">{{phone.comment}}</span></td>
             </tr>
             </tbody>
         </table>
+        <script type="text/ng-template" id="phone-edit-modal.html">
+            <div class="modal-header">
+                <h3>{{modalTitle}}</h3>
+            </div>
+            <form name="mform" novalidate>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.countryCode.$invalid }">
+                        <span class="label">Код страны: </span><br/>
+                        <input type="text" class="form-control" name = "countryCode" ng-model="phone.countryCode" ng-maxlength="4" ng-pattern=/^[0-9]+$/ required>
+                        <p ng-show="mform.countryCode.$error.pattern" class="help-block">Только цифры.</p>
+                        <p ng-show="mform.countryCode.$error.maxlength" class="help-block">Не более 4 цифр.</p>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.operatorCode.$invalid }">
+                        <span class="label">Код оператора: </span><br/>
+                        <input type="text" class="form-control" name = "operatorCode" ng-model="phone.operatorCode" ng-maxlength="3" ng-pattern=/^[0-9]+$/ required>
+                        <p ng-show="mform.operatorCode.$error.pattern" class="help-block">Только цифры.</p>
+                        <p ng-show="mform.operatorCode.$error.maxlength" class="help-block">Не более 3 цифр.</p>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.number.$invalid }">
+                        <span class="label">Номер: </span><br/>
+                        <input type="text" class="form-control" name = "number" ng-model="phone.number" ng-maxlength="8" ng-pattern=/^[0-9]+$/ required>
+                        <p ng-show="mform.number.$error.pattern" class="help-block">Только цифры.</p>
+                        <p ng-show="mform.number.$error.maxlength" class="help-block">Не более 8 цифр.</p>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.phoneType.$invalid}">
+                        <span class="label">Тип:</span><br/>
+                        <select class="form-control" name="phoneType" ng-model="phone.type" required>
+                            <option value="MOBILE">Мобильный</option>
+                            <option value="HOME">Домашний</option>
+                        </select>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.comment.$invalid }">
+                        <span class="label">Описание: </span><br/>
+                        <textarea class="form-control" name = "comment" ng-model="phone.comment" ng-maxlength="200"></textarea>
+                        <p ng-show="mform.comment.$error.maxlength" class="help-block">Не более 200 символов.</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()"  ng-disabled="mform.$invalid">Сохранить</button>
+                <button class="btn btn-warning" ng-click="cancel()">Отмена</button>
+            </div>
+            </form>
+        </script>
     </div>
     <hr/>
+    </span>
     <div class="panel panel-default">
         <div class="panel-heading">Заказы</div>
         <table class="table">

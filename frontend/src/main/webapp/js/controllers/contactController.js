@@ -8,7 +8,10 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     };
     $scope.viewContact = function(contactId){
         $state.go('.view', {id: contactId});
-    }
+    };
+    $scope.editContact = function(contactId){
+        $state.go('.edit', {id: contactId});
+    };
     $scope.createContact = function () {
         $state.go('.new');
     };
@@ -110,6 +113,7 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
                 $state.go('contacts');
             }, function(error) {
             });
+            $scope.$broadcast('savePhones');
         };
         $scope.$on('$viewContentLoaded', function () {
             $scope.head = "Редактировать контакт";
@@ -121,8 +125,9 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
                 id : $stateParams.id
             }, function(data) {
                 $scope.contact = data;
+                $scope.$broadcast('getPhones');
             }, function(error) {
-                $state.go('contacts.view');
+                $state.go('contacts');
             });
         };
     });

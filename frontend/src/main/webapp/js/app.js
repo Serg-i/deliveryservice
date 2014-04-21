@@ -176,8 +176,8 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('contacts.view.edit', {
-                url: '/edit',
+            .state('contacts.edit', {
+                url: '/edit/{id}',
                 views: {
                     "@": {
                         templateUrl: 'partials/contact-edit.html',
