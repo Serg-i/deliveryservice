@@ -6,8 +6,8 @@ app.controller('AlertCtrl', function ($scope, EVENTS, $timeout) {
     $scope.index = [];
     $scope.alerts = [];
 
-    var addAlert = function(message) {
-        $scope.alerts.push({type: 'danger', msg: message});
+    var addAlert = function(type, message) {
+        $scope.alerts.push({type: type, msg: message});
         $scope.index.push($scope.mark++);
         var mk = $scope.mark - 1;
         $timeout(function () {
@@ -32,25 +32,34 @@ app.controller('AlertCtrl', function ($scope, EVENTS, $timeout) {
     $scope.$on( "http-error-event", function(event, message) {
         switch (message){
             case EVENTS.notAuthenticated:
-                addAlert('Ошибка авторизации!');
+                addAlert('danger','Ошибка авторизации!');
                 break;
             case EVENTS.notAuthorized:
-                addAlert('Операция запрещена!');
+                addAlert('danger','Операция запрещена!');
                 break;
             case EVENTS.notFound:
-                addAlert('Страница не найдена!');
+                addAlert('danger','Страница не найдена!');
                 break;
             case EVENTS.internalServerError:
-                addAlert('Внутренняя ошибка сервера!');
+                addAlert('danger','Внутренняя ошибка сервера!');
                 break;
             case EVENTS.serverError:
-                addAlert('Ошибка сервера!');
+                addAlert('danger','Ошибка сервера!');
                 break;
             case EVENTS.clientError:
-                addAlert('Ошибка клиента!');
+                addAlert('danger','Ошибка клиента!');
                 break;
             default:
-                addAlert('Неизвестная ошибка!');
+                addAlert('danger','Неизвестная ошибка!');
+        }
+    } );
+    $scope.$on( "logic-error-event", function(event, message) {
+        switch (message){
+            case EVENTS.notChecked:
+                addAlert('warning','Ничего не выбрано!');
+                break;
+            default:
+                addAlert('warning','Логическая ошибка!');
         }
     } );
 });

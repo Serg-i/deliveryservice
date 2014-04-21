@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, ContactsREST,
-    ContactSearch, ContactsSearchREST, $state) {
+    ContactSearch, ContactsSearchREST, $state, EVENTS, $rootScope) {
 
     $scope.toPage = function (toPage) {
         $state.go('contacts', {page: toPage});
@@ -15,11 +15,24 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     $scope.searchContact = function () {
         $state.go('.search');
     };
+    $scope.sendEmail = function (checkedContacts) {
+        if(checkedContacts.length>0){
+            $state.go('mail', {ids: checkedContacts});
+        }
+        else{
+            $rootScope.$broadcast('logic-error-event', EVENTS.notChecked);
+        }
+    };
     $scope.$on('$viewContentLoaded', function () {
         loadData();
     });
 
     var loadData = function() {
+
+        $scope.checked = {
+            ids: []
+        };
+
         if (ContactSearch.params === null) {
             ContactsREST.readAll({
                 page: $stateParams.page

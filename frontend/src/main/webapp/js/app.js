@@ -6,7 +6,8 @@ var app = angular.module('myApp', [
     'ui.select2',
     'ui.bootstrap',
     'ncy-angular-breadcrumb',
-    'ngStorage'
+    'ngStorage',
+    'checklist-model'
 ])
     app.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
 
@@ -202,6 +203,23 @@ var app = angular.module('myApp', [
                 },
                 data: {
                     ncyBreadcrumbLabel: 'Фильтры',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
+                    ]
+                }
+            })
+            .state('mail', {
+                url: '/mail',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/email.html',
+                        controller: 'MailCtrl'
+                    }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Новый',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,
