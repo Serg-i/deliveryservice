@@ -1,0 +1,181 @@
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>{{head}}</h1>
+    </div>
+    <div class="panel-body">
+      <form name="form" novalidate>
+        <ul class="list-group">
+            <li id = "name" class="list-group-item" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
+                <span class="label">Имя*: </span><br/>
+                <input type="text" name="name" class="form-control" ng-model="contact.name" required ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/>
+                <p ng-show="form.name.$invalid && !form.name.$pristine" class="help-block">Заполнение обязательно.</p>
+                <p ng-show="form.name.$error.pattern" class="help-block">Только буквы.</p>
+                <p ng-show="form.name.$error.maxlength" class="help-block">Не более 30 символов.</p>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.surname.$invalid && !form.surname.$pristine }">
+                <span class="label">Фамилия*: </span><br/>
+                <input type="text" name="surname" class="form-control" ng-model="contact.surname" required ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/>
+                <p ng-show="form.surname.$invalid && !form.surname.$pristine" class="help-block">Заполнение обязательно.</p>
+                <p ng-show="form.surname.$error.pattern" class="help-block">Только буквы.</p>
+                <p ng-show="form.surname.$error.maxlength" class="help-block">Не более 30 символов.</p>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.middlename.$invalid && !form.middlename.$pristine }">
+                <span class="label">Отчество: </span><br/>
+                <input type="text" name="middlename" class="form-control" ng-model="contact.middleName"
+                       ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/ >
+                <p ng-show="form.middlename.$error.pattern" class="help-block">Только буквы.</p>
+                <p ng-show="form.middlename.$error.maxlength" class="help-block">Не более 30 символов.</p>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Дата рождения: </span><br/>
+                <div class="row">
+                    <div class="col-md-6">
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="contact.dateOfBirth"
+                           is-open="opened" min="'1900-01-01'" max="'2002-01-01'" datepicker-options="dateOptions"
+                           date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                </p>
+                        </div>
+                    </div>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.email.$invalid && !form.email.$pristine }">
+                <span class="label">Email: </span><br/>
+                <input type="text" name="email" class="form-control" ng-model="contact.email" ng-pattern=/([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})/>
+                <p ng-show="form.email.$error.pattern" class="help-block">Пример: smb@gmail.com.</p>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Адрес: </span><br/>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.city.$invalid && !form.city.$pristine }">
+                <span class="label">Город: </span><br/>
+                <input type="text" name="city" class="form-control" ng-model="contact.city" ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/>
+                <p ng-show="form.city.$error.pattern" class="help-block">Только буквы.</p>
+                <p ng-show="form.city.$error.maxlength" class="help-block">Не более 30 символов.</p>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.street.$invalid && !form.street.$pristine }">
+                <span class="label">Улица: </span><br/>
+                <input type="text" name="street" class="form-control" ng-model="contact.street" ng-maxlength="30" ng-pattern=/^[A-Za-z0-9]+$/ >
+                <p ng-show="form.street.$error.pattern" class="help-block">Только буквы или цифры.</p>
+                <p ng-show="form.street.$error.maxlength" class="help-block">Не более 30 символов.</p>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.home.$invalid && !form.home.$pristine }">
+                <span class="label">Дом: </span><br/>
+                <input type="text" name="home" class="form-control" ng-model="contact.home" ng-maxlength="10" ng-pattern=/^[A-Za-z0-9]+$/ >
+                <p ng-show="form.home.$error.pattern" class="help-block">Только буквы или цифры.</p>
+                <p ng-show="form.home.$error.maxlength" class="help-block">Не более 10 символов.</p>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.flat.$invalid && !form.flat.$pristine }">
+                <span class="label">Квартира: </span><br/>
+                <input type="text" name="flat" class="form-control" ng-model="contact.flat" ng-maxlength="10" ng-pattern=/^[A-Za-z0-9]+$/ >
+                <p ng-show="form.flat.$error.pattern" class="help-block">Только буквы или цифры.</p>
+                <p ng-show="form.flat.$error.maxlength" class="help-block">Не более 20 символов.</p>
+            </li>
+            <li class="list-group-item text-center">
+                <div class="btn-group">
+                    <a ng-click="saveContact()" class="btn btn-default" ng-disabled="form.$invalid">Сохранить</a>
+                </div>
+            </li>
+        </ul>
+          </form>
+    </div>
+    </hr>
+    <span ng-controller="PhoneCtrl">
+    <div class=" text-right">
+        <div class="btn-group">
+            <button type="button" ng-click="newPhone()" class="btn btn-default">Новый</button>
+            <button type="button" ng-click="deletePhones()" class="btn btn-default">Удалить</button>
+        </div>
+    </div>
+    <br/>
+    <div class="panel panel-default">
+        <div class="panel-heading">Телефоны</div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td><span class="label label-primary"></span></td>
+                <td><span class="label label-primary">Телефон</span></td>
+                <td><span class="label label-primary">Тип</span></td>
+                <td><span class="label label-primary">Комментарий</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="phone in phones" ng-if="phone.deleted == false">
+                <td><input type="checkbox" ng-model="phone.checked"></td>
+                <td><a ng-click="editPhone($index)"><span class="label label-primary"> +{{phone.countryCode}}{{phone.operatorCode}}{{phone.number}}</span></a></td>
+                <td><span class="label label-default">{{toLocalType(phone.type)}}</span></td>
+                <td><span class="label label-default">{{phone.comment}}</span></td>
+            </tr>
+            </tbody>
+        </table>
+        <script type="text/ng-template" id="phone-edit-modal.html">
+            <div class="modal-header">
+                <h3>{{modalTitle}}</h3>
+            </div>
+            <form name="mform" novalidate>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.countryCode.$invalid }">
+                        <span class="label">Код страны: </span><br/>
+                        <input type="text" class="form-control" name = "countryCode" ng-model="phone.countryCode" ng-maxlength="4" ng-pattern=/^[0-9]+$/ required>
+                        <p ng-show="mform.countryCode.$error.pattern" class="help-block">Только цифры.</p>
+                        <p ng-show="mform.countryCode.$error.maxlength" class="help-block">Не более 4 цифр.</p>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.operatorCode.$invalid }">
+                        <span class="label">Код оператора: </span><br/>
+                        <input type="text" class="form-control" name = "operatorCode" ng-model="phone.operatorCode" ng-maxlength="3" ng-pattern=/^[0-9]+$/ required>
+                        <p ng-show="mform.operatorCode.$error.pattern" class="help-block">Только цифры.</p>
+                        <p ng-show="mform.operatorCode.$error.maxlength" class="help-block">Не более 3 цифр.</p>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.number.$invalid }">
+                        <span class="label">Номер: </span><br/>
+                        <input type="text" class="form-control" name = "number" ng-model="phone.number" ng-maxlength="8" ng-pattern=/^[0-9]+$/ required>
+                        <p ng-show="mform.number.$error.pattern" class="help-block">Только цифры.</p>
+                        <p ng-show="mform.number.$error.maxlength" class="help-block">Не более 8 цифр.</p>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.phoneType.$invalid}">
+                        <span class="label">Тип:</span><br/>
+                        <select class="form-control" name="phoneType" ng-model="phone.type" required>
+                            <option value="MOBILE">Мобильный</option>
+                            <option value="HOME">Домашний</option>
+                        </select>
+                    </li>
+                    <li class="list-group-item" ng-class="{ 'has-error' : mform.comment.$invalid }">
+                        <span class="label">Описание: </span><br/>
+                        <textarea class="form-control" name = "comment" ng-model="phone.comment" ng-maxlength="200"></textarea>
+                        <p ng-show="mform.comment.$error.maxlength" class="help-block">Не более 200 символов.</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()"  ng-disabled="mform.$invalid">Сохранить</button>
+                <button class="btn btn-warning" ng-click="cancel()">Отмена</button>
+            </div>
+            </form>
+        </script>
+    </div>
+    <hr/>
+    </span>
+    <div class="panel panel-default">
+        <div class="panel-heading">Заказы</div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td><span class="label label-primary">Дата</span></td>
+                <td><span class="label label-primary">Описание</span></td>
+                <td><span class="label label-primary">Сумма</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><span class="label label-default">Дафыв фыа</span></td>
+                <td><span class="label label-default">фыва фыв </span></td>
+                <td><span class="label label-default">Кфыв фыва в</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

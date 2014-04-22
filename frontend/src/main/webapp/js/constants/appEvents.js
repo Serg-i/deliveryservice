@@ -11,5 +11,6 @@ app.constant('EVENTS', {
     notAuthorized: 'auth-not-authorized',
     isAuthorized: 'auth-authorized',
     serverError: 'server-error',
-    clientError: 'client-error'
+    clientError: 'client-error',
+    notChecked: 'not-checked'
 });

@@ -4,56 +4,61 @@
         <h1>Контакт <small></small></h1>
     </div>
     <div class="panel-body">
+        <div class=" text-right">
+            <div class="btn-group">
+                <a ng-click="editContact()" class="btn btn-default">Изменить</a>
+                <a ng-click="deleteContact()" class="btn btn-default">Удалить</a>
+            </div>
+        </div>
         <ul class="list-group">
             <li id = "name" class="list-group-item">
                 <span class="label">Имя*: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.name" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Фамилия*: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.surname" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Отчество: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.middleName" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Дата рождения: </span><br/>
-                <input type="text" class="form-control">
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="contact.dateOfBirth"
+                           is-open="opened" min="1900-01-01" max="2002-01-01" datepicker-options="dateOptions"
+                           date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true" readonly/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                </p>
             </li>
             <li class="list-group-item">
                 <span class="label">Email: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.email" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Адрес: </span><br/>
-                <input type="text" class="form-control">
             </li>
             <li class="list-group-item">
                 <span class="label">Город: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.city" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Улица: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.street" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Дом: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.home" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Квартира: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="contact.flat" readonly>
             </li>
-            <li class="list-group-item">
-                <span class="label">Квартира: </span><br/>
-                <input type="text" class="form-control">
-            </li>
-            <li class="list-group-item text-center">
-                <div class="btn-group">
-                    <a ng-click="saveContact()" class="btn btn-default">Сохранить</a>
-                </div>
-            </li>
+
+
         </ul>
     </div>
     <hr/>

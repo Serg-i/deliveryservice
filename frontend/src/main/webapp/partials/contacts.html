@@ -6,12 +6,10 @@
         <div class=" text-right">
             <div class="btn-group">
                 <a ng-click="searchContact()" class="btn btn-default">Поиск</a>
-                <a ng-click="sendEmail($scope.checkedContacts)" class="btn btn-default">Отправить письмо</a>
+                <a ng-click="sendEmail(checked.ids)" class="btn btn-default">Отправить письмо</a>
             </div>
             <div class="btn-group">
                 <a ng-click="createContact()" class="btn btn-default">Новый</a>
-                <a ng-click="editContact()" class="btn btn-default">Редактировать</a>        <!-- contactID ? -->
-               <a ng-click="deleteContact($scope.checkedContacts)" class="btn btn-default">Удалить</a>
             </div>
         </div>
         <br/>
@@ -28,8 +26,8 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="contact in page.currentPage">
-                    <td><input type="checkbox"></td>
-                    <td><a ng-click="editContact()"><span class="label label-default">{{ contact.surname }} {{ contact.name }} {{ contact.middleName }}</span></a></td>
+                    <td><input type="checkbox" checklist-model="checked.ids" checklist-value="contact.id">{{contact.id}}</td>
+                    <td><a ng-click="editContact(contact.id)"><span class="label label-default">{{ contact.surname }} {{ contact.name }} {{ contact.middleName }}</span></a></td>
                     <td><span class="label label-default">{{ contact.dateOfBirth | date:'MM/dd/yyyy'}}</span></td>
                     <td><span class="label label-default">{{ contact.city }} {{ contact.street }} {{ contact.home }} {{ contact.flat }}</span></td>
 
@@ -37,6 +35,9 @@
                 </tbody>
             </table>
             <div class="text-center">
+                <label ng-repeat="id in checked.ids">
+                    <p>{{id}}</p>
+                </label>
                 <pagination total-items="totalItems" page="curPage" max-size="10" on-select-page="toPage(page)"></pagination>
             </div>
         </div>

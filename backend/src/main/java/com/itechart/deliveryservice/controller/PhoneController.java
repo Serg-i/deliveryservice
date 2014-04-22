@@ -1,22 +1,22 @@
 package com.itechart.deliveryservice.controller;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.itechart.deliveryservice.controller.data.PhoneDTO;
-import org.dozer.DozerBeanMapper;
-import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.PhoneDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.entity.Phone;
+import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
+import org.dozer.DozerBeanMapper;
+import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/api/contacts")
 @Component
@@ -35,32 +35,52 @@ public class PhoneController {
 
     @GET
     @Path("/{contactId}/phones")
-    public List<PhoneDTO> getAllPhones(@PathParam("contactId") long contactId) {
+    public List<PhoneDTO> getAllPhones(@PathParam("contactId") long contactId) throws Exception {
 
         Contact owner = contactDao.getById(contactId);
+        if (owner == null)
+            throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
         List<PhoneDTO> list = new ArrayList<PhoneDTO>();
         for(Phone p : owner.getPhones())
             list.add(mapper.map(p, PhoneDTO.class));
         return list;
     }
 
-    @PUT
-    @Path("/{contactId}/phones/{phoneId}")
-    public void getPhone(@PathParam("contactId") long contactId,
-                                   @PathParam("phoneId") long phoneId, @Valid PhoneDTO phoneDTO) {
+    @POST
+    @Path("/{contactId}/phones/")
+    public void getPhone(@PathParam("contactId") long contactId, @Valid PhoneDTO phoneDTO) throws Exception {
 
         Phone phone =  mapper.map(phoneDTO, Phone.class);
         Contact owner = contactDao.getById(contactId);
-        phone.setId(phoneId);
+        if (owner == null)
+            throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
         phone.setOwner(owner);
+        phoneDao.save(phone);
+    }
+
+    @PUT
+    @Path("/{contactId}/phones/{phoneId}")
+    public void getPhone(@PathParam("contactId") long contactId,
+                                   @PathParam("phoneId") long phoneId, @Valid PhoneDTO phoneDTO) throws Exception {
+
+        Phone phone = phoneDao.getById(phoneId);
+        if (phone == null)
+            throw new BusinessLogicException("This phone doesn't exist", HttpStatus.NOT_FOUND);
+        phone.setNumber(phoneDTO.getNumber());
+        phone.setCountryCode(phoneDTO.getCountryCode());
+        phone.setOperatorCode(phoneDTO.getOperatorCode());
+        phone.setComment(phoneDTO.getComment());
+        phone.setType(phoneDTO.getType());
         phoneDao.merge(phone);
     }
 
     @DELETE
     @Path("/{contactId}/phones/{phoneId}")
-    public void deletePhone(@PathParam("phoneId") long phoneId) {
+    public void deletePhone(@PathParam("phoneId") long phoneId) throws Exception {
 
         Phone phone = phoneDao.getById(phoneId);
+        if (phone == null)
+            throw new BusinessLogicException("This phone doesn't exist", HttpStatus.NOT_FOUND);
         phoneDao.delete(phone);
     }
 }

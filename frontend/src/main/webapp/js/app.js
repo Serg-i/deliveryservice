@@ -6,7 +6,8 @@ var app = angular.module('myApp', [
     'ui.select2',
     'ui.bootstrap',
     'ncy-angular-breadcrumb',
-    'ngStorage'
+    'ngStorage',
+    'checklist-model'
 ])
     app.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
 
@@ -158,11 +159,28 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
+            .state('contacts.view', {
+                url: '/view/{id}',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/contact-view.html',
+                        controller: 'ViewContactCtrl'
+                    }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Контакт',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
+                        ]
+                }
+            })
             .state('contacts.new', {
                 url: '/new',
                 views: {
                     "@": {
-                        templateUrl: 'partials/contact.html',
+                        templateUrl: 'partials/contact-edit.html',
                         controller: 'NewContactCtrl'
                     }
                 },
@@ -176,10 +194,10 @@ var app = angular.module('myApp', [
                 }
             })
             .state('contacts.edit', {
-                url: '/edit',
+                url: '/edit/{id}',
                 views: {
                     "@": {
-                        templateUrl: 'partials/contact.html',
+                        templateUrl: 'partials/contact-edit.html',
                         controller: 'EditContactCtrl'
                     }
                 },
@@ -202,6 +220,23 @@ var app = angular.module('myApp', [
                 },
                 data: {
                     ncyBreadcrumbLabel: 'Фильтры',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
+                    ]
+                }
+            })
+            .state('mail', {
+                url: '/mail',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/email.html',
+                        controller: 'MailCtrl'
+                    }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Новый',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,
