@@ -7,15 +7,23 @@ import org.antlr.stringtemplate.StringTemplate;
 public class EmptyTemplate implements Template {
 
     private String name;
-
     private String templateText;
 
     public EmptyTemplate() {
-        setName("Не выбран");
+        init();
+    }
+
+    private void init() {
+        setName("Not selected");
+        setTemplateText("");
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setTemplateText(String templateText) {
+        this.templateText = templateText;
     }
 
     @Override

@@ -40,13 +40,9 @@ public class Sender  extends Thread{
             message.setSubject(letter.getSubject());
             message.setText(letter.getText());
 
-            System.out.print(contact.getEmail()+" "+letter.getSubject()+" " +
-                    ""+letter.getText()+" "+letter.getAddressFrom()+" "+letter.getPassword());
             Transport.send(message);
 
         } catch (MessagingException e) {
-            System.out.print(contact.getEmail()+" "+letter.getSubject()+" " +
-                    ""+letter.getText()+" "+letter.getAddressFrom()+" "+letter.getPassword());
             throw new RuntimeException(e);
         }
     }

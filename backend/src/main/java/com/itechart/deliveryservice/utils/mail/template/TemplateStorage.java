@@ -30,7 +30,7 @@ public class TemplateStorage {
     public List<String> getAll(){
         List<String> tempNames = new ArrayList<String>() ;
         for(int id = 0; id < templates.size(); id++){
-            tempNames.add(templates.get(id).getName());
+            tempNames.add(templates.get(new Long(id)).getName());
         }
         return tempNames;
     }

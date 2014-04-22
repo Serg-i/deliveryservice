@@ -65,7 +65,7 @@ public class MailController {
             emails.add(contact.getEmail());
         }
         out.setMails(emails);
-        /*out.setTemplateNames(new TemplateStorage().getAll());  */
+        out.setTemplateNames(new TemplateStorage().getAll());
         return out;
     }
 

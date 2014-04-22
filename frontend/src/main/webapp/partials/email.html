@@ -15,15 +15,22 @@
             </li>
             <li class="list-group-item">
                 <span class="label">Шаблон:</span><br/>
-                <select class="form-control" name="cust" ui-select2 ng-model="letter.template" required>
+                <select class="form-control" name="cust" ui-select2 ng-model="letter.template" ng-click = "getTemplate(letter.template)">
                     <option ng-repeat="template in templates" value="{{ template.id }}">
-                        {{ template.name}}
+                        {{ template.name }}
                     </option>
                 </select>
             </li>
             <li class="list-group-item">
                 <span class="label">Текст: </span><br/>
-                <textarea class="form-control" ng-model="letter.text">{{letter.text}}</textarea>
+                <div ng-switch on="letter.template">
+                    <div ng-switch-when=0>
+                        <textarea class="form-control" ng-model="letter.text">{{letter.text}}</textarea>
+                    </div>
+                    <div ng-switch-default>
+                        <textarea class="form-control" ng-model="letter.text" readonly>{{letter.text}}</textarea>
+                    </div>
+                </div>
             </li>
             <li class="list-group-item text-center">
                 <div class="btn-group">

@@ -11,7 +11,12 @@ public class NewYearTemplate implements Template {
     private String templateText;
 
     public NewYearTemplate() {
-        setName("Новый год");
+        init();
+    }
+
+    private void init() {
+        setName("New Year");
+        setTemplateText("Dear $name$, happy new year!");
     }
 
     public NewYearTemplate(String name, String templateText) {
@@ -45,7 +50,7 @@ public class NewYearTemplate implements Template {
     }
     private StringTemplate createQuery() {
         StringTemplate query = new StringTemplate(
-                "Dear $name$, happy new year!" );
+                this.getTemplateText() );
         return query;
     }
 }

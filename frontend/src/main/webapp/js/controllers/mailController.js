@@ -11,6 +11,7 @@ app.controller('MailCtrl',
         };
 
         $scope.mails = {};
+        $scope.templates = [];
 
         $scope.toContacts = function () {
             $state.go("contacts", {page: 1});
@@ -22,7 +23,10 @@ app.controller('MailCtrl',
         };
 
         $scope.getTemplate = function (id) {
-            MailTemplateREST.getTemplate(id);
+            MailTemplateREST.getTemplate({tempId: id}).$promise.then(
+                function (result) {
+                    $scope.letter.text = result.templateText;
+                });
         };
 
         $scope.$on('$viewContentLoaded', function () {
@@ -32,21 +36,31 @@ app.controller('MailCtrl',
         var loadData = function() {
             $scope.letter.contactToId = CheckedContacts.ids;
             $scope.letter.template = 0;
-            var mailArr = [];
 
+            var res = null;
             NewLetterREST.getMails($scope.letter.contactToId).$promise.then(
                 function (result) {
-                    mailArr = result;
-                    createMailList(mailArr.mails);
+                    res = result;
+                    createTemplateList(res.templateNames);
+                    createMailList(res.mails);
             });
         };
 
         var createMailList = function(mails) {
-         var mailList = '';
+             var mailList = '';
 
-         for(var i = 0; i< mails.length; i++ ){
-             mailList+= mails[i]+', ';
-         }
-            $scope.mails = mailList ;
+             for(var i = 0; i< mails.length; i++ ){
+                 mailList+= mails[i]+', ';
+             }
+                $scope.mails = mailList ;
+        };
+        var createTemplateList = function(tempNames) {
+            for(var i = 0; i< tempNames.length; i++ ){
+                var template = {
+                    name: tempNames[i],
+                    id: i
+                }
+                $scope.templates.push(template);
+            }
         };
     });
