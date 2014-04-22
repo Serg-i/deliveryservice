@@ -9,6 +9,7 @@ import com.itechart.deliveryservice.entity.Order;
 import com.itechart.deliveryservice.entity.OrderState;
 import com.itechart.deliveryservice.entity.User;
 import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
+import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
@@ -119,4 +120,19 @@ public class ContactController {
         return out;
     }
 
+    @POST
+    @Path("/search/p/{page}")
+    public TableDTO<ContactDTO>  searchContacts(@PathParam("page") int page, @Valid SearchContactDTO dto) {
+
+        SearchParams sp = dto.createParams();
+        int count = (int) contactDao.searchCount(sp);
+        TableDTO<ContactDTO> table = new TableDTO<ContactDTO>();
+        table.setCount(count);
+        List<Contact> found = contactDao.search(sp, firstItem(page, count), Settings.getRows());
+        List<ContactDTO> list = new ArrayList<ContactDTO>();
+        for(Contact contact : found)
+            list.add(mapper.map(contact, ContactDTO.class));
+        table.setCurrentPage(list);
+        return table;
+    }
 }

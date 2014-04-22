@@ -198,7 +198,7 @@ var app = angular.module('myApp', [
                 views: {
                     "@": {
                         templateUrl: 'partials/contact-search.html',
-                        controller: 'SearchOrderCtrl'
+                        controller: 'SearchContactCtrl'
                     }
                 },
                 data: {

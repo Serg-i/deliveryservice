@@ -7,50 +7,63 @@
         <ul class="list-group">
             <li class="list-group-item">
                 <span class="label">Имя: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.name">
             </li>
             <li class="list-group-item">
                 <span class="label">Фамилия: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.surname">
             </li>
             <li class="list-group-item">
                 <span class="label">Отчество: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.middleName">
             </li>
             <li class="list-group-item">
-                <span class="label">Дата рождения(min): </span><br/>
-                <input type="text" class="form-control">
+                <span class="label">Дата рождения: </span><br/>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="search.dateOfBirth"
+                                   is-open="opened" min="'1900-01-01'" max="'2050-01-01'" datepicker-options="dateOptions"
+                                   date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </li>
             <li class="list-group-item">
-                <span class="label">Дата рождения(max): </span><br/>
-                <input type="text" class="form-control">
+                <span class="label">Рамки: </span><br/>
+                <select class="form-control" name="date_border" ng-model="search.dateOp">
+                    <option value="LESS">Раньше</option>
+                    <option value="GREATER">Позже</option>
+                </select>
             </li>
             <li class="list-group-item">
                 <span class="label">Email: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.email">
             </li>
             <li class="list-group-item">
                 <span class="label">Адрес: </span><br/>
-                <input type="text" class="form-control">
             </li>
             <li class="list-group-item">
                 <span class="label">Город: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.city">
             </li>
             <li class="list-group-item">
                 <span class="label">Улица: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.street">
             </li>
             <li class="list-group-item">
                 <span class="label">Дом: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.home">
             </li>
             <li class="list-group-item">
                 <span class="label">Квартира: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="search.flat">
             </li>
             <li class="list-group-item text-center">
-                <a href="#/api/contacts" class="btn btn-default">Поиск</a>
+                <a ng-click="searchContact()" class="btn btn-default">Поиск</a>
             </li>
         </ul>
     </div>
