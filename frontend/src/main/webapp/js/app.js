@@ -129,6 +129,22 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
+            .state('users.new', {
+                url: '/new',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/user-edit.html',
+                        controller: 'NewUserCtrl'
+                    }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Новый',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                    ]
+                }
+            })
             .state('contacts', {
                 url: '/api/contacts/{page}',
                 templateUrl: 'partials/contacts.html',

@@ -6,7 +6,7 @@
     <div class="panel-body">
         <div class=" text-right">
             <div class="btn-group">
-                <button type="button" class="btn btn-default">Новый</button>
+                <a ng-if="newVisible == true" ng-click="createUser()" class="btn btn-default">Новый</a>
                 <button type="button" class="btn btn-default">Редактировать</button>
                 <button type="button" class="btn btn-default">Удалить</button>
             </div>

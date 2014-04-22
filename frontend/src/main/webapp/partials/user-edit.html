@@ -1,0 +1,43 @@
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>{{head}}<small></small></h1>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <li class="list-group-item" ng-class="{ 'has-error' : form.rep.$invalid}">
+                <span class="label">Login: </span><br/>
+                <input type="text" class="form-control" value="{{user.username}}" ng-model="user.username" required>
+            </li>
+            <li class="list-group-item">
+                <span class="label">Роль: </span><br/>
+                <select class="form-control" name="role" ui-select2 ng-model="user.role" required>
+                    <option value="ADMINISTRATOR">administrator</option>
+                    <option value="SUPERVISOR">supervisor</option>
+                    <option value="ORDER_MANAGER">order manager</option>
+                    <option value="PROCESSING_MANAGER">processing manager</option>
+                    <option value="COURIER">courier</option>
+                </select>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.rep.$invalid}">
+                <span class="label" >Password: </span><br/>
+                <input type="password" class="form-control"  ng-model="user.password" ng-minlength="6" required>
+                <p ng-show="form.cost.$error.minlength" class="help-block">Не менее 6 символов.</p>
+            </li>
+            <li class="list-group-item" ng-class="{ 'has-error' : form.cust.$invalid}">
+                <span class="label">Контакт:</span><br/>
+                <select class="form-control" name="contactId" ui-select2 ng-model="user.contactId" required>
+                    <option ng-repeat="contact in contacts" value="{{ contact.id }}">
+                        {{ contact.name }} {{ contact.surname }}
+                    </option>
+                </select>
+            </li>
+            <li class="list-group-item text-center">
+                <div class="btn-group">
+                    <a ng-click="saveUser(user.id)" class="btn btn-default" ng-disabled="form.$invalid">Сохранить</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>

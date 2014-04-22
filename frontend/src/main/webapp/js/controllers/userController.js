@@ -88,27 +88,21 @@ app.controller('ViewUserCtrl', function ($stateParams, $scope, $filter, OrderRES
 
 
 
-app.controller('NewUserCtrl', function ($scope, UserREST) {
+app.controller('NewUserCtrl', function ($scope, UserREST,ContactNamesREST,$state) {
 
-        $scope.saveOrder = function () {
+        $scope.saveUser = function () {
             var rest = new UserREST($scope.user);
             rest.$create({
-            }, function(data) {
+                }, function(data) {
                 $state.go('users');
             }, function(error) {
             });
         };
         $scope.$on('$viewContentLoaded', function () {
-            $scope.head = "Создать заказ";
+            $scope.head = "Создать нового пользователя";
             ContactNamesREST.getNames({
             }, function(data) {
                 $scope.contacts = data;
-                UserREST.getForSelect({
-                }, function(data) {
-                    $scope.users = data;
-                }, function(error) {
-                    $state.go('orders');
-                });
             }, function(error) {
                 $state.go('orders');
             });
