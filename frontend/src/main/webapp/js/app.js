@@ -118,10 +118,11 @@ var app = angular.module('myApp', [
                 }
             })
             .state('users', {
-                url: '/api/users',
+                url: '/api/users/{page}',
                 templateUrl: 'partials/users.html',
                 controller: 'UsersCtrl',
                 data: {
+                    ncyBreadcrumbLabel: 'Пользователи',
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor

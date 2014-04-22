@@ -1,0 +1,38 @@
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Пользователь <small></small></h1>
+    </div>
+    <div class="panel-body">
+        <div class=" text-right">
+            <div class="btn-group">
+                <a ng-if="editVisible == true" ng-click="editUser()" class="btn btn-default">Изменить</a>
+                <a ng-if="deleteVisible == true" ng-click="deleteUser()" class="btn btn-default">Удалить</a>
+            </div>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="label">Login: </span><br/>
+                <input type="text" class="form-control">
+            </li>
+            <li class="list-group-item">
+                <span class="label">Роль: </span><br/>
+                <input type="text" class="form-control">
+            </li>
+            <li class="list-group-item">
+                <span class="label">Password: </span><br/>
+                <input type="password" class="form-control">
+            </li>
+            <li class="list-group-item">
+                <span class="label">Контакт:</span><br/>
+                <div class="input-group">
+                    <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Выбрать</button>
+                        </span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>
