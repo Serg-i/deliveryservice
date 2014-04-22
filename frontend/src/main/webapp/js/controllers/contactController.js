@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, ContactsREST,
-    ContactSearch, ContactsSearchREST, $state, EVENTS, $rootScope) {
+    ContactSearch, ContactsSearchREST, $state, EVENTS, $rootScope, CheckedContacts) {
 
     $scope.toPage = function (toPage) {
         $state.go('contacts', {page: toPage});
@@ -24,7 +24,8 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     };
     $scope.sendEmail = function (checkedContacts) {
         if(checkedContacts.length>0){
-            $state.go('mail', {ids: checkedContacts});
+            CheckedContacts.update(checkedContacts);
+            $state.go('.mail');
         }
         else{
             $rootScope.$broadcast('logic-error-event', EVENTS.notChecked);

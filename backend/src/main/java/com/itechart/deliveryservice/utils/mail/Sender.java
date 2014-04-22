@@ -24,13 +24,12 @@ public class Sender  extends Thread{
 
     public void run() {
         for(Contact contact : letter.getContactTo()){
-            if(null!=letter.getTemplate()){
+            if(!"Не выбран".equals(letter.getTemplate().getName())){
                 String message =  letter.getTemplate().getText(contact);
                 letter.setText(message);
             }
             send(contact);
         }
-        System.out.print("!!!post ");
     }
 
     private void send(Contact contact){

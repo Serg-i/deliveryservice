@@ -11,6 +11,7 @@ public class NewYearTemplate implements Template {
     private String templateText;
 
     public NewYearTemplate() {
+        setName("Новый год");
     }
 
     public NewYearTemplate(String name, String templateText) {

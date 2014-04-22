@@ -11,6 +11,7 @@ public class GreatDayTemplate implements Template {
     private String templateText;
 
     public GreatDayTemplate() {
+        setName("Хорошего дня");
     }
 
     public GreatDayTemplate(String name, String templateText) {

@@ -210,8 +210,8 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
-            .state('mail', {
-                url: '/mail',
+            .state('contacts.mail', {
+                url: '/api/mail',
                 views: {
                     "@": {
                         templateUrl: 'partials/email.html',
@@ -219,11 +219,10 @@ var app = angular.module('myApp', [
                     }
                 },
                 data: {
-                    ncyBreadcrumbLabel: 'Новый',
+                    ncyBreadcrumbLabel: 'Почта',
                     authorizedRoles: [
                         USER_ROLES.admin,
-                        USER_ROLES.supervisor,
-                        USER_ROLES.order_manager
+                        USER_ROLES.supervisor
                     ]
                 }
             });

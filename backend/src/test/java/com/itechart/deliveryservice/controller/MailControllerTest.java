@@ -1,6 +1,7 @@
 package com.itechart.deliveryservice.controller;
 
 import com.itechart.deliveryservice.controller.data.LetterDTO;
+import com.itechart.deliveryservice.controller.data.ShortLetterDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.utils.Settings;
@@ -72,10 +73,10 @@ public class MailControllerTest {
             val = response.getContentAsString();
         }
 
-        List<String> list = mapper.readValue(val, new TypeReference<List<String>>() {
+        ShortLetterDTO list = mapper.readValue(val, new TypeReference<ShortLetterDTO>() {
         });
-        assertEquals(list.size(), 1);
-        assertEquals(list.get(0), contact.getEmail());
+        assertEquals(list.getMails().size(), 1);
+        assertEquals(list.getMails().get(0), contact.getEmail());
     }
 
     @Test

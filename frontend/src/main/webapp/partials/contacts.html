@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="contact in page.currentPage">
-                    <td><input type="checkbox" checklist-model="checked.ids" checklist-value="contact.id">{{contact.id}}</td>
+                    <td><input type="checkbox" checklist-model="checked.ids" checklist-value="contact.id"></td>
                     <td><a ng-click="editContact(contact.id)"><span class="label label-default">{{ contact.surname }} {{ contact.name }} {{ contact.middleName }}</span></a></td>
                     <td><span class="label label-default">{{ contact.dateOfBirth | date:'MM/dd/yyyy'}}</span></td>
                     <td><span class="label label-default">{{ contact.city }} {{ contact.street }} {{ contact.home }} {{ contact.flat }}</span></td>
@@ -36,9 +36,6 @@
                 </tbody>
             </table>
             <div class="text-center">
-                <label ng-repeat="id in checked.ids">
-                    <p>{{id}}</p>
-                </label>
                 <pagination total-items="totalItems" page="curPage" max-size="10" on-select-page="toPage(page)"></pagination>
             </div>
         </div>
