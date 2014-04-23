@@ -1,11 +1,21 @@
 package com.itechart.deliveryservice.controller.data;
 
+import com.itechart.deliveryservice.controller.validators.BasicString;
 import com.itechart.deliveryservice.entity.UserRole;
+import com.sun.istack.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
-public class UserDTO {
+import javax.validation.constraints.Size;
+
+public class UserModifyDTO {
     private long id;
+    @NotBlank
+    @BasicString
     private String username;
+    @NotBlank
+    @Size(min=6)
     private String password;
+    @NotNull
     private UserRole role;
     private long contactId;
 

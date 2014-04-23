@@ -1,10 +1,7 @@
 package com.itechart.deliveryservice.controller;
 
 
-import com.itechart.deliveryservice.controller.data.TableDTO;
-import com.itechart.deliveryservice.controller.data.UserCreateDTO;
-import com.itechart.deliveryservice.controller.data.UserDTO;
-import com.itechart.deliveryservice.controller.data.UserUpdateDTO;
+import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.Contact;
@@ -75,7 +72,7 @@ public class UserControllerTest {
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
             val = response.getContentAsString();
         }
-        TableDTO<UserDTO> contacts = mapper.readValue(val, new TypeReference<TableDTO<UserDTO>>(){});
+        TableDTO<UserViewDTO> contacts = mapper.readValue(val, new TypeReference<TableDTO<UserViewDTO>>(){});
         assertTrue(contacts.getCount() > 0);
         assertTrue(contacts.getCurrentPage().size() > 0);
 
@@ -90,16 +87,14 @@ public class UserControllerTest {
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
             val = response.getContentAsString();
         }
-        UserDTO received = mapper.readValue(val, UserDTO.class);
+        UserViewDTO received = mapper.readValue(val, UserViewDTO.class);
         assertEquals(user.getId(),received.getId());
         assertEquals(user.getUsername(),received.getUsername());
         assertEquals(user.getPassword(),received.getPassword());
         assertEquals(user.getRole(),received.getRole());
         Contact contact=user.getContact();
         assertEquals(contact.getId(),received.getContactId());
-        assertEquals(contact.getName(),received.getContactName());
-        assertEquals(contact.getSurname(),received.getContactSurname());
-        assertEquals(contact.getMiddleName(),received.getContactMiddleName());
+
     }
 
     @Test
@@ -115,9 +110,9 @@ public class UserControllerTest {
 
     @Test
     public void shouldUpdateUser() throws Exception{
-        UserUpdateDTO userUpdateDTO =dozer.map(user,UserUpdateDTO.class);
-        userUpdateDTO.setUsername("Rondo");
-        String body = mapper.writeValueAsString(userUpdateDTO);
+        UserModifyDTO userModifyDTO =dozer.map(user,UserModifyDTO.class);
+        userModifyDTO.setUsername("Rondo");
+        String body = mapper.writeValueAsString(userModifyDTO);
         {
             MockHttpRequest request = MockHttpRequest.put("/api/users/" + user.getId());
             request.contentType(MediaType.APPLICATION_JSON);
@@ -127,7 +122,7 @@ public class UserControllerTest {
             assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         }
         User found = userDao.getById(user.getId());
-        assertEquals(userUpdateDTO.getUsername(),found.getUsername());
+        assertEquals(userModifyDTO.getUsername(),found.getUsername());
     }
 
     @Test

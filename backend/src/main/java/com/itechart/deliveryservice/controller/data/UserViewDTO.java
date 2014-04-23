@@ -1,18 +1,17 @@
 package com.itechart.deliveryservice.controller.data;
 
-import com.itechart.deliveryservice.controller.validators.BasicString;
 import com.itechart.deliveryservice.entity.UserRole;
 
-import javax.validation.constraints.Size;
+public class UserViewDTO {
 
-public class UserUpdateDTO {
     private long id;
-    @BasicString
     private String username;
-    @Size(min=6)
     private String password;
     private UserRole role;
     private long contactId;
+    private String contactName;
+    private String contactSurname;
+    private String contactMiddleName;
 
     public long getId() {
         return id;
@@ -52,5 +51,29 @@ public class UserUpdateDTO {
 
     public void setContactId(long contactId) {
         this.contactId = contactId;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactSurname() {
+        return contactSurname;
+    }
+
+    public void setContactSurname(String contactSurname) {
+        this.contactSurname = contactSurname;
+    }
+
+    public String getContactMiddleName() {
+        return contactMiddleName;
+    }
+
+    public void setContactMiddleName(String midleName) {
+        this.contactMiddleName = midleName;
     }
 }

@@ -186,7 +186,7 @@
 
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.User</class-a>
-        <class-b>com.itechart.deliveryservice.controller.data.UserDTO</class-b>
+        <class-b>com.itechart.deliveryservice.controller.data.UserViewDTO</class-b>
         <field>
             <a>contact.id</a>
             <b>contactId</b>
@@ -207,12 +207,16 @@
 
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.User</class-a>
-        <class-b>com.itechart.deliveryservice.controller.data.UserUpdateDTO</class-b>
+        <class-b>com.itechart.deliveryservice.controller.data.UserModifyDTO</class-b>
     </mapping>
 
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.User</class-a>
-        <class-b>com.itechart.deliveryservice.controller.data.UserCreateDTO</class-b>
+        <class-b>com.itechart.deliveryservice.controller.data.UserDTO</class-b>
+        <field>
+            <a>contact.id</a>
+            <b>contactId</b>
+        </field>
     </mapping>
 
 </mappings>
