@@ -1,6 +1,9 @@
 package com.itechart.deliveryservice.utils.mail;
 
 import com.itechart.deliveryservice.entity.Contact;
+import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
+import com.itechart.deliveryservice.utils.mail.template.templateImpl.EmptyTemplate;
+import org.springframework.http.HttpStatus;
 
 import java.util.Properties;
 import javax.mail.Message;
@@ -23,12 +26,16 @@ public class Sender  extends Thread{
     }
 
     public void run() {
-        for(Contact contact : letter.getContactTo()){
-            if(!"Не выбран".equals(letter.getTemplate().getName())){
+        if(letter.getTemplate() instanceof EmptyTemplate) {
+            for(Contact contact : letter.getContactTo()){
+                send(contact);
+            }
+        }else{
+            for(Contact contact : letter.getContactTo()){
                 String message =  letter.getTemplate().getText(contact);
                 letter.setText(message);
+                send(contact);
             }
-            send(contact);
         }
     }
 
