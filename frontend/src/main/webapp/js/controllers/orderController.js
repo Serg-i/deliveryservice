@@ -135,7 +135,7 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, $filter, OrderRE
         }
     });
 
-app.controller('NewOrderCtrl', function ($scope, ContactNamesREST, OrderREST, UserREST, $state) {
+app.controller('NewOrderCtrl', function ($scope, ContactNamesREST, OrderREST, UserNamesREST, $state) {
 
         $scope.saveOrder = function () {
             var rest = new OrderREST($scope.order);
@@ -150,7 +150,7 @@ app.controller('NewOrderCtrl', function ($scope, ContactNamesREST, OrderREST, Us
             ContactNamesREST.getNames({
             }, function(data) {
                 $scope.contacts = data;
-                UserREST.getForSelect({
+                UserNamesREST.getForSelect({
                 }, function(data) {
                     $scope.users = data;
                 }, function(error) {
@@ -162,7 +162,7 @@ app.controller('NewOrderCtrl', function ($scope, ContactNamesREST, OrderREST, Us
         });
     });
 
-app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactNamesREST, OrderREST, UserREST, $state) {
+app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactNamesREST, OrderREST, UserNamesREST, $state) {
 
         $scope.saveOrder = function () {
             var rest = new OrderREST($scope.order);
@@ -179,7 +179,7 @@ app.controller('EditOrderCtrl', function ($stateParams, $scope, ContactNamesREST
             }, function(data) {
                 //if names received
                 $scope.contacts = data;
-                UserREST.getForSelect({
+                UserNamesREST.getForSelect({
                 }, function(data) {
                     //if users received
                     $scope.users = data;
