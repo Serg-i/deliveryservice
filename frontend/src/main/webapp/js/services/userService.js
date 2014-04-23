@@ -29,9 +29,11 @@ app.factory("UserREST", function($resource) {
                 headers: {
                     'Content-Type': 'application/json'
                 }
+
             }
     });
 });
+
 
 app.factory("UsersREST", function($resource) {
      return $resource("/backend/api/users/p/:page", {}, {

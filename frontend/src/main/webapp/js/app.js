@@ -125,8 +125,7 @@ var app = angular.module('myApp', [
                 data: {
                     ncyBreadcrumbLabel: 'Пользователи',
                     authorizedRoles: [
-                        USER_ROLES.admin,
-                        USER_ROLES.supervisor
+                        USER_ROLES.admin
                     ]
                 }
             })
@@ -141,8 +140,22 @@ var app = angular.module('myApp', [
                 data: {
                     ncyBreadcrumbLabel: 'Новый',
                     authorizedRoles: [
-                        USER_ROLES.admin,
-                        USER_ROLES.supervisor,
+                        USER_ROLES.admin
+                    ]
+                }
+            })
+            .state('users.edit', {
+                url: '/edit/{id}',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/user-edit.html',
+                        controller: 'EditUserCtrl'
+                    }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Редактировать',
+                    authorizedRoles: [
+                        USER_ROLES.admin
                     ]
                 }
             })

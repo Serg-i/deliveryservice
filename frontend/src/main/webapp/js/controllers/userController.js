@@ -2,13 +2,44 @@
 
 app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session,USER_ROLES,$stateParams) {
 
-
         $scope.toPage = function (toPage) {
             $state.go('users', {page: toPage});
         };
 
+
+        $scope.deleteUsers=function(usersIds){
+            var length=usersIds.length;
+            for(var i=0;i<length;++i){
+                var currentId=usersIds[i];
+                deleteUser(currentId);
+            }
+            while($scope.usersToDelete.length > 0) {
+                $scope.usersToDelete.pop();
+            }
+        };
+
+        function deleteUser(currentId){
+            var deleteFromList = function () {
+                var data = $scope.page;
+                var usersList = data.currentPage;
+                for (var i = 0; i < usersList.length; ++i) {
+                    if (usersList[i].id == currentId) {
+                        usersList.splice(i, 1);
+                        break;
+                    }
+                }
+            };
+            UserREST.delete({
+                id: currentId
+            },deleteFromList)
+        }
+
+        $scope.editUser = function(userId){
+            $state.go('.edit', {id: userId});
+    };
+
         $scope.viewUser = function (userId) {
-            $state.go('.view', {id: orderId});
+            $state.go('.view', {id: userId});
         };
 
         $scope.createUser = function () {
@@ -21,6 +52,7 @@ app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session
         });
 
         var loadData = function() {
+            $scope.usersToDelete=[];
             UsersREST.readAll({
                 page: $stateParams.page
                 }, initTable);
@@ -35,60 +67,16 @@ app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session
 
         var roleRestriction = function() {
             $scope.newVisible = false;
-            if (Session.userRole == USER_ROLES.admin || Session.userRole == USER_ROLES.supervisor){
+            if (Session.userRole == USER_ROLES.admin){
                 $scope.newVisible = true;
             }
         };
 
     });
 
-app.controller('ViewUserCtrl', function ($stateParams, $scope, $filter, OrderREST, OrderState,
-                                          OrderStateREST, $state, Session,USER_ROLES) {
-
-        $scope.deleteOrder = function() {
-            UserREST.delete({
-                    id: $stateParams.id
-            }, function(data) {
-                $state.go('orders');
-            }, function(error) {
-            });
-        };
-
-        $scope.editOrder = function() {
-            $state.go('.edit', {id: $stateParams.id});
-        };
-
-        $scope.$on('$viewContentLoaded', function () {
-            loadData();
-        });
-
-        var loadData = function() {
-            $scope.stateChange = false;
-            UserREST.readOne({
-                id : $stateParams.id
-            }, function(data) {
-                $scope.user = data;
-            }, function(error) {
-                $state.go('users');
-            });
-            //roleRestriction();
-        };
-
-        var roleRestriction = function() {
-            $scope.deleteVisible = false;
-            $scope.editVisible = false;
-            if (Session.userRole == USER_ROLES.admin)
-                $scope.deleteVisible = true;
-            if (Session.userRole == USER_ROLES.admin
-                || Session.userRole == USER_ROLES.supervisor
-                || Session.userRole == USER_ROLES.order_manager)
-                $scope.editVisible = true;
-        }
-    });
 
 
-
-app.controller('NewUserCtrl', function ($scope, UserREST,ContactNamesREST,$state) {
+app.controller('NewUserCtrl', function ($scope, UserREST,ContactNamesREST,$state,Session,USER_ROLES) {
 
         $scope.saveUser = function () {
             var rest = new UserREST($scope.user);
@@ -100,11 +88,68 @@ app.controller('NewUserCtrl', function ($scope, UserREST,ContactNamesREST,$state
         };
         $scope.$on('$viewContentLoaded', function () {
             $scope.head = "Создать нового пользователя";
+            loadContactNames();
+            roleRestriction();
+        });
+
+        var loadContactNames=function(){
             ContactNamesREST.getNames({
             }, function(data) {
                 $scope.contacts = data;
             }, function(error) {
-                $state.go('orders');
+                $state.go('users');
             });
-        });
+        }
+
+        var roleRestriction = function() {
+            $scope.newVisible = false;
+            if (Session.userRole == USER_ROLES.admin){
+                $scope.newVisible = true;
+            }
+        };
     });
+
+app.controller('EditUserCtrl', function ($stateParams, $scope, UserREST, $state,ContactNamesREST,Session,USER_ROLES) {
+
+    $scope.saveUser = function () {
+        var rest = new UserREST($scope.user);
+        rest.$update({
+        }, function(data) {
+            $state.go('users');
+        }, function(error) {
+        });
+        $scope.$broadcast('savePhones');
+    };
+
+    $scope.$on('$viewContentLoaded', function () {
+        $scope.head = "Редактировать данные пользователя";
+        loadContactNames();
+        loadUserData();
+        roleRestriction();
+    });
+
+    var loadContactNames=function(){
+        ContactNamesREST.getNames({
+        }, function(data) {
+            $scope.contacts = data;
+        }, function(error) {
+            $state.go('users');
+        });
+    }
+    var loadUserData = function() {
+        UserREST.readOne({
+            id : $stateParams.id
+        }, function(data) {
+            $scope.user = data;
+        }, function(error) {
+            $state.go('users');
+        });
+    };
+
+    var roleRestriction = function() {
+        $scope.newVisible = false;
+        if (Session.userRole == USER_ROLES.admin){
+            $scope.newVisible = true;
+        }
+    };
+});
