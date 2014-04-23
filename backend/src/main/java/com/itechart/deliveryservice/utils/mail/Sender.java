@@ -24,13 +24,12 @@ public class Sender  extends Thread{
 
     public void run() {
         for(Contact contact : letter.getContactTo()){
-            if(null!=letter.getTemplate()){
+            if(!"Не выбран".equals(letter.getTemplate().getName())){
                 String message =  letter.getTemplate().getText(contact);
                 letter.setText(message);
             }
             send(contact);
         }
-        System.out.print("!!!post ");
     }
 
     private void send(Contact contact){
@@ -41,13 +40,9 @@ public class Sender  extends Thread{
             message.setSubject(letter.getSubject());
             message.setText(letter.getText());
 
-            System.out.print(contact.getEmail()+" "+letter.getSubject()+" " +
-                    ""+letter.getText()+" "+letter.getAddressFrom()+" "+letter.getPassword());
             Transport.send(message);
 
         } catch (MessagingException e) {
-            System.out.print(contact.getEmail()+" "+letter.getSubject()+" " +
-                    ""+letter.getText()+" "+letter.getAddressFrom()+" "+letter.getPassword());
             throw new RuntimeException(e);
         }
     }

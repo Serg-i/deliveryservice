@@ -11,6 +11,12 @@ public class GreatDayTemplate implements Template {
     private String templateText;
 
     public GreatDayTemplate() {
+        init();
+    }
+
+    private void init() {
+        setName("Great Day");
+        setTemplateText("Dear, $name$ $surname$, we want to inform you that today a great day!");
     }
 
     public GreatDayTemplate(String name, String templateText) {
@@ -45,7 +51,7 @@ public class GreatDayTemplate implements Template {
     }
     private StringTemplate createQuery() {
         StringTemplate query = new StringTemplate(
-                "Great Day,$name$ $surname$, we want to inform you that today a great day!" );
+                this.getTemplateText() );
         return query;
     }
 }

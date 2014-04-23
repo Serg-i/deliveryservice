@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, ContactsREST,
-    ContactSearch, ContactsSearchREST, $state, EVENTS, $rootScope) {
+    ContactSearch, ContactsSearchREST, $state, EVENTS, $rootScope, CheckedContacts) {
 
     $scope.toPage = function (toPage) {
         $state.go('contacts', {page: toPage});
@@ -18,9 +18,14 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     $scope.searchContact = function () {
         $state.go('.search');
     };
+    $scope.searchDisable = function () {
+        ContactSearch.params = null;
+        loadData();
+    };
     $scope.sendEmail = function (checkedContacts) {
         if(checkedContacts.length>0){
-            $state.go('mail', {ids: checkedContacts});
+            CheckedContacts.update(checkedContacts);
+            $state.go('.mail');
         }
         else{
             $rootScope.$broadcast('logic-error-event', EVENTS.notChecked);
@@ -131,4 +136,16 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
             });
         };
     });
+
+app.controller('SearchContactCtrl', function($scope, ContactSearch, $state){
+    $scope.searchContact = function() {
+        ContactSearch.params = $scope.search;
+        $state.go("contacts", {page: 1});
+    },
+        $scope.$on('$viewContentLoaded', function () {
+            $scope.search = {};
+            $scope.search.dateOp = "GREATER";
+
+        });
+});
 

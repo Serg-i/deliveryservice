@@ -72,3 +72,13 @@ app.factory("ContactNamesREST", function($resource) {
 app.service('ContactSearch', function() {
     return {params: null};
 });
+
+app.service('CheckedContacts', function () {
+    this.init = function () {
+        this.ids = [];
+    };
+    this.update = function (arr) {
+        this.ids = arr;
+    };
+    return this;
+});

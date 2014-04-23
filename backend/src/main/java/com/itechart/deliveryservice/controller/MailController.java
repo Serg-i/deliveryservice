@@ -1,5 +1,6 @@
 package com.itechart.deliveryservice.controller;
 import com.itechart.deliveryservice.controller.data.LetterDTO;
+import com.itechart.deliveryservice.controller.data.ShortLetterDTO;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.entity.Contact;
 import com.itechart.deliveryservice.utils.Settings;
@@ -41,14 +42,12 @@ public class MailController {
         Letter letter = new Letter();
 
         letter.setAddressFrom(Settings.getMailAddressFrom());
-        letter.setAddressFrom(Settings.getMailPassword());
+        letter.setPassword(Settings.getMailPassword());
 
         letter.setContactTo(contacts);
         letter.setSubject(letterDTO.getSubject());
-        if(letterDTO.getTemplate() != 0) {
-            Template template = new TemplateStorage().getTemplate(letterDTO.getTemplate());
-            letter.setTemplate(template);
-        }
+        Template template = new TemplateStorage().getTemplate(letterDTO.getTemplate());
+        letter.setTemplate(template);
         letter.setText(letterDTO.getText());
 
         Sender sender = new Sender(letter);
@@ -57,13 +56,17 @@ public class MailController {
 
     @POST
     @Path("/new")
-    public List<String> getEmails(List<Long> tempIds) {
+    public ShortLetterDTO getEmails(List<Long> tempIds) {
+        ShortLetterDTO out = new ShortLetterDTO();
         List<String> emails = new ArrayList<String>();
+
         for(Long aLong : tempIds){
             Contact contact = contactDao.getById(aLong.longValue());
             emails.add(contact.getEmail());
         }
-        return emails;
+        out.setMails(emails);
+        out.setTemplateNames(new TemplateStorage().getAll());
+        return out;
     }
 
     @GET

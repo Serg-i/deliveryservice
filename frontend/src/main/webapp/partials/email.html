@@ -7,37 +7,35 @@
         <ul class="list-group">
             <li class="list-group-item">
                 <span class="label">Кому: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="mails" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Тема: </span><br/>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" ng-model="letter.subject">
             </li>
             <li class="list-group-item">
-                <span class="label">Шаблон: </span><br/>
-                <div class="input-group">
-                    <input type="text" class="form-control">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            Выбрать
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a href="#">Шаблон 1</a></li>
-                            <li><a href="#">Шаблон 2</a></li>
-                            <li><a href="#">Шаблон 3</a></li>
-                        </ul>
-                    </div><!-- /btn-group -->
-                </div><!-- /input-group -->
+                <span class="label">Шаблон:</span><br/>
+                <select class="form-control" name="cust" ui-select2 ng-model="letter.template" ng-click = "getTemplate(letter.template)">
+                    <option ng-repeat="template in templates" value="{{ template.id }}">
+                        {{ template.name }}
+                    </option>
+                </select>
             </li>
             <li class="list-group-item">
                 <span class="label">Текст: </span><br/>
-                <textarea class="form-control"></textarea>
+                <div ng-switch on="letter.template">
+                    <div ng-switch-when=0>
+                        <textarea class="form-control" ng-model="letter.text">{{letter.text}}</textarea>
+                    </div>
+                    <div ng-switch-default>
+                        <textarea class="form-control" ng-model="letter.text" readonly>{{letter.text}}</textarea>
+                    </div>
+                </div>
             </li>
             <li class="list-group-item text-center">
                 <div class="btn-group">
-                    <a href="#/api/contacts" class="btn btn-default">Отмена</a>
-                    <a href="#/api/contacts" class="btn btn-default">Отправить</a>
+                    <a ng-click = "toContacts()" class="btn btn-default">Отмена</a>
+                    <a ng-click = "sendMail(letter)" class="btn btn-default">Отправить</a>
                 </div>
             </li>
         </ul>
