@@ -49,6 +49,9 @@ app.controller('AlertCtrl', function ($scope, EVENTS, $timeout) {
             case EVENTS.clientError:
                 addAlert('danger','Ошибка клиента!');
                 break;
+            case EVENTS.daoError:
+                addAlert('danger','Ошибка работы с базой данных');
+                break;
             default:
                 addAlert('danger','Неизвестная ошибка!');
         }

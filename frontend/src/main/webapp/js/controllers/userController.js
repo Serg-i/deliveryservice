@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session,USER_ROLES,$stateParams) {
+app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session,USER_ROLES,$stateParams,$rootScope,EVENTS) {
 
         $scope.toPage = function (toPage) {
             $state.go('users', {page: toPage});

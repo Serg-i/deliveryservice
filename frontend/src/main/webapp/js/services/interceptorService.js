@@ -21,6 +21,9 @@ app.factory('ErrorInterceptor', function ($rootScope, $q, EVENTS) {
                 case 404:
                     $rootScope.$broadcast('http-error-event', EVENTS.notFound);
                     break;
+                case 422:
+                    $rootScope.$broadcast('http-error-event', EVENTS.daoError);
+                    break;
                 case 500:
                     $rootScope.$broadcast('http-error-event', EVENTS.internalServerError);
                     break;
