@@ -4,12 +4,6 @@
         <h1>Контакт <small></small></h1>
     </div>
     <div class="panel-body">
-        <div class=" text-right">
-            <div class="btn-group">
-                <a ng-click="editContact()" class="btn btn-default">Изменить</a>
-                <a ng-click="deleteContact()" class="btn btn-default">Удалить</a>
-            </div>
-        </div>
         <ul class="list-group">
             <li id = "name" class="list-group-item">
                 <span class="label">Имя*: </span><br/>
@@ -25,14 +19,7 @@
             </li>
             <li class="list-group-item">
                 <span class="label">Дата рождения: </span><br/>
-                <p class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="contact.dateOfBirth"
-                           is-open="opened" min="'1900-01-01'" max="'2002-01-01'" datepicker-options="dateOptions"
-                           date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                </span>
-                </p>
+                <input type="text" class="form-control" value="{{ contact.dateOfBirth  | date:'MM/dd/yyyy'}}" readonly>
             </li>
             <li class="list-group-item">
                 <span class="label">Email: </span><br/>
@@ -62,34 +49,24 @@
         </ul>
     </div>
     <hr/>
-    <div class=" text-right">
-        <div class="btn-group">
-            <button type="button" class="btn btn-default">Новый</button>
-            <button type="button" class="btn btn-default">Редактировать</button>
-            <button type="button" class="btn btn-default">Удалить</button>
-        </div>
-    </div>
-    <br/>
     <div class="panel panel-default">
         <div class="panel-heading">Телефоны</div>
-            <table class="table">
-                <thead>
-                <tr>
-                    <td><span class="label label-primary"></span></td>
-                    <td><span class="label label-primary">Телефон</span></td>
-                    <td><span class="label label-primary">Описание</span></td>
-                    <td><span class="label label-primary">Комментарий</span></td>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><span class="label label-default">Телефон</span></td>
-                        <td><span class="label label-default">Описание</span></td>
-                        <td><span class="label label-default">Комментарий</span></td>
-                    </tr>
-                </tbody>
-            </table>
+        <table class="table">
+            <thead>
+            <tr>
+                <td><span class="label label-primary">Телефон</span></td>
+                <td><span class="label label-primary">Тип</span></td>
+                <td><span class="label label-primary">Комментарий</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="phone in phones">
+                <td><span class="label label-primary"> +{{phone.countryCode}}{{phone.operatorCode}}{{phone.number}}</span></td>
+                <td><span class="label label-default">{{toLocalType(phone.type)}}</span></td>
+                <td><span class="label label-default">{{phone.comment}}</span></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <hr/>
     <div class="panel panel-default">

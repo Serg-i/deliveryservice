@@ -61,33 +61,35 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     };
 });
 
- app.controller('ViewContactCtrl', function ($stateParams, $scope, ContactREST, $state) {
-
-        $scope.deleteContact = function() {
-            ContactREST.delete({
-                id: $stateParams.id
-            }, function(data) {
-                $state.go('contacts');
-            }, function(error) {
-            });
-        };
-
-        $scope.editContact = function() {
-            $state.go('.edit', {id: $stateParams.id});
-        };
+ app.controller('ViewContactCtrl', function ($stateParams, $scope, ContactREST, PhoneREST, $state) {
 
         $scope.$on('$viewContentLoaded', function () {
             loadData();
         });
 
+        $scope.toLocalType = function(type) {
+            if (type == 'HOME')
+                return "Домашний";
+            else
+                return "Мобильный";
+        };
+
         var loadData = function() {
             ContactREST.readOne({
-                id : $stateParams.id
+                id : $stateParams.cid
             }, function(data) {
                 $scope.contact = data;
+                PhoneREST.getAll({
+                cid: $scope.contact.id
+                },function (data) {
+                    $scope.phones = data;
+                }, function (error) {
+                    $state.go('contacts');
+                });
             }, function(error) {
                 $state.go('contacts');
             });
+
         };
     });
 
@@ -109,6 +111,15 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     });
 
     app.controller('EditContactCtrl', function ($stateParams, $scope, ContactREST, $state) {
+
+        $scope.deleteContact = function() {
+            ContactREST.delete({
+                id: $stateParams.id
+            }, function(data) {
+                $state.go('contacts');
+            }, function(error) {
+            });
+        };
 
         $scope.saveContact = function () {
             var rest = new ContactREST($scope.contact);

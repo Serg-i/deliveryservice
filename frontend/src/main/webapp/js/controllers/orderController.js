@@ -72,6 +72,10 @@ app.controller('ViewOrderCtrl', function ($stateParams, $scope, $filter, OrderRE
             });
         };
 
+        $scope.viewContact = function (contactId) {
+            $state.go('.contact', {cid: contactId});
+        };
+
         $scope.editOrder = function() {
             $state.go('.edit', {id: $stateParams.id});
         };

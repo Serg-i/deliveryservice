@@ -61,6 +61,25 @@ var app = angular.module('myApp', [
                     ]
                 }
             })
+            .state('orders.view.contact', {
+                url: '/contact/{cid}',
+                views: {
+                    "@": {
+                        templateUrl: 'partials/contact-view.html',
+                        controller: 'ViewContactCtrl'
+                    }
+                },
+                data: {
+                    ncyBreadcrumbLabel: 'Контакт',
+                    authorizedRoles: [
+                        USER_ROLES.admin,
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager,
+                        USER_ROLES.processing_manager,
+                        USER_ROLES.courier
+                    ]
+                }
+            })
             .state('orders.view.edit', {
                 url: '/edit',
                 views: {
@@ -74,9 +93,7 @@ var app = angular.module('myApp', [
                     authorizedRoles: [
                         USER_ROLES.admin,
                         USER_ROLES.supervisor,
-                        USER_ROLES.order_manager,
-                        USER_ROLES.processing_manager,
-                        USER_ROLES.courier
+                        USER_ROLES.order_manager
                     ]
                 }
             })
@@ -92,10 +109,7 @@ var app = angular.module('myApp', [
                     ncyBreadcrumbLabel: 'Новый',
                     authorizedRoles: [
                         USER_ROLES.admin,
-                        USER_ROLES.supervisor,
-                        USER_ROLES.order_manager,
-                        USER_ROLES.processing_manager,
-                        USER_ROLES.courier
+                        USER_ROLES.order_manager
                     ]
                 }
             })

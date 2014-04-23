@@ -15,6 +15,7 @@ import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,21 +53,23 @@ public class ContactController {
        return mapper.map(contact, ContactDTO.class);
     }
 
-     @GET
-     @Path("/p/{page}")
-     public TableDTO<ShortContactDTO> readAll(@PathParam("page") int page) throws Exception{
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
+    @GET
+    @Path("/p/{page}")
+    public TableDTO<ShortContactDTO> readAll(@PathParam("page") int page) throws Exception{
 
-         int count = (int) contactDao.getCount();
-         List<Contact> contacts = contactDao.getOffset(firstItem(page, count), Settings.getRows());
-         TableDTO<ShortContactDTO> out = new TableDTO<ShortContactDTO>();
-         List<ShortContactDTO> list = new ArrayList<ShortContactDTO>();
-         for(Contact contact: contacts)
-             list.add(mapper.map(contact, ShortContactDTO.class));
-         out.setCurrentPage(list);
-         out.setCount(count);
-         return out;
-     }
+        int count = (int) contactDao.getCount();
+        List<Contact> contacts = contactDao.getOffset(firstItem(page, count), Settings.getRows());
+        TableDTO<ShortContactDTO> out = new TableDTO<ShortContactDTO>();
+        List<ShortContactDTO> list = new ArrayList<ShortContactDTO>();
+        for(Contact contact: contacts)
+            list.add(mapper.map(contact, ShortContactDTO.class));
+        out.setCurrentPage(list);
+        out.setCount(count);
+        return out;
+    }
 
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @POST
     public ContactDTO insert(@Valid ContactDTO contactDTO){
         Contact contact = mapper.map(contactDTO, Contact.class);
@@ -74,6 +77,7 @@ public class ContactController {
         return mapper.map(contact, ContactDTO.class);
     }
 
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @PUT
     @Path("/{idContact}")
     public void update(@PathParam("idContact") long idContact, @Valid ContactDTO contactDTO){
@@ -82,6 +86,7 @@ public class ContactController {
         contactDao.merge(contact);
     }
 
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @DELETE
     @Path("/{idContact}")
     public void delete(@PathParam("idContact") long idContact) throws Exception{
@@ -120,6 +125,7 @@ public class ContactController {
         return out;
     }
 
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @POST
     @Path("/search/p/{page}")
     public TableDTO<ContactDTO>  searchContacts(@PathParam("page") int page, @Valid SearchContactDTO dto) {
