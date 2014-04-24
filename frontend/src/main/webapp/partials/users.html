@@ -26,7 +26,7 @@
                 <tr ng-repeat="user in page.currentPage">
                     <td><input type="checkbox" checklist-model="usersToDelete" checklist-value="user.id"></td>
                     <td><a ng-click="editUser(user.id)"><span class="label label-default"
-                            >{{user.contactName}} {{user.contactMiddleName}} {{user.contactSurname}} </span></a></td>
+                            >{{user.contactSurname}} {{user.contactName}} {{user.contactMiddleName}} </span></a></td>
                     <td><span class="label label-default">{{user.username}}</span></td>
                     <td><span class="label label-default">{{user.role}}</span></td>
                 </tr>

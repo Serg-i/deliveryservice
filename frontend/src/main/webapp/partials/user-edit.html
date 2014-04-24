@@ -15,19 +15,19 @@
                 <li class="list-group-item">
                     <span class="label">Роль: </span><br/>
                     <select class="form-control" name="role" ui-select2 ng-model="user.role" value="{{user.role}}" required>
-                        <option value="ADMINISTRATOR">administrator</option>
-                        <option value="SUPERVISOR">supervisor</option>
-                        <option value="ORDER_MANAGER">order manager</option>
-                        <option value="PROCESSING_MANAGER">processing manager</option>
-                        <option value="COURIER">courier</option>
+                        <option value="ADMINISTRATOR">Администратор</option>
+                        <option value="SUPERVISOR">Супервизор</option>
+                        <option value="ORDER_MANAGER">Менеджер по приему заказов</option>
+                        <option value="PROCESSING_MANAGER">Менеджер по обработке заказов</option>
+                        <option value="COURIER">Курьер</option>
                     </select>
                     <p ng-show="form.role.$invalid && !form.name.$pristine" class="help-block">Заполнение обязательно.</p>
                 </li>
                 <li class="list-group-item" ng-class="{ 'has-error' : form.rep.$invalid}">
                     <span class="label" >Password: </span><br/>
                     <input type="password" name="password" class="form-control"  ng-model="user.password"
-                           value="{{user.password}}" ng-minlength="6" required>
-                    <p ng-show="form.password.$error.minlength" class="help-block">Не менее 6 символов.</p>
+                           value="{{user.password}}" ng-minlength="4" required>
+                    <p ng-show="form.password.$error.minlength" class="help-block">Не менее 4 символов.</p>
                     <p ng-show="form.password.$invalid && !form.name.$pristine&&!form.password.$error.minlength"
                        class="help-block">Заполнение обязательно.</p>
                 </li>
