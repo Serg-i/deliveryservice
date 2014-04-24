@@ -80,11 +80,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><span class="label label-default">Дафыв фыа</span></td>
-                    <td><span class="label label-default">фыва фыв </span></td>
-                    <td><span class="label label-default">Кфыв фыва в</span></td>
-                </tr>
+            <tr ng-repeat="order in orders">
+                <td><span class="label label-default">{{ order.date | date:'MM/dd/yyyy HH:mm'}}</span></td>
+                <td><span class="label label-default">{{ order.description }} </span></td>
+                <td><span class="label label-default">{{ order.cost }}</span></td>
+            </tr>
             </tbody>
         </table>
     </div>
