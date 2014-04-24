@@ -34,7 +34,6 @@ app.factory("UserREST", function($resource) {
     });
 });
 
-
 app.factory("UsersREST", function($resource) {
      return $resource("/backend/api/users/p/:page", {}, {
          readAll: {
@@ -45,6 +44,17 @@ app.factory("UsersREST", function($resource) {
              }
          }
      });
- });
+});
 
-
+app.factory("UserNamesREST", function($resource) {
+    return $resource("/backend/api/users/names", {}, {
+        getForSelect: {
+            method: "GET",
+            params: {},
+            isArray: false,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    });
+});

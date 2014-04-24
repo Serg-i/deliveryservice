@@ -29,18 +29,14 @@
             </li>
             <li class="list-group-item">
                 <span class="label">Дата рождения: </span><br/>
-                <div class="row">
-                    <div class="col-md-6">
                 <p class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="contact.dateOfBirth"
-                           is-open="opened" min="'1900-01-01'" max="'2002-01-01'" datepicker-options="dateOptions"
-                           date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true"/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
+                        <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="contact.dateOfBirth"
+                               is-open="opened" min="'1900-01-01'" max="'2002-01-01'" datepicker-options="dateOptions"
+                               date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
                 </p>
-                        </div>
-                    </div>
             </li>
             <li class="list-group-item" ng-class="{ 'has-error' : form.email.$invalid && !form.email.$pristine }">
                 <span class="label">Email: </span><br/>
@@ -151,8 +147,8 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" ng-click="ok()"  ng-disabled="mform.$invalid">Сохранить</button>
-                <button class="btn btn-warning" ng-click="cancel()">Отмена</button>
+                <button class="btn btn-default" ng-click="ok()"  ng-disabled="mform.$invalid">Сохранить</button>
+                <button class="btn btn-default" ng-click="cancel()">Отмена</button>
             </div>
             </form>
         </script>
