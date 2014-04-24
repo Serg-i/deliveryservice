@@ -1,9 +1,8 @@
 package com.itechart.deliveryservice.utils.mail;
 
 import com.itechart.deliveryservice.entity.Contact;
-import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
+import com.itechart.deliveryservice.exceptionhandler.ThreadExceptionHandler;
 import com.itechart.deliveryservice.utils.mail.template.templateImpl.EmptyTemplate;
-import org.springframework.http.HttpStatus;
 
 import java.util.Properties;
 import javax.mail.Message;
@@ -20,6 +19,7 @@ public class Sender  extends Thread{
     private Letter letter;
 
     public Sender(Letter letter) {
+        setDefaultUncaughtExceptionHandler(new ThreadExceptionHandler());
         setDaemon(true);
         this.letter = letter;
         createSession();
