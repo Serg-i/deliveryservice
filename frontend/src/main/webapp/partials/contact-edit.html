@@ -9,26 +9,27 @@
                 <a ng-click="deleteContact()" class="btn btn-default">Удалить</a>
             </div>
         </div>
+        <br/>
       <form name="form" novalidate>
         <ul class="list-group">
             <li id = "name" class="list-group-item" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
                 <span class="label">Имя*: </span><br/>
-                <input type="text" name="name" class="form-control" ng-model="contact.name" required ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/>
-                <p ng-show="form.name.$invalid && !form.name.$pristine" class="help-block">Заполнение обязательно.</p>
+                <input type="text" name="name" class="form-control" ng-model="contact.name" required ng-maxlength="30" ng-pattern=/^[A-Za-zА-Яа-я-]+$/>
+                <p ng-show="form.surname.$error.required && !form.name.$pristine" class="help-block">Заполнение обязательно.</p>
                 <p ng-show="form.name.$error.pattern" class="help-block">Только буквы.</p>
                 <p ng-show="form.name.$error.maxlength" class="help-block">Не более 30 символов.</p>
             </li>
             <li class="list-group-item" ng-class="{ 'has-error' : form.surname.$invalid && !form.surname.$pristine }">
                 <span class="label">Фамилия*: </span><br/>
-                <input type="text" name="surname" class="form-control" ng-model="contact.surname" required ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/>
-                <p ng-show="form.surname.$invalid && !form.surname.$pristine" class="help-block">Заполнение обязательно.</p>
+                <input type="text" name="surname" class="form-control" ng-model="contact.surname" required ng-maxlength="30" ng-pattern=/^[A-Za-zА-Яа-я-]+$/>
+                <p ng-show="form.surname.$error.required && !form.surname.$pristine" class="help-block">Заполнение обязательно.</p>
                 <p ng-show="form.surname.$error.pattern" class="help-block">Только буквы.</p>
                 <p ng-show="form.surname.$error.maxlength" class="help-block">Не более 30 символов.</p>
             </li>
             <li class="list-group-item" ng-class="{ 'has-error' : form.middlename.$invalid && !form.middlename.$pristine }">
                 <span class="label">Отчество: </span><br/>
                 <input type="text" name="middlename" class="form-control" ng-model="contact.middleName"
-                       ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/ >
+                       ng-maxlength="30" ng-pattern=/^[A-Za-zА-Яа-я-]+$/ >
                 <p ng-show="form.middlename.$error.pattern" class="help-block">Только буквы.</p>
                 <p ng-show="form.middlename.$error.maxlength" class="help-block">Не более 30 символов.</p>
             </li>
@@ -53,25 +54,25 @@
             </li>
             <li class="list-group-item" ng-class="{ 'has-error' : form.city.$invalid && !form.city.$pristine }">
                 <span class="label">Город: </span><br/>
-                <input type="text" name="city" class="form-control" ng-model="contact.city" ng-maxlength="30" ng-pattern=/^[A-Za-z-]+$/>
+                <input type="text" name="city" class="form-control" ng-model="contact.city" ng-maxlength="30" ng-pattern=/^[A-Za-zА-Яа-я-]+$/>
                 <p ng-show="form.city.$error.pattern" class="help-block">Только буквы.</p>
                 <p ng-show="form.city.$error.maxlength" class="help-block">Не более 30 символов.</p>
             </li>
             <li class="list-group-item" ng-class="{ 'has-error' : form.street.$invalid && !form.street.$pristine }">
                 <span class="label">Улица: </span><br/>
-                <input type="text" name="street" class="form-control" ng-model="contact.street" ng-maxlength="30" ng-pattern=/^[A-Za-z0-9]+$/ >
+                <input type="text" name="street" class="form-control" ng-model="contact.street" ng-maxlength="30" ng-pattern=/^[A-Za-zА-Яа-я0-9]+$/ >
                 <p ng-show="form.street.$error.pattern" class="help-block">Только буквы или цифры.</p>
                 <p ng-show="form.street.$error.maxlength" class="help-block">Не более 30 символов.</p>
             </li>
             <li class="list-group-item" ng-class="{ 'has-error' : form.home.$invalid && !form.home.$pristine }">
                 <span class="label">Дом: </span><br/>
-                <input type="text" name="home" class="form-control" ng-model="contact.home" ng-maxlength="10" ng-pattern=/^[A-Za-z0-9]+$/ >
+                <input type="text" name="home" class="form-control" ng-model="contact.home" ng-maxlength="10" ng-pattern=/^[A-Za-zА-Яа-я0-9]+$/ >
                 <p ng-show="form.home.$error.pattern" class="help-block">Только буквы или цифры.</p>
                 <p ng-show="form.home.$error.maxlength" class="help-block">Не более 10 символов.</p>
             </li>
             <li class="list-group-item" ng-class="{ 'has-error' : form.flat.$invalid && !form.flat.$pristine }">
                 <span class="label">Квартира: </span><br/>
-                <input type="text" name="flat" class="form-control" ng-model="contact.flat" ng-maxlength="10" ng-pattern=/^[A-Za-z0-9]+$/ >
+                <input type="text" name="flat" class="form-control" ng-model="contact.flat" ng-maxlength="10" ng-pattern=/^[A-Za-zА-Яа-я0-9]+$/ >
                 <p ng-show="form.flat.$error.pattern" class="help-block">Только буквы или цифры.</p>
                 <p ng-show="form.flat.$error.maxlength" class="help-block">Не более 20 символов.</p>
             </li>

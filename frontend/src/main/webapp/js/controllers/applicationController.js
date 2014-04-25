@@ -2,7 +2,7 @@
 
 app.controller('appCtrl',
     function ($rootScope, $scope, USER_ROLES, AuthService, Session, BasicAuth,
-                           OrderSearch) {
+                           OrderSearch, ContactSearch) {
 
         $scope.currentUser = {
             name: '',
@@ -38,6 +38,7 @@ app.controller('appCtrl',
             $scope.currentUser.isAuthorized = Session.isAuthorized;
             $scope.rusRole.role = convertToRus(Session.userRole);
             OrderSearch.params = null;
+            ContactSearch.params = null;
         } );
 
         AuthService.init();
