@@ -13,7 +13,7 @@ public class UserModifyDTO {
     @BasicString
     private String username;
     @NotBlank
-    @Size(min=6)
+    @Size(min=4)
     private String password;
     @NotNull
     private UserRole role;
