@@ -12,6 +12,8 @@ import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -47,10 +49,14 @@ public class UserController {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
+
 
     @GET
     @Path("/names")
     public UsersForSelectDTO getUsersForSelect() {
+
+        logger.info("USER - GET USERS FOR SELECT");
 
         SearchParams sp = new SearchParams();
         UsersForSelectDTO out = new UsersForSelectDTO();
@@ -77,6 +83,8 @@ public class UserController {
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
     public UserDTO getUser(@PathParam("id") long id){
+
+        logger.info("USER - READ ONE");
         User user=userDao.getById(id);
         return mapper.map(user,UserDTO.class);
     }
@@ -85,6 +93,8 @@ public class UserController {
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/p/{page}")
     public TableDTO<UserViewDTO> getUsersPage(@PathParam("page")int page){
+
+        logger.info("USER - READ ALL");
         int count=(int)userDao.getCount();
         List<User> users = userDao.getOffset(firstItem(page, count), Settings.getRows());
         TableDTO<UserViewDTO> out = new TableDTO<UserViewDTO>();
@@ -101,6 +111,8 @@ public class UserController {
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/")
     public void createUser(@Valid UserCreateDTO userCreateDTO){
+
+        logger.info("USER - CREATE");
         User user=mapper.map(userCreateDTO,User.class);
         Contact contact=contactDao.getById(userCreateDTO.getContactId());
         user.setContact(contact);
@@ -112,6 +124,8 @@ public class UserController {
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
     public void updateUser(UserModifyDTO userModifyDTO){
+
+        logger.info("USER - UPDATE");
         User user=mapper.map(userModifyDTO,User.class);
         Contact contact=contactDao.getById(userModifyDTO.getContactId());
         user.setContact(contact);
@@ -122,6 +136,8 @@ public class UserController {
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
     public void deleteUser(@PathParam("id") long id) throws BusinessLogicException {
+
+        logger.info("USER - DELETE");
         User user=userDao.getById(id);
         SearchParams sp1=new SearchParams();
         sp1.addParam("processingManager.id", Long.toString(id));

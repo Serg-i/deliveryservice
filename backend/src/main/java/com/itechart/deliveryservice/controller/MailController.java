@@ -9,6 +9,8 @@ import com.itechart.deliveryservice.utils.mail.Sender;
 import com.itechart.deliveryservice.utils.mail.template.Template;
 import com.itechart.deliveryservice.utils.mail.template.TemplateStorage;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +33,13 @@ public class MailController {
     @Autowired
     private ContactDao contactDao;
 
+    private static final Logger logger = LoggerFactory.getLogger(MailController.class);
+
     @POST
     @Path("/send")
     public void send(@Valid LetterDTO letterDTO) {
+
+        logger.info("MAIL - SEND");
         List<Contact> contacts = new ArrayList<Contact>();
         for(Long aLong : letterDTO.getContactToId()){
             contacts.add(contactDao.getById(aLong.longValue()));
@@ -57,6 +63,8 @@ public class MailController {
     @POST
     @Path("/new")
     public ShortLetterDTO getEmails(List<Long> tempIds) {
+
+        logger.info("MAIL - GET MAILS AND TEMPLATES");
         ShortLetterDTO out = new ShortLetterDTO();
         List<String> emails = new ArrayList<String>();
 
@@ -72,6 +80,8 @@ public class MailController {
     @GET
     @Path("/template/{tempId}")
     public Template getTemplate(@PathParam("tempId") long tempId) {
+
+        logger.info("MAIL - GET TEMPLATE'S TEXT");
         return new TemplateStorage().getTemplate(tempId);
     }
 }

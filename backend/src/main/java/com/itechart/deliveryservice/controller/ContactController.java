@@ -13,6 +13,8 @@ import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -44,9 +46,13 @@ public class ContactController {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
+
     @GET
     @Path("/{idContact}")
     public ContactDTO readOne(@PathParam("idContact") long idContact) throws Exception{
+
+       logger.info("CONTACT - READ ONE");
        Contact contact = contactDao.getById(idContact);
         if (contact == null)
             throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
@@ -57,6 +63,8 @@ public class ContactController {
     @GET
     @Path("/p/{page}")
     public TableDTO<ShortContactDTO> readAll(@PathParam("page") int page) throws Exception{
+
+        logger.info("CONTACT - READ ALL");
 
         int count = (int) contactDao.getCount();
         List<Contact> contacts = contactDao.getOffset(firstItem(page, count), Settings.getRows());
@@ -72,6 +80,8 @@ public class ContactController {
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @POST
     public ContactDTO insert(@Valid ContactDTO contactDTO){
+
+        logger.info("CONTACT - INSERT");
         Contact contact = mapper.map(contactDTO, Contact.class);
         contactDao.save(contact);
         return mapper.map(contact, ContactDTO.class);
@@ -81,6 +91,8 @@ public class ContactController {
     @PUT
     @Path("/{idContact}")
     public void update(@PathParam("idContact") long idContact, @Valid ContactDTO contactDTO){
+
+        logger.info("CONTACT - UPDATE");
         Contact contact = mapper.map(contactDTO, Contact.class);
         contact.setId(idContact);
         contactDao.merge(contact);
@@ -90,6 +102,8 @@ public class ContactController {
     @DELETE
     @Path("/{idContact}")
     public void delete(@PathParam("idContact") long idContact) throws Exception{
+
+        logger.info("CONTACT - DELETE");
         Contact contact = contactDao.getById(idContact);
         List<User> users = userDao.getAll();
         List<Order> orders = orderDao.getAll();
@@ -117,6 +131,8 @@ public class ContactController {
     @Path("/names")
     public List<ContactNameDTO> getAllNames() {
 
+        logger.info("CONTACT - GET ALL NAMES");
+
         List<Contact> contacts = contactDao.getAll();
         List<ContactNameDTO> out = new ArrayList<ContactNameDTO>();
         for (Contact contact: contacts){
@@ -129,6 +145,8 @@ public class ContactController {
     @POST
     @Path("/search/p/{page}")
     public TableDTO<ContactDTO>  searchContacts(@PathParam("page") int page, @Valid SearchContactDTO dto) {
+
+        logger.info("CONTACT - SEARCH");
 
         SearchParams sp = dto.createParams();
         int count = (int) contactDao.searchCount(sp);

@@ -4,6 +4,8 @@ import com.itechart.deliveryservice.controller.data.LoginInfoDTO;
 import com.itechart.deliveryservice.dao.UserDao;
 import com.itechart.deliveryservice.entity.User;
 import org.dozer.DozerBeanMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,9 +29,11 @@ public class AuthenticationController {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+
     @GET
     public LoginInfoDTO login() {
-
+        logger.info("LOGIN");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
         User user = userDao.getByName(name);

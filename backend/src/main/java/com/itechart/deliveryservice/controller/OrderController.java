@@ -10,6 +10,8 @@ import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -44,9 +46,13 @@ public class OrderController {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+
     @GET
     @Path("/p/{page}")
     public TableDTO<ShortOrderDTO> readAll(@PathParam("page") int page) throws Exception {
+
+        logger.info("ORDER - READ ALL");
 
         List<Order> orders = null;
         User user = getUser();
@@ -80,6 +86,8 @@ public class OrderController {
     @Path("/{id}")
     public OrderDTO readOne(@PathParam("id") long orderId) throws Exception {
 
+        logger.info("ORDER - READ ONE");
+
         Order order = orderDao.getById(orderId);
         if (order == null)
             throw new BusinessLogicException("This order doesn't exist", HttpStatus.NOT_FOUND);
@@ -93,6 +101,8 @@ public class OrderController {
     @Path("/")
     public void create(@Valid ReceiveOrderDTO orderDTO) throws Exception {
 
+        logger.info("ORDER - CREATE");
+
         Order order =  mapper.map(orderDTO, Order.class);
         order.setState(OrderState.NEW);
         order.setReceptionManager(getUser());
@@ -105,6 +115,8 @@ public class OrderController {
     @Path("/{id}")
     public void update(@PathParam("id") long orderId,
                        @Valid ReceiveOrderDTO orderDTO) throws Exception {
+
+        logger.info("ORDER - UPDATE");
 
         Order upOrder =  mapper.map(orderDTO, Order.class);
         Order order = orderDao.getById(orderId);
@@ -121,6 +133,8 @@ public class OrderController {
     @DELETE
     @Path("/{id}")
     public void delete(@PathParam("id") long orderId) {
+
+        logger.info("ORDER - DELETE");
         Order order = orderDao.getById(orderId);
         orderDao.delete(order);
     }
@@ -129,6 +143,8 @@ public class OrderController {
     @Path("/{id}/state")
     public void updateState(@PathParam("id") long orderId,
                              @Valid NewStateDTO state) throws Exception {
+
+        logger.info("ORDER - UPDATE STATE");
 
         OrderState st = state.getNewState();
         Order order = orderDao.getById(orderId);
@@ -150,6 +166,8 @@ public class OrderController {
     @POST
     @Path("/search/p/{page}")
     public TableDTO<ShortOrderDTO> searchOrders(@PathParam("page") int page, @Valid SearchOrderDTO dto) {
+
+        logger.info("ORDER - SEARCH");
 
         SearchParams sp = dto.createParams();
         User user = getUser();

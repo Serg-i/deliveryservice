@@ -7,6 +7,8 @@ import com.itechart.deliveryservice.entity.Phone;
 import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -33,9 +35,13 @@ public class PhoneController {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(PhoneController.class);
+
     @GET
     @Path("/{contactId}/phones")
     public List<PhoneDTO> getAllPhones(@PathParam("contactId") long contactId) throws Exception {
+
+        logger.info("PHONE - READ ALL");
 
         Contact owner = contactDao.getById(contactId);
         if (owner == null)
@@ -50,6 +56,8 @@ public class PhoneController {
     @Path("/{contactId}/phones/")
     public void getPhone(@PathParam("contactId") long contactId, @Valid PhoneDTO phoneDTO) throws Exception {
 
+        logger.info("PHONE - CREATE");
+
         Phone phone =  mapper.map(phoneDTO, Phone.class);
         Contact owner = contactDao.getById(contactId);
         if (owner == null)
@@ -62,6 +70,8 @@ public class PhoneController {
     @Path("/{contactId}/phones/{phoneId}")
     public void getPhone(@PathParam("contactId") long contactId,
                                    @PathParam("phoneId") long phoneId, @Valid PhoneDTO phoneDTO) throws Exception {
+
+        logger.info("PHONE - UPDATE");
 
         Phone phone = phoneDao.getById(phoneId);
         if (phone == null)
@@ -77,6 +87,8 @@ public class PhoneController {
     @DELETE
     @Path("/{contactId}/phones/{phoneId}")
     public void deletePhone(@PathParam("phoneId") long phoneId) throws Exception {
+
+        logger.info("PHONE - DELETE");
 
         Phone phone = phoneDao.getById(phoneId);
         if (phone == null)

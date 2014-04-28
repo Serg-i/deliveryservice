@@ -10,6 +10,8 @@ import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
 import org.dozer.DozerBeanMapper;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +37,14 @@ public class SearchController {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
+
 
     @GET
     @Path("/contacts/{page}")
     public TableDTO<ShortContactDTO> searchContacts(@PathParam("page") long page, @Valid SearchContactDTO dto) {
+
+        logger.info("SEARCH CONTACT - GET TABLE");
 
         SearchParams sp = dto.createParams();
         long count = contactDao.searchCount(sp);
