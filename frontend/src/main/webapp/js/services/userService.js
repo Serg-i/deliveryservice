@@ -58,3 +58,24 @@ app.factory("UserNamesREST", function($resource) {
         }
     });
 });
+app.factory("UserRole", function(USER_ROLES, USER_LOCAL_ROLES) {
+    return {
+        getlocal: function (role) {
+            switch (role) {
+                case USER_ROLES.supervisor:
+                    return USER_LOCAL_ROLES.supervisor; break;
+                case USER_ROLES.admin:
+                    return USER_LOCAL_ROLES.admin; break;
+                case USER_ROLES.order_manager:
+                    return USER_LOCAL_ROLES.order_manager; break;
+                case USER_ROLES.processing_manager:
+                    return USER_LOCAL_ROLES.processing_manager; break;
+                case USER_ROLES.courier:
+                    return USER_LOCAL_ROLES.courier; break;
+                case USER_ROLES.guest:
+                    return USER_LOCAL_ROLES.guest; break;
+            }
+            return null;
+        }
+    };
+});

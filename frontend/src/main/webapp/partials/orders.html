@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="order in page.currentPage">
-                    <td><a ng-click="viewOrder(order.id)"><span class="label label-primary"> {{ order.state }}</span></a></td>
+                    <td><a ng-click="viewOrder(order.id)"><span class="label label-default"> {{ order.state }}</span></a></td>
                     <td><span class="label label-default">{{ order.customerName }} {{ order.customerSurname }}</span></td>
                     <td><span class="label label-default">{{ order.recipientName }} {{ order.recipientSurname }}</span></td>
                     <td><span class="label label-default">{{ order.date  | date:'MM/dd/yyyy HH:mm'}}</span></td>

@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session,USER_ROLES,$stateParams,$rootScope,EVENTS) {
+app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session,USER_ROLES,$stateParams,$rootScope,EVENTS, UserRole) {
 
         $scope.toPage = function (toPage) {
             $state.go('users', {page: toPage});
@@ -63,6 +63,8 @@ app.controller('UsersCtrl',  function ($scope,$state,UserREST,UsersREST, Session
             $scope.page = data;
             $scope.curPage = $stateParams.page;
             $scope.totalItems = $scope.page.count;
+            for (var i = 0; i < $scope.page.currentPage.length; i++)
+                $scope.page.currentPage[i].role = UserRole.getlocal($scope.page.currentPage[i].role);
         };
 
         var roleRestriction = function() {
