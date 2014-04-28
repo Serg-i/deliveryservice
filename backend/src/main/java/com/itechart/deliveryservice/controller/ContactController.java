@@ -170,11 +170,11 @@ public class ContactController {
         for (Order order: foundCustomers){
            list.add(mapper.map(order, OrderDTO.class));
         }
-        dto = new ShortSearchOrderDTO();
+        dto.setCustomer(0);
         dto.setRecipient(id);
         List<Order> foundRecipients = orderDao.searchAll(dto.createParams());
         for (Order order: foundRecipients)  {
-            if (!list.contains(mapper.map(order, OrderDTO.class)))
+            if (!foundCustomers.contains(order))
                 list.add(mapper.map(order, OrderDTO.class));
         }
         return list;
