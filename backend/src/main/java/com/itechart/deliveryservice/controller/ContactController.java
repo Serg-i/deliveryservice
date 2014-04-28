@@ -144,7 +144,7 @@ public class ContactController {
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_ORDER_MANAGER", "ROLE_SUPERVISOR"})
     @POST
     @Path("/search/p/{page}")
-    public TableDTO<ContactDTO>  searchContacts(@PathParam("page") int page, @Valid SearchContactDTO dto) {
+    public TableDTO<ContactDTO> searchContacts(@PathParam("page") int page, @Valid SearchContactDTO dto) {
 
         logger.info("CONTACT - SEARCH");
 
@@ -159,4 +159,25 @@ public class ContactController {
         table.setCurrentPage(list);
         return table;
     }
+
+    @GET
+    @Path("/{idContact}/orders")
+    public List<OrderDTO> getOrders(@PathParam("idContact") long id){
+        ShortSearchOrderDTO dto = new ShortSearchOrderDTO();
+        dto.setCustomer(id);
+        List<Order> foundCustomers = orderDao.searchAll(dto.createParams());
+        List<OrderDTO> list = new ArrayList<OrderDTO>();
+        for (Order order: foundCustomers){
+           list.add(mapper.map(order, OrderDTO.class));
+        }
+        dto = new ShortSearchOrderDTO();
+        dto.setRecipient(id);
+        List<Order> foundRecipients = orderDao.searchAll(dto.createParams());
+        for (Order order: foundRecipients)  {
+            if (!list.contains(mapper.map(order, OrderDTO.class)))
+                list.add(mapper.map(order, OrderDTO.class));
+        }
+        return list;
+    }
+
 }

@@ -82,3 +82,16 @@ app.service('CheckedContacts', function () {
     };
     return this;
 });
+
+app.factory("OrdersByContactREST", function($resource) {
+    return $resource("/backend/api/contacts/:id/orders", {}, {
+        search: {
+            method:'GET',
+            params: {id: '@id'},
+            isArray: true,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    });
+});

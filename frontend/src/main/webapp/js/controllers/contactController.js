@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, ContactsREST,
-    ContactSearch, ContactsSearchREST, $state, EVENTS, $rootScope, CheckedContacts) {
+                                          ContactSearch, ContactsSearchREST, $state, EVENTS, $rootScope, CheckedContacts) {
 
     $scope.toPage = function (toPage) {
         $state.go('contacts', {page: toPage});
@@ -61,92 +61,108 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     };
 });
 
- app.controller('ViewContactCtrl', function ($stateParams, $scope, ContactREST, PhoneREST, $state) {
+app.controller('ViewContactCtrl', function ($stateParams, $scope, ContactREST, PhoneREST, $state, OrdersByContactREST) {
 
-        $scope.$on('$viewContentLoaded', function () {
-            loadData();
-        });
+    $scope.$on('$viewContentLoaded', function () {
+        loadData();
+    });
 
-        $scope.toLocalType = function(type) {
-            if (type == 'HOME')
-                return "Домашний";
-            else
-                return "Мобильный";
-        };
+    $scope.toLocalType = function(type) {
+        if (type == 'HOME')
+            return "Домашний";
+        else
+            return "Мобильный";
+    };
 
-        var loadData = function() {
-            ContactREST.readOne({
-                id : $stateParams.cid
-            }, function(data) {
-                $scope.contact = data;
-                PhoneREST.getAll({
+    var loadData = function() {
+        ContactREST.readOne({
+            id : $stateParams.cid
+        }, function(data) {
+            $scope.contact = data;
+            PhoneREST.getAll({
                 cid: $scope.contact.id
-                },function (data) {
-                    $scope.phones = data;
-                }, function (error) {
-                    $state.go('contacts');
-                });
-            }, function(error) {
+            },function (data) {
+                $scope.phones = data;
+            }, function (error) {
                 $state.go('contacts');
             });
-
-        };
-    });
-
-    app.controller('NewContactCtrl', function ($scope, ContactREST, $state) {
-
-        $scope.saveContact = function () {
-            var rest = new ContactREST($scope.contact);
-            rest.$create({
-            }, function(data) {
-                $scope.contact = data;
-                $state.go('contacts');
-            }, function(error) {
+            OrdersByContactREST.search({
+                id: $scope.contact.id
+            },  function(data){
+                $scope.orders = data;
+            }, function (error){
                 $state.go('contacts');
             });
-        };
-        $scope.$on('$viewContentLoaded', function () {
-            $scope.head = "Создать контакт";
+        }, function(error) {
+            $state.go('contacts');
         });
-    });
 
-    app.controller('EditContactCtrl', function ($stateParams, $scope, ContactREST, $state) {
+    };
+});
 
-        $scope.deleteContact = function() {
-            ContactREST.delete({
-                id: $stateParams.id
-            }, function(data) {
-                $state.go('contacts');
-            }, function(error) {
-            });
-        };
+app.controller('NewContactCtrl', function ($scope, ContactREST, $state) {
 
-        $scope.saveContact = function () {
-            var rest = new ContactREST($scope.contact);
-            rest.$update({
-                id : $stateParams.id
-            }, function(data) {
-                $state.go('contacts');
-            }, function(error) {
-            });
-            $scope.$broadcast('savePhones');
-        };
-        $scope.$on('$viewContentLoaded', function () {
-            $scope.head = "Редактировать контакт";
-            loadData();
-
+    $scope.saveContact = function () {
+        var rest = new ContactREST($scope.contact);
+        rest.$create({
+        }, function(data) {
+            $scope.contact = data;
+            $state.go('contacts');
+        }, function(error) {
+            $state.go('contacts');
         });
-        var loadData = function() {
-            ContactREST.readOne({
-                id : $stateParams.id
-            }, function(data) {
-                $scope.contact = data;
-                $scope.$broadcast('getPhones');
-            }, function(error) {
+    };
+    $scope.$on('$viewContentLoaded', function () {
+        $scope.head = "Создать контакт";
+        $scope.showDeleteBtn = false;
+    });
+});
+
+app.controller('EditContactCtrl', function ($stateParams, $scope, ContactREST, $state, OrdersByContactREST) {
+
+    $scope.deleteContact = function() {
+        ContactREST.delete({
+            id: $stateParams.id
+        }, function(data) {
+            $state.go('contacts');
+        }, function(error) {
+        });
+    };
+
+    $scope.saveContact = function () {
+        var rest = new ContactREST($scope.contact);
+        rest.$update({
+            id : $stateParams.id
+        }, function(data) {
+            $state.go('contacts');
+        }, function(error) {
+        });
+        $scope.$broadcast('savePhones');
+    };
+    $scope.$on('$viewContentLoaded', function () {
+        $scope.head = "Редактировать контакт";
+        $scope.showDeleteBtn = true;
+        loadData();
+
+    });
+    var loadData = function() {
+        ContactREST.readOne({
+            id : $stateParams.id
+        }, function(data) {
+            $scope.contact = data;
+            $scope.$broadcast('getPhones');
+            OrdersByContactREST.search({
+                id: $scope.contact.id
+            },  function(data){
+                $scope.orders = data;
+            }, function (error){
                 $state.go('contacts');
             });
-        };
-    });
+        }, function(error) {
+            $state.go('contacts');
+        });
+    };
+});
 
 app.controller('SearchContactCtrl', function($scope, ContactSearch, $state){
     $scope.searchContact = function() {
