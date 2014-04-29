@@ -67,10 +67,10 @@ public class UserController {
         List<User> second = userDao.searchAll(sp);
 
         out.setCouriers(new ArrayList<UserNameDTO>());
-        out.setProcissingManagers(new ArrayList<UserNameDTO>());
+        out.setProcessingManagers(new ArrayList<UserNameDTO>());
 
         for (User user : first) {
-            out.getProcissingManagers().add(mapper.map(user, UserNameDTO.class));
+            out.getProcessingManagers().add(mapper.map(user, UserNameDTO.class));
         }
         for (User user : second) {
             out.getCouriers().add(mapper.map(user, UserNameDTO.class));
@@ -82,11 +82,15 @@ public class UserController {
     @GET
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
-    public UserDTO getUser(@PathParam("id") long id){
+    public UserDTO getUser(@PathParam("id") long id) throws Exception{
 
         logger.info("USER - READ ONE");
-        User user=userDao.getById(id);
-        return mapper.map(user,UserDTO.class);
+        User user = userDao.getById(id);
+        if (user == null) {
+            logger.error("USER - NOT FOUND");
+            throw new BusinessLogicException("This user doesn't exist", HttpStatus.NOT_FOUND);
+        }
+        return mapper.map(user, UserDTO.class);
     }
 
     @GET
@@ -95,7 +99,7 @@ public class UserController {
     public TableDTO<UserViewDTO> getUsersPage(@PathParam("page")int page){
 
         logger.info("USER - READ ALL");
-        int count=(int)userDao.getCount();
+        int count = (int)userDao.getCount();
         List<User> users = userDao.getOffset(firstItem(page, count), Settings.getRows());
         TableDTO<UserViewDTO> out = new TableDTO<UserViewDTO>();
         List<UserViewDTO> result=new ArrayList<UserViewDTO>();
@@ -110,11 +114,15 @@ public class UserController {
     @POST
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/")
-    public void createUser(@Valid UserCreateDTO userCreateDTO){
+    public void createUser(@Valid UserCreateDTO userCreateDTO) throws Exception{
 
         logger.info("USER - CREATE");
-        User user=mapper.map(userCreateDTO,User.class);
-        Contact contact=contactDao.getById(userCreateDTO.getContactId());
+        User user = mapper.map(userCreateDTO,User.class);
+        Contact contact = contactDao.getById(userCreateDTO.getContactId());
+        if (contact == null) {
+            logger.error("USER - CONTACT NOT FOUND");
+            throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
+        }
         user.setContact(contact);
         userDao.save(user);
     }
@@ -123,11 +131,15 @@ public class UserController {
     @PUT
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
-    public void updateUser(UserModifyDTO userModifyDTO){
+    public void updateUser(UserModifyDTO userModifyDTO) throws Exception{
 
         logger.info("USER - UPDATE");
-        User user=mapper.map(userModifyDTO,User.class);
-        Contact contact=contactDao.getById(userModifyDTO.getContactId());
+        User user = mapper.map(userModifyDTO,User.class);
+        Contact contact = contactDao.getById(userModifyDTO.getContactId());
+        if (contact == null) {
+            logger.error("USER - CONTACT NOT FOUND");
+            throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
+        }
         user.setContact(contact);
         userDao.merge(user);
     }

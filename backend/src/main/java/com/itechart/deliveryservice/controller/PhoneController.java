@@ -44,8 +44,10 @@ public class PhoneController {
         logger.info("PHONE - READ ALL");
 
         Contact owner = contactDao.getById(contactId);
-        if (owner == null)
+        if (owner == null){
+            logger.error("PHONE - CONTACT NOT FOUND");
             throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
+        }
         List<PhoneDTO> list = new ArrayList<PhoneDTO>();
         for(Phone p : owner.getPhones())
             list.add(mapper.map(p, PhoneDTO.class));
@@ -60,8 +62,10 @@ public class PhoneController {
 
         Phone phone =  mapper.map(phoneDTO, Phone.class);
         Contact owner = contactDao.getById(contactId);
-        if (owner == null)
+        if (owner == null){
+            logger.error("PHONE - CONTACT NOT FOUND");
             throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
+        }
         phone.setOwner(owner);
         phoneDao.save(phone);
     }
@@ -74,8 +78,10 @@ public class PhoneController {
         logger.info("PHONE - UPDATE");
 
         Phone phone = phoneDao.getById(phoneId);
-        if (phone == null)
+        if (phone == null){
+            logger.error("PHONE - CONTACT NOT FOUND");
             throw new BusinessLogicException("This phone doesn't exist", HttpStatus.NOT_FOUND);
+        }
         phone.setNumber(phoneDTO.getNumber());
         phone.setCountryCode(phoneDTO.getCountryCode());
         phone.setOperatorCode(phoneDTO.getOperatorCode());
@@ -91,8 +97,10 @@ public class PhoneController {
         logger.info("PHONE - DELETE");
 
         Phone phone = phoneDao.getById(phoneId);
-        if (phone == null)
+        if (phone == null){
+            logger.error("PHONE - NOT FOUND");
             throw new BusinessLogicException("This phone doesn't exist", HttpStatus.NOT_FOUND);
+        }
         phoneDao.delete(phone);
     }
 }

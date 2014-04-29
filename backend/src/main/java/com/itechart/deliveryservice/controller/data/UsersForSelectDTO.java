@@ -4,15 +4,15 @@ import java.util.List;
 
 public class UsersForSelectDTO {
 
-    private List<UserNameDTO> procissingManagers;
+    private List<UserNameDTO> processingManagers;
     private List<UserNameDTO> couriers;
 
-    public List<UserNameDTO> getProcissingManagers() {
-        return procissingManagers;
+    public List<UserNameDTO> getProcessingManagers() {
+        return processingManagers;
     }
 
-    public void setProcissingManagers(List<UserNameDTO> procissingManagers) {
-        this.procissingManagers = procissingManagers;
+    public void setProcessingManagers(List<UserNameDTO> processingManagers) {
+        this.processingManagers = processingManagers;
     }
 
     public List<UserNameDTO> getCouriers() {

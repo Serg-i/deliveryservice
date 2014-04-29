@@ -54,8 +54,10 @@ public class ContactController {
 
        logger.info("CONTACT - READ ONE");
        Contact contact = contactDao.getById(idContact);
-        if (contact == null)
+        if (contact == null) {
+            logger.error("CONTACT - NOT FOUND");
             throw new BusinessLogicException("This contact doesn't exist", HttpStatus.NOT_FOUND);
+        }
        return mapper.map(contact, ContactDTO.class);
     }
 

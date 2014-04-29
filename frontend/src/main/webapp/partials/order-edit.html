@@ -25,7 +25,7 @@
             <li class="list-group-item" ng-class="{ 'has-error' : form.pm.$invalid}">
                 <span class="label">Менеджер по обработке: </span><br/>
                 <select class="form-control" name="pm" ui-select2 ng-model="order.processingManagerId" required>
-                    <option ng-repeat="user in users.procissingManagers" value="{{ user.id }}">
+                    <option ng-repeat="user in users.processingManagers" value="{{ user.id }}">
                         {{ user.username }}
                     </option>
                 </select>

@@ -89,10 +89,14 @@ public class OrderController {
         logger.info("ORDER - READ ONE");
 
         Order order = orderDao.getById(orderId);
-        if (order == null)
+        if (order == null)   {
+            logger.error("ORDER - NOT FOUND");
             throw new BusinessLogicException("This order doesn't exist", HttpStatus.NOT_FOUND);
-        if (!canAccessOrder(order))
+        }
+        if (!canAccessOrder(order)) {
+            logger.error("ORDER - ACCESS DENIED");
             throw new BusinessLogicException("Access Denied", HttpStatus.FORBIDDEN);
+        }
         return mapper.map(order, OrderDTO.class);
     }
 
@@ -120,8 +124,10 @@ public class OrderController {
 
         Order upOrder =  mapper.map(orderDTO, Order.class);
         Order order = orderDao.getById(orderId);
-        if (order == null)
+        if (order == null){
+            logger.error("ORDER - NOT FOUND");
             throw new BusinessLogicException("This order doesn't exist", HttpStatus.NOT_FOUND);
+        }
         upOrder.setDate(order.getDate());
         upOrder.setReceptionManager(order.getReceptionManager());
         upOrder.setState(order.getState());
@@ -148,10 +154,14 @@ public class OrderController {
 
         OrderState st = state.getNewState();
         Order order = orderDao.getById(orderId);
-        if (order == null)
+        if (order == null){
+            logger.error("ORDER - NOT FOUND");
             throw new BusinessLogicException("This order doesn't exist", HttpStatus.NOT_FOUND);
-        if (!canAccessOrder(order) || !canSetOrderState(order, st))
+        }
+        if (!canAccessOrder(order) || !canSetOrderState(order, st)){
+            logger.error("ORDER - ACCESS DENIED");
             throw new BusinessLogicException("Access Denied", HttpStatus.FORBIDDEN);
+        }
         OrderChange oc = new OrderChange();
         oc.setComment(state.getComment());
         oc.setUserChangedStatus(getUser());
