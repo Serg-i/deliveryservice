@@ -266,7 +266,8 @@ var app = angular.module('myApp', [
                     ncyBreadcrumbLabel: 'Почта',
                     authorizedRoles: [
                         USER_ROLES.admin,
-                        USER_ROLES.supervisor
+                        USER_ROLES.supervisor,
+                        USER_ROLES.order_manager
                     ]
                 }
             });
