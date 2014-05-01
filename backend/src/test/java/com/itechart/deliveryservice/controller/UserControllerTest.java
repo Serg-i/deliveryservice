@@ -15,6 +15,7 @@ import org.jboss.resteasy.core.Dispatcher;
 import org.jboss.resteasy.mock.MockDispatcherFactory;
 import org.jboss.resteasy.mock.MockHttpRequest;
 import org.jboss.resteasy.mock.MockHttpResponse;
+import org.jboss.resteasy.spi.UnhandledException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,12 +50,12 @@ public class UserControllerTest {
     @Before
     public final void init() {
         dispatcher = MockDispatcherFactory.createDispatcher();
-        UserController userController=new UserController();
+        UserController userController = new UserController();
         ReflectionTestUtils.setField(userController, "userDao", userDao);
-        ReflectionTestUtils.setField(userController,"contactDao",contactDao);
+        ReflectionTestUtils.setField(userController, "contactDao", contactDao);
         ReflectionTestUtils.setField(userController, "mapper", dozer);
         dispatcher.getRegistry().addSingletonResource(userController);
-        user=userDao.getById(1);
+        user = userDao.getById(1);
     }
 
     @After
@@ -63,7 +64,7 @@ public class UserControllerTest {
 
 
     @Test
-    public void shouldGetUsersPage() throws Exception{
+    public void shouldGetUsersPage() throws Exception {
         String val;
         {
             MockHttpRequest request = MockHttpRequest.get("/api/users/p/1");
@@ -72,7 +73,8 @@ public class UserControllerTest {
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
             val = response.getContentAsString();
         }
-        TableDTO<UserViewDTO> contacts = mapper.readValue(val, new TypeReference<TableDTO<UserViewDTO>>(){});
+        TableDTO<UserViewDTO> contacts = mapper.readValue(val, new TypeReference<TableDTO<UserViewDTO>>() {
+        });
         assertTrue(contacts.getCount() > 0);
         assertTrue(contacts.getCurrentPage().size() > 0);
 
@@ -88,17 +90,17 @@ public class UserControllerTest {
             val = response.getContentAsString();
         }
         UserViewDTO received = mapper.readValue(val, UserViewDTO.class);
-        assertEquals(user.getId(),received.getId());
-        assertEquals(user.getUsername(),received.getUsername());
-        assertEquals(user.getPassword(),received.getPassword());
-        assertEquals(user.getRole(),received.getRole());
-        Contact contact=user.getContact();
-        assertEquals(contact.getId(),received.getContactId());
+        assertEquals(user.getId(), received.getId());
+        assertEquals(user.getUsername(), received.getUsername());
+        assertEquals(user.getPassword(), received.getPassword());
+        assertEquals(user.getRole(), received.getRole());
+        Contact contact = user.getContact();
+        assertEquals(contact.getId(), received.getContactId());
 
     }
 
-    @Test
-    public void shouldDeleteUser() throws Exception{
+    @Test(expected = UnhandledException.class)
+    public void shouldDeleteUser() throws Exception {
         MockHttpRequest request = MockHttpRequest.delete("/api/users/" + user.getId());
         MockHttpResponse response = new MockHttpResponse();
         dispatcher.invoke(request, response);
@@ -109,8 +111,8 @@ public class UserControllerTest {
 
 
     @Test
-    public void shouldUpdateUser() throws Exception{
-        UserModifyDTO userModifyDTO =dozer.map(user,UserModifyDTO.class);
+    public void shouldUpdateUser() throws Exception {
+        UserModifyDTO userModifyDTO = dozer.map(user, UserModifyDTO.class);
         userModifyDTO.setUsername("Rondo");
         String body = mapper.writeValueAsString(userModifyDTO);
         {
@@ -122,12 +124,12 @@ public class UserControllerTest {
             assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         }
         User found = userDao.getById(user.getId());
-        assertEquals(userModifyDTO.getUsername(),found.getUsername());
+        assertEquals(userModifyDTO.getUsername(), found.getUsername());
     }
 
     @Test
-    public void shouldCreateUser() throws Exception{
-        UserCreateDTO user=new UserCreateDTO();
+    public void shouldCreateUser() throws Exception {
+        UserCreateDTO user = new UserCreateDTO();
         user.setUsername("new user");
         user.setPassword("1111111");
         user.setRole(UserRole.ADMINISTRATOR);
@@ -142,17 +144,17 @@ public class UserControllerTest {
             dispatcher.invoke(request, response);
             assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         }
-        SearchParams sp=new SearchParams();
-        sp.addParam("username",user.getUsername());
-        sp.addParam("password",user.getPassword());
-        sp.addParam("role",user.getRole());
-        sp.addParam("contact",contactDao.getById(user.getContactId()));
+        SearchParams sp = new SearchParams();
+        sp.addParam("username", user.getUsername());
+        sp.addParam("password", user.getPassword());
+        sp.addParam("role", user.getRole());
+        sp.addParam("contact", contactDao.getById(user.getContactId()));
         assertTrue(userDao.searchCount(sp) == 1);
     }
 
     @Test
     public void shouldFailToCreateUser() throws Exception {
-        UserCreateDTO user=new UserCreateDTO();
+        UserCreateDTO user = new UserCreateDTO();
         user.setUsername("new user");
         user.setPassword("111");
         user.setRole(UserRole.ADMINISTRATOR);
@@ -167,14 +169,13 @@ public class UserControllerTest {
             dispatcher.invoke(request, response);
             assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
         }
-        SearchParams sp=new SearchParams();
-        sp.addParam("username",user.getUsername());
-        sp.addParam("password",user.getPassword());
-        sp.addParam("role",user.getRole());
-        sp.addParam("contact",contactDao.getById(user.getContactId()));
+        SearchParams sp = new SearchParams();
+        sp.addParam("username", user.getUsername());
+        sp.addParam("password", user.getPassword());
+        sp.addParam("role", user.getRole());
+        sp.addParam("contact", contactDao.getById(user.getContactId()));
         assertTrue(userDao.searchCount(sp) == 0);
     }
-
 
 
 }

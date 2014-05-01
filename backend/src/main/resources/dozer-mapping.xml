@@ -208,6 +208,10 @@
     <mapping map-null="false">
         <class-a>com.itechart.deliveryservice.entity.User</class-a>
         <class-b>com.itechart.deliveryservice.controller.data.UserModifyDTO</class-b>
+        <field>
+            <a>contact.id</a>
+            <b>contactId</b>
+        </field>
     </mapping>
 
     <mapping map-null="false">
