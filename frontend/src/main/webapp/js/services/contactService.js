@@ -80,6 +80,14 @@ app.service('CheckedContacts', function () {
     this.update = function (arr) {
         this.ids = arr;
     };
+    this.delete = function (id) {
+        for(var i = this.ids.length - 1; i >= 0; i--) {
+            if(this.ids[i] == id) {
+                this.ids.splice(i, 1);
+                break;
+            }
+        }
+    };
     return this;
 });
 

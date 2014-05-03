@@ -38,7 +38,7 @@ app.controller('ContactsCtrl',  function ($stateParams, $scope, ContactREST, Con
     var loadData = function() {
 
         $scope.checked = {
-            ids: []
+            ids: CheckedContacts.ids
         };
 
         if (ContactSearch.params === null) {
@@ -118,12 +118,13 @@ app.controller('NewContactCtrl', function ($scope, ContactREST, $state) {
     });
 });
 
-app.controller('EditContactCtrl', function ($stateParams, $scope, ContactREST, $state, OrdersByContactREST) {
+app.controller('EditContactCtrl', function ($stateParams, $scope, ContactREST, $state, OrdersByContactREST, CheckedContacts) {
 
     $scope.deleteContact = function() {
         ContactREST.delete({
             id: $stateParams.id
         }, function(data) {
+            CheckedContacts.delete($stateParams.id);
             $state.go('contacts');
         }, function(error) {
         });
