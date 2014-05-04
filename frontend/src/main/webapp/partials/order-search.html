@@ -27,13 +27,10 @@
             </li>
             <li class="list-group-item">
                 <span class="label">Дата заказа: </span><br/>
-                <p class="input-group">
+                <p>
                     <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="search.date"
                            is-open="opened" min="2000-01-01" max="'2050-01-01'" datepicker-options="dateOptions"
                            date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-weeks="true"/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
                 </p>
             </li>
             <li class="list-group-item">
