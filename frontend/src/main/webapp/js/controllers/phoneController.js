@@ -15,6 +15,10 @@ app.controller('PhoneCtrl',  function ($scope, $state, $modal, PhoneREST) {
             }
         });
     });
+    $scope.$on('initEmptyPhones', function(e) {
+        var data = [];
+        $scope.phones = data;
+    });
     $scope.$on('savePhones', function() {
         for (var i = 0; i < $scope.phones.length; i++) {
             var dto = jQuery.extend({}, $scope.phones[i]);

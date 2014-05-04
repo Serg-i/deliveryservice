@@ -107,6 +107,7 @@ app.controller('NewContactCtrl', function ($scope, ContactREST, $state) {
         rest.$create({
         }, function(data) {
             $scope.contact = data;
+            $scope.$broadcast('savePhones');
             $state.go('contacts');
         }, function(error) {
             $state.go('contacts');
@@ -115,6 +116,7 @@ app.controller('NewContactCtrl', function ($scope, ContactREST, $state) {
     $scope.$on('$viewContentLoaded', function () {
         $scope.head = "Создать контакт";
         $scope.showDeleteBtn = false;
+        $scope.$broadcast('initEmptyPhones');
     });
 });
 
