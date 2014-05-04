@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = { })
-@Pattern(regexp = "^[A-Za-z -]+$")
+@Pattern(regexp = "^[A-Za-zА-Яа-я-]+$")
 public @interface Alphabetic {
     String message() default "";
     Class<?>[] groups() default {};

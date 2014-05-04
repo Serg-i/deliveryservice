@@ -3,10 +3,9 @@ package com.itechart.deliveryservice.controller;
 
 import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
+import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
-import com.itechart.deliveryservice.entity.Contact;
-import com.itechart.deliveryservice.entity.User;
-import com.itechart.deliveryservice.entity.UserRole;
+import com.itechart.deliveryservice.entity.*;
 import com.itechart.deliveryservice.utils.SearchParams;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -41,6 +40,8 @@ public class UserControllerTest {
     @Autowired
     ContactDao contactDao;
     @Autowired
+    OrderDao orderDao;
+    @Autowired
     DozerBeanMapper dozer;
 
     private Dispatcher dispatcher;
@@ -53,6 +54,7 @@ public class UserControllerTest {
         UserController userController = new UserController();
         ReflectionTestUtils.setField(userController, "userDao", userDao);
         ReflectionTestUtils.setField(userController, "contactDao", contactDao);
+        ReflectionTestUtils.setField(userController, "orderDao", orderDao);
         ReflectionTestUtils.setField(userController, "mapper", dozer);
         dispatcher.getRegistry().addSingletonResource(userController);
         user = userDao.getById(1);
@@ -100,12 +102,25 @@ public class UserControllerTest {
     }
 
     @Test(expected = UnhandledException.class)
-    public void shouldDeleteUser() throws Exception {
+    public void shouldNotDeleteUser() throws Exception {
+        Order order = orderDao.getById(1);
+        order.setDeliveryManager(user);
         MockHttpRequest request = MockHttpRequest.delete("/api/users/" + user.getId());
         MockHttpResponse response = new MockHttpResponse();
         dispatcher.invoke(request, response);
         assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
         User found = userDao.getById(user.getId());
+        assertNull(found);
+    }
+
+    @Test
+    public void ShouldDeleteUser() throws Exception{
+        User test = userDao.getById(17);
+        MockHttpRequest request = MockHttpRequest.delete("/api/users/" + test.getId());
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+        assertEquals(HttpServletResponse.SC_NO_CONTENT, response.getStatus());
+        User found = userDao.getById(test.getId());
         assertNull(found);
     }
 

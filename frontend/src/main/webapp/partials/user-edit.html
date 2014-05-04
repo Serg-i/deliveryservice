@@ -9,8 +9,9 @@
                 <li class="list-group-item" ng-class="{ 'has-error' : form.rep.$invalid}">
                     <span class="label">Login: </span><br/>
                     <input type="text" name="username" class="form-control"
-                           value="{{user.username}}" ng-model="user.username" required>
+                           value="{{user.username}}" ng-maxlength="20" ng-model="user.username" required>
                     <p ng-show="form.username.$invalid && !form.name.$pristine" class="help-block">Заполнение обязательно.</p>
+                    <p ng-show="form.username.$error.maxlength" class="help-block">Не более 20 символов.</p>
                 </li>
                 <li class="list-group-item">
                     <span class="label">Роль: </span><br/>
@@ -25,7 +26,7 @@
                 </li>
                 <li class="list-group-item" ng-class="{ 'has-error' : form.rep.$invalid}">
                     <span class="label" >Password: </span><br/>
-                    <input type="password" name="password" class="form-control"  ng-model="user.password"
+                    <input type="text" name="password" class="form-control"  ng-model="user.password"
                            value="{{user.password}}" ng-minlength="4" required>
                     <p ng-show="form.password.$error.minlength" class="help-block">Не менее 4 символов.</p>
                     <p ng-show="form.password.$invalid && !form.name.$pristine&&!form.password.$error.minlength"

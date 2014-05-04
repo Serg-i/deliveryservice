@@ -4,9 +4,7 @@ import com.itechart.deliveryservice.controller.data.*;
 import com.itechart.deliveryservice.dao.ContactDao;
 import com.itechart.deliveryservice.dao.OrderDao;
 import com.itechart.deliveryservice.dao.UserDao;
-import com.itechart.deliveryservice.entity.Contact;
-import com.itechart.deliveryservice.entity.User;
-import com.itechart.deliveryservice.entity.UserRole;
+import com.itechart.deliveryservice.entity.*;
 import com.itechart.deliveryservice.exceptionhandler.BusinessLogicException;
 import com.itechart.deliveryservice.utils.SearchParams;
 import com.itechart.deliveryservice.utils.Settings;
@@ -37,7 +35,7 @@ import static com.itechart.deliveryservice.utils.Utils.firstItem;
 @ValidateRequest
 public class UserController {
 
-    public  static final String CAN_NOT_DELETE_MESSAGE="User process orders , can not delete";
+    public static final String CAN_NOT_DELETE_MESSAGE = "User process orders , can not delete";
 
     @Autowired
     private UserDao userDao;
@@ -82,7 +80,7 @@ public class UserController {
     @GET
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
-    public UserDTO getUser(@PathParam("id") long id) throws Exception{
+    public UserDTO getUser(@PathParam("id") long id) throws Exception {
 
         logger.info("USER - READ ONE");
         User user = userDao.getById(id);
@@ -96,15 +94,15 @@ public class UserController {
     @GET
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/p/{page}")
-    public TableDTO<UserViewDTO> getUsersPage(@PathParam("page")int page){
+    public TableDTO<UserViewDTO> getUsersPage(@PathParam("page") int page) {
 
         logger.info("USER - READ ALL");
-        int count = (int)userDao.getCount();
+        int count = (int) userDao.getCount();
         List<User> users = userDao.getOffset(firstItem(page, count), Settings.getRows());
         TableDTO<UserViewDTO> out = new TableDTO<UserViewDTO>();
-        List<UserViewDTO> result=new ArrayList<UserViewDTO>();
-        for(User user:users){
-            result.add(mapper.map(user,UserViewDTO.class));
+        List<UserViewDTO> result = new ArrayList<UserViewDTO>();
+        for (User user : users) {
+            result.add(mapper.map(user, UserViewDTO.class));
         }
         out.setCurrentPage(result);
         out.setCount(count);
@@ -114,10 +112,10 @@ public class UserController {
     @POST
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/")
-    public void createUser(@Valid UserCreateDTO userCreateDTO) throws Exception{
+    public void createUser(@Valid UserCreateDTO userCreateDTO) throws Exception {
 
         logger.info("USER - CREATE");
-        User user = mapper.map(userCreateDTO,User.class);
+        User user = mapper.map(userCreateDTO, User.class);
         Contact contact = contactDao.getById(userCreateDTO.getContactId());
         if (contact == null) {
             logger.error("USER - CONTACT NOT FOUND");
@@ -131,10 +129,10 @@ public class UserController {
     @PUT
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
-    public void updateUser(UserModifyDTO userModifyDTO) throws Exception{
+    public void updateUser(UserModifyDTO userModifyDTO) throws Exception {
 
         logger.info("USER - UPDATE");
-        User user = mapper.map(userModifyDTO,User.class);
+        User user = mapper.map(userModifyDTO, User.class);
         Contact contact = contactDao.getById(userModifyDTO.getContactId());
         if (contact == null) {
             logger.error("USER - CONTACT NOT FOUND");
@@ -150,19 +148,15 @@ public class UserController {
     public void deleteUser(@PathParam("id") long id) throws BusinessLogicException {
 
         logger.info("USER - DELETE");
-        User user=userDao.getById(id);
-        SearchParams sp1=new SearchParams();
-        sp1.addParam("processingManager.id", Long.toString(id));
-        int numberOfOrders1 = (int)orderDao.searchCount(sp1);
-        SearchParams sp2=new SearchParams();
-        sp2.addParam("deliveryManager.id", Long.toString(id));
-        int numberOfOrders2 = (int)orderDao.searchCount(sp2);
-        SearchParams sp3=new SearchParams();
-        sp3.addParam("receptionManager.id", Long.toString(id));
-        int numberOfOrders3 = (int)orderDao.searchCount(sp3);
-        int totalNumberOfOrders=numberOfOrders1+numberOfOrders2+numberOfOrders3;
-        if(totalNumberOfOrders>0){
-            throw new BusinessLogicException(CAN_NOT_DELETE_MESSAGE, HttpStatus.UNPROCESSABLE_ENTITY);
+        User user = userDao.getById(id);
+        List<Order> orders = orderDao.getAll();
+        for (Order order : orders) {
+            if ((order.getState() != OrderState.CLOSED && order.getState() != OrderState.CANCELED)
+                    &&
+                    (order.getReceptionManager().equals(user)
+                            || order.getProcessingManager().equals(user)
+                            || order.getDeliveryManager().equals(user)))
+                throw new BusinessLogicException(CAN_NOT_DELETE_MESSAGE, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         userDao.delete(user);
     }

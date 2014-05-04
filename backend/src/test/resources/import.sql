@@ -34,6 +34,7 @@ INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'ORDER_M
 INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'PROCESSING_MANAGER', 'user13', '14');
 INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'COURIER', 'user14', '15');
 INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'ADMINISTRATOR', 'user15', '16');
+INSERT INTO user (password, role, username, contact_id) VALUES ('1234', 'ORDER_MANAGER', 'ordermgr', '17');
 
 INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('22510', '1990-12-2', 'no', 'NEW', '1', '5', '4', '3', '1');
 INSERT INTO orders (cost, date, description, state, customer_id, delivery_manager_id, processing_manager_id, reception_manager_id, recipient_id) VALUES ('25032', '1990-12-1', 'no', 'ACCEPTED', '2', '10', '9', '8', '2');
