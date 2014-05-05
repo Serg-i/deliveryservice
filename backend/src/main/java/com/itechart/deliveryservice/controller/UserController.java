@@ -131,10 +131,12 @@ public class UserController {
     @PUT
     @Secured({"ROLE_ADMINISTRATOR"})
     @Path("/{id}")
-    public void updateUser(UserModifyDTO userModifyDTO) throws Exception {
+    public void updateUser(UserModifyDTO userModifyDTO,@PathParam("id")long id) throws Exception {
 
         logger.info("USER - UPDATE");
         User user = mapper.map(userModifyDTO, User.class);
+        User userToModify=userDao.getById(id);
+        checkIfThisUserAuthorized(userToModify);
         Contact contact = contactDao.getById(userModifyDTO.getContactId());
         if (contact == null) {
             logger.error("USER - CONTACT NOT FOUND");
@@ -169,6 +171,7 @@ public class UserController {
         String name = auth.getName();
         User currentLoginUser = userDao.getByName(name);
         if(currentLoginUser.equals(user)){
+            logger.error("USER - CAN NOT MODIFY HIMSELF");
             throw new BusinessLogicException("",HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
