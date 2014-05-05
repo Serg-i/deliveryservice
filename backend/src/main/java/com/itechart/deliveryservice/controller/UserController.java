@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -150,6 +152,7 @@ public class UserController {
         logger.info("USER - DELETE");
         User user = userDao.getById(id);
         List<Order> orders = orderDao.getAll();
+        checkIfThisUserAuthorized(user);
         for (Order order : orders) {
             if ((order.getState() != OrderState.CLOSED && order.getState() != OrderState.CANCELED)
                     &&
@@ -159,6 +162,15 @@ public class UserController {
                 throw new BusinessLogicException(CAN_NOT_DELETE_MESSAGE, HttpStatus.UNPROCESSABLE_ENTITY);
         }
         userDao.delete(user);
+    }
+
+    private void checkIfThisUserAuthorized(User user) throws BusinessLogicException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        User currentLoginUser = userDao.getByName(name);
+        if(currentLoginUser.equals(user)){
+            throw new BusinessLogicException("",HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
 
